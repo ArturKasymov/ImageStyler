@@ -10,7 +10,7 @@ public class ViewManager extends Application {
     public void start(Stage primaryStage) throws Exception{
         System.out.println(ViewManager.class.getResource("").toString());
 
-        Parent root = FXMLLoader.load(ViewManager.class.getResource("resources/Layouts/LoginView.fxml"));
+        Parent root = FXMLLoader.load(ViewManager.class.getResource("Layouts/LoginView.fxml"));
         primaryStage.setTitle("Hello UJ");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
