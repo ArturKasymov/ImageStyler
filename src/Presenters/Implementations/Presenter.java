@@ -7,5 +7,5 @@ public class Presenter {
         if(instance==null) instance=new Presenter();
         return instance;
     }
-    
+
 }
