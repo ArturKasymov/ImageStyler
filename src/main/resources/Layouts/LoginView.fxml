@@ -11,7 +11,8 @@
 
 <VBox alignment="CENTER" prefHeight="600.00" prefWidth="400.00" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.LoginView">
    <children>
-      <TextField id="loginField" fx:id="loginField" alignment="CENTER" opacity="0.75" prefWidth="240.0" promptText="login" VBox.vgrow="NEVER">
+      <TextField id="loginField" fx:id="loginField" alignment="CENTER"
+                 opacity="0.75" prefWidth="240.0" promptText="login" VBox.vgrow="NEVER">
          <effect>
             <InnerShadow />
          </effect>
@@ -28,7 +29,7 @@
          </effect>
       </PasswordField>
       <Button id="loginButton" fx:id="loginButton" contentDisplay="CENTER" mnemonicParsing="false" opacity="0.75" prefWidth="250.0" text="LOG IN" textOverrun="CENTER_ELLIPSIS" />
-      <Hyperlink id="registerLink" alignment="CENTER" prefWidth="250.0" text="Haven't got an account yet?">
+      <Hyperlink fx:id="registerLink" alignment="CENTER" minWidth="350.0" text="Haven't got an account yet?">
          <VBox.margin>
             <Insets top="-10.0" />
          </VBox.margin>
