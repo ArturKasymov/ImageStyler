@@ -2,10 +2,12 @@ package Views;
 
 import Presenters.Implementations.Presenter;
 import Presenters.Interfaces.LoginPresenter;
+import app.ViewManager;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
@@ -13,10 +15,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
-public class LoginView {
+public class LoginView extends Parent {
     private LoginPresenter presenter;
+    private final ViewManager app;
 
     public LoginView() {
+        app = new ViewManager();
         this.presenter = new Presenter(this);
     }
 
@@ -76,7 +80,7 @@ public class LoginView {
 
         registerLink.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
-                presenter.setView("register");
+                app.setView(app.getRegisterView());
                 registerLink.setVisited(false);
             }
         });

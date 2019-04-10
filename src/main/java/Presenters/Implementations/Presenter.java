@@ -1,12 +1,14 @@
 package Presenters.Implementations;
 
 import Presenters.Interfaces.LoginPresenter;
+import Presenters.Interfaces.RegisterPresenter;
 import Views.LoginView;
+import javafx.scene.Parent;
 
-public class Presenter implements LoginPresenter {
-    private LoginView view;
+public class Presenter implements LoginPresenter, RegisterPresenter {
+    private Parent view;
 
-    public Presenter(LoginView view) {
+    public Presenter(Parent view) {
         this.view = view;
     }
 
@@ -14,7 +16,7 @@ public class Presenter implements LoginPresenter {
 
     }
 
-    public void setView(String v) {
+    public void register(CharSequence login, CharSequence password) {
 
     }
 
