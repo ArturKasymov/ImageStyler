@@ -9,7 +9,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
@@ -21,7 +20,6 @@ import javafx.scene.input.MouseEvent;
 public class LoginViewImpl extends BaseView implements LoginView {
 
     private LoginPresenter presenter;
-
     public LoginViewImpl() {
         this.presenter = new LoginPresenter(this);
     }
@@ -88,7 +86,7 @@ public class LoginViewImpl extends BaseView implements LoginView {
 
         registerLink.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
-                changeViewTo(new RegisterViewImpl());
+                presenter.register();
                 registerLink.setVisited(false);
             }
         });
@@ -96,26 +94,18 @@ public class LoginViewImpl extends BaseView implements LoginView {
 
     }
 
-
-
     public void showWrongDataAlert(){
 
     }
-    public void goToRegister(){
 
-    };
+    public void goToRegister(){
+        presenter.unsubscribe();
+        changeViewTo(new RegisterViewImpl());
+    }
 
     public void goToMain(){
-
-    };
-
-    /*
-
-    ???  onLogin()
-
-    ???  onRegisterClick
-
-    here?
-     */
+        presenter.unsubscribe();
+        changeViewTo(new MainViewImpl());
+    }
 
 }

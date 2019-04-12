@@ -1,15 +1,14 @@
 package Views.Implementations;
 
+import Presenters.RegisterPresenter;
 import Views.BaseView;
 import Views.Interfaces.RegisterView;
 import Views.core.ViewByID;
-import app.ViewManager;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
+
 
 public class RegisterViewImpl extends BaseView implements RegisterView {
-    //private RegisterPresenter presenter;
-    private ViewManager viewManager;
+    private RegisterPresenter presenter;
 
     @Override
     public ViewByID getViewID() {
@@ -17,11 +16,14 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
     }
 
     public RegisterViewImpl(){
-
+        presenter= new RegisterPresenter(this);
     }
-    /*public RegisterViewImpl(ViewManager viewManager){
-        this.viewManager=viewManager;
-    }*/
+
+
+    public void goToMain(){
+        presenter.unsubscribe();
+        changeViewTo(new MainViewImpl());
+    }
 
     @FXML
     public void initialize() {
