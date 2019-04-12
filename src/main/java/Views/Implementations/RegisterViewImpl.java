@@ -35,7 +35,7 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
     }
 
     private boolean passwordsMatch() {
-        return passwordField.getCharacters().equals(onceMorePasswordField.getCharacters());
+        return passwordField.getCharacters().toString().equals(onceMorePasswordField.getCharacters().toString());
     }
 
     @Override
@@ -84,24 +84,30 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
         loginField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (event.getCode().getName()=="Enter" && filledIn() && passwordsMatch())
+                if (event.getCode().getName()=="Enter" && filledIn() && passwordsMatch()) {
+                    registerButton.setDisable(false);
                     presenter.register(loginField.getCharacters(), passwordField.getCharacters());
+                }
             }
         });
 
         passwordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (event.getCode().getName()=="Enter" && filledIn() & passwordsMatch())
+                if (event.getCode().getName()=="Enter" && filledIn() & passwordsMatch()) {
+                    registerButton.setDisable(false);
                     presenter.register(loginField.getCharacters(), passwordField.getCharacters());
+                }
             }
         });
 
         onceMorePasswordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (event.getCode().getName()=="Enter" && filledIn() && passwordsMatch())
+                if (event.getCode().getName()=="Enter" && filledIn() && passwordsMatch()) {
+                    registerButton.setDisable(false);
                     presenter.register(loginField.getCharacters(), passwordField.getCharacters());
+                }
             }
         });
 

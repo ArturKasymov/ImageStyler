@@ -70,8 +70,4 @@ public class ViewManager extends Application {
             e.printStackTrace();
         }
     }
-
-    public Parent getRegisterView() {
-        return RegisterView;
-    }
 }
