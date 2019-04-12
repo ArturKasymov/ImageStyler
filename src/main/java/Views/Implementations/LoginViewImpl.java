@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.control.Label;
 
 
 public class LoginViewImpl extends BaseView implements LoginView {
@@ -40,12 +41,16 @@ public class LoginViewImpl extends BaseView implements LoginView {
     @FXML
     private Button registerButton;
 
+    @FXML
+    private Label warning;
+
     private boolean filledIn() {
         return loginField.getCharacters().length()>0 && passwordField.getCharacters().length()>0;
     }
 
     @FXML
     public void initialize() {
+        warning.setVisible(false);
         loginButton.setDisable(true);
 
         loginField.textProperty().addListener(new ChangeListener<String>() {
@@ -89,7 +94,7 @@ public class LoginViewImpl extends BaseView implements LoginView {
     }
 
     public void showWrongDataAlert() {
-
+        warning.setVisible(true);
     }
 
     public void goToRegister(){
