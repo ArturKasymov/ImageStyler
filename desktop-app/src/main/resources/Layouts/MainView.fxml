@@ -1,11 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-<?import javafx.scene.layout.*?>
-
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="Views.Implementations.MainViewImpl"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<GridPane maxHeight="Infinity" maxWidth="Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.MainViewImpl">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="200.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="400.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="360.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <ToolBar maxHeight="Infinity" maxWidth="Infinity" prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: yellow;" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+        <items>
+            <Button fx:id="logOutButton" mnemonicParsing="false" text="LOG OUT" prefHeight="20.0" prefWidth="70.0" onAction="#onLogOut">
+               <font>
+                  <Font size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="settingsButton" mnemonicParsing="false" prefHeight="20.0" prefWidth="70.0" text="Settings" onAction="#onSettings">
+               <font>
+                  <Font size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="generateButton" mnemonicParsing="false" text="+" onAction="#onGenerate"/>
+        </items>
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+      </ToolBar>
+   </children>
+</GridPane>

@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 
-import static main.java.Utils.Constants.*;
+import static Utils.Constants.*;
 
 
 public class ViewManager extends Application {
@@ -22,14 +22,21 @@ public class ViewManager extends Application {
     public void start(Stage primaryStage){
         this.stage = primaryStage;
         initViews();
-        setView(LoginView);
+        initStage();
+
 
     }
 
-    private void setView(Parent view) {
+    private void initStage(){
+
         stage.setTitle(TITLE);
-        stage.setScene(new Scene(view, WIDTH, HEIGHT));
+
+        stage.setScene(new Scene(LoginView, WIDTH, HEIGHT));
         stage.show();
+    }
+
+    private void setView(Parent view) {
+        stage.getScene().setRoot(view);
     }
 
     public void changeViewTo(BaseView targetView){
