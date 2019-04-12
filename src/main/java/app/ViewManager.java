@@ -65,7 +65,7 @@ public class ViewManager extends Application {
         try {
             LoginView = loadView("/LoginView.fxml");
             RegisterView = loadView("/RegisterView.fxml");
-            //MainView = loadView("/MainView.fxml");
+            MainView = loadView("/MainView.fxml");
         }catch (IOException e){
             e.printStackTrace();
         }
