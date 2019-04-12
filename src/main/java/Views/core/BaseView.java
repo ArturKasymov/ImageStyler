@@ -1,6 +1,5 @@
-package Views;
+package Views.core;
 
-import Views.core.ViewByID;
 import app.ViewManager;
 import javafx.scene.Parent;
 

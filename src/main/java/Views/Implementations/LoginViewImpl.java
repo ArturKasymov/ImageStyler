@@ -1,12 +1,12 @@
 package Views.Implementations;
 
 import Presenters.LoginPresenter;
-import Views.BaseView;
+import Views.core.BaseView;
 import Views.Interfaces.LoginView;
 import Views.core.ViewByID;
-import app.ViewManager;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -78,24 +78,21 @@ public class LoginViewImpl extends BaseView implements LoginView {
             }
         });
 
-        loginButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent event) {
-                presenter.login(loginField.getCharacters(), passwordField.getCharacters());
-            }
-        });
-
-        registerLink.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent event) {
-                presenter.register();
-                registerLink.setVisited(false);
-            }
-        });
-
-
     }
 
-    public void showWrongDataAlert(){
+    @FXML
+    protected void onLogin(ActionEvent e) {
+        presenter.login(loginField.getCharacters(), passwordField.getCharacters());
+    }
 
+    @FXML
+    protected void onMoveToRegister(ActionEvent e) {
+        presenter.register();
+        registerLink.setVisited(false);
+    }
+
+    public void showWrongDataAlert() {
+        
     }
 
     public void goToRegister(){

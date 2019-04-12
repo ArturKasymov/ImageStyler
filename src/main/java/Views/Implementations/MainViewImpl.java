@@ -1,6 +1,6 @@
 package Views.Implementations;
 
-import Views.BaseView;
+import Views.core.BaseView;
 import Views.core.ViewByID;
 
 public class MainViewImpl extends BaseView {

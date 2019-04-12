@@ -6,9 +6,8 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="600.0"
-      prefWidth="400.0" spacing="10.0"
-      xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
+      fx:controller="Views.Implementations.RegisterViewImpl" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <TextField id="LoginField" fx:id="loginField"
                  alignment="CENTER" opacity="0.75"
@@ -27,7 +26,8 @@
             <Insets top="-5.0" />
          </VBox.margin>
       </PasswordField>
-      <Button alignment="CENTER" mnemonicParsing="false" prefWidth="250.0" text="Register" textAlignment="CENTER">
+      <Button alignment="CENTER" mnemonicParsing="false" prefWidth="250.0" text="Register"
+              textAlignment="CENTER" onAction="#onRegister">
          <VBox.margin>
             <Insets top="5.0" />
          </VBox.margin></Button>
