@@ -74,9 +74,4 @@ public class ViewManager extends Application {
     public Parent getRegisterView() {
         return RegisterView;
     }
-
-
-    public static void main(String[] args) {
-        launch(args);
-    }
 }
