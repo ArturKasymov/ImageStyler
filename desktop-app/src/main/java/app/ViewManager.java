@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 
-import static Utils.Constants.*;
+import static main.java.Utils.Constants.*;
 
 
 public class ViewManager extends Application {

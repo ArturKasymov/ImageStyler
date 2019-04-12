@@ -1,9 +1,7 @@
 package Views.Implementations;
 
 import Presenters.LoginPresenter;
-import Views.core.BaseView;
-import Views.Interfaces.LoginView;
-import Views.core.ViewByID;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -14,6 +12,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.control.Label;
+import Views.Interfaces.LoginView;
+import Views.core.BaseView;
+import Views.core.ViewByID;
 
 
 public class LoginViewImpl extends BaseView implements LoginView {

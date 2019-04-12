@@ -1,8 +1,8 @@
 package Views.core;
 
-import app.ViewManager;
-import javafx.scene.Parent;
 
+import javafx.scene.Parent;
+import app.ViewManager;
 
 
 public abstract class BaseView extends Parent {
