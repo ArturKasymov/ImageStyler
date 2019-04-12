@@ -1,5 +1,6 @@
 package app;
 
+import Views.BaseView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,8 +22,8 @@ public class ViewManager extends Application {
     public void start(Stage primaryStage){
         this.stage = primaryStage;
         initViews();
-        //System.out.println(LoginView);
         setView(LoginView);
+
     }
 
     private void setView(Parent view) {
@@ -31,23 +32,40 @@ public class ViewManager extends Application {
         stage.show();
     }
 
-    public void changeViewTo(Parent targetView){
-        setView(targetView);
+    public void changeViewTo(BaseView targetView){
+
+        switch (targetView.getViewID())
+        {
+            case LOGIN_VIEW:
+                setView(LoginView);
+                break;
+            case REGISTER_VIEW:
+                setView(RegisterView);
+                break;
+            case MAIN_VIEW:
+                setView(MainView);
+                break;
+        }
+
+
+
     }
 
     private Parent loadView(String path) throws IOException {
         String layouts = "/Layouts";
         URL url = ViewManager.class.getResource(layouts+path);
         FXMLLoader loader = new FXMLLoader(url);
-
-        return loader.load();
+        Parent view=loader.load();
+        BaseView controller=loader.getController();
+        controller.setViewManager(this);
+        return view;
     }
 
     private void initViews() {
         try {
             LoginView = loadView("/LoginView.fxml");
             RegisterView = loadView("/RegisterView.fxml");
-            MainView = loadView("/MainView.fxml");
+            //MainView = loadView("/MainView.fxml");
         }catch (IOException e){
             e.printStackTrace();
         }
