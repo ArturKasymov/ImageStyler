@@ -40,9 +40,6 @@ public class LoginViewImpl extends BaseView implements LoginView {
     private Button loginButton;
 
     @FXML
-    private Button registerButton;
-
-    @FXML
     private Label warning;
 
     private boolean filledIn() {
@@ -99,12 +96,12 @@ public class LoginViewImpl extends BaseView implements LoginView {
     }
 
     public void goToRegister(){
-        presenter.unsubscribe();
+        //presenter.unsubscribe();
         changeViewTo(new RegisterViewImpl());
     }
 
     public void goToMain(){
-        presenter.unsubscribe();
+        //presenter.unsubscribe();
         changeViewTo(new MainViewImpl());
     }
 

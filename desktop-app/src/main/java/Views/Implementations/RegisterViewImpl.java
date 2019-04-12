@@ -49,7 +49,7 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
 
 
     public void goToMain(){
-        presenter.unsubscribe();
+        //presenter.unsubscribe();
         changeViewTo(new MainViewImpl());
     }
 

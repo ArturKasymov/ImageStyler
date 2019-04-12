@@ -13,7 +13,7 @@ public class LoginPresenter {
     }
 
     public void login(CharSequence login, CharSequence password) {
-        if(new Random().nextBoolean()) view.goToMain();
+        if (true) view.goToMain();
         else view.showWrongDataAlert();
     }
 
