@@ -46,6 +46,19 @@ public class LoginViewImpl extends BaseView implements LoginView {
         return loginField.getCharacters().length()>0 && passwordField.getCharacters().length()>0;
     }
 
+    private void buttonToggle() {
+        if (filledIn()) loginButton.setDisable(false);
+        else loginButton.setDisable(true);
+    }
+
+    private void maybeLogin(KeyEvent event) {
+        if (event==null || (event.getCode().getName().equals("Enter") && filledIn())) {
+            presenter.login(loginField.getCharacters(), passwordField.getCharacters());
+            loginField.clear();
+            passwordField.clear();
+        }
+    }
+
     @FXML
     public void initialize() {
         warning.setVisible(false);
@@ -53,29 +66,25 @@ public class LoginViewImpl extends BaseView implements LoginView {
 
         loginField.textProperty().addListener(new ChangeListener<String>() {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (filledIn()) loginButton.setDisable(false);
-                else loginButton.setDisable(true);
+                buttonToggle();
             }
         });
 
         passwordField.textProperty().addListener(new ChangeListener<String>() {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (filledIn()) loginButton.setDisable(false);
-                else loginButton.setDisable(true);
+                buttonToggle();
             }
         });
 
         loginField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             public void handle(KeyEvent event) {
-                if (event.getCode().getName()=="Enter" && filledIn())
-                    presenter.login(loginField.getCharacters(), passwordField.getCharacters());
+                maybeLogin(event);
             }
         });
 
         passwordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             public void handle(KeyEvent event) {
-                if (event.getCode().getName()=="Enter" && filledIn())
-                    presenter.login(loginField.getCharacters(), passwordField.getCharacters());
+                maybeLogin(event);
             }
         });
 
@@ -83,7 +92,7 @@ public class LoginViewImpl extends BaseView implements LoginView {
 
     @FXML
     protected void onLogin(ActionEvent e) {
-        presenter.login(loginField.getCharacters(), passwordField.getCharacters());
+        maybeLogin(null);
     }
 
     @FXML

@@ -6,13 +6,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="400.0" prefWidth="600.0"
-      fx:controller="Views.Implementations.RegisterViewImpl" xmlns="http://javafx.com/javafx/8.0.172-ea"
-      xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.RegisterViewImpl">
    <children>
-      <TextField id="LoginField" fx:id="loginField"
-                 alignment="CENTER" opacity="0.75"
-                 prefWidth="240.0" promptText="login" VBox.vgrow="NEVER">
+      <TextField id="LoginField" fx:id="loginField" alignment="CENTER" opacity="0.75" prefWidth="240.0" promptText="login" VBox.vgrow="NEVER">
          <VBox.margin>
             <Insets top="-50.0" />
          </VBox.margin>
@@ -24,11 +20,10 @@
       </PasswordField>
       <PasswordField fx:id="onceMorePasswordField" alignment="CENTER" opacity="0.75" promptText="password (once more)">
          <VBox.margin>
-            <Insets top="-5.0" />
+            <Insets />
          </VBox.margin>
       </PasswordField>
-      <Button alignment="CENTER" mnemonicParsing="false" prefWidth="250.0" text="Register"
-              textAlignment="CENTER" onAction="#onRegister" fx:id="registerButton">
+      <Button fx:id="registerButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onRegister" prefWidth="250.0" text="Register" textAlignment="CENTER">
          <VBox.margin>
             <Insets top="5.0" />
          </VBox.margin></Button>
