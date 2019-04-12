@@ -1,7 +1,7 @@
 package Views;
 
-import Presenters.Implementations.Presenter;
-import Presenters.Interfaces.LoginPresenter;
+import Presenters.LoginPresenter;
+import Views.Interfaces.LoginView;
 import app.ViewManager;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -15,13 +15,21 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
-public class LoginView extends Parent {
-    private LoginPresenter presenter;
-    private final ViewManager app;
+import javax.swing.text.View;
 
-    public LoginView() {
-        app = new ViewManager();
-        this.presenter = new Presenter(this);
+
+public class LoginViewImpl extends Parent implements LoginView {
+
+    private LoginPresenter presenter;
+    private ViewManager ViewManager;
+
+    public LoginViewImpl() {
+        this.presenter = new LoginPresenter(this);
+    }
+
+
+    public void setViewManager(ViewManager viewManager){
+        this.ViewManager=viewManager;
     }
 
     @FXML
@@ -80,12 +88,26 @@ public class LoginView extends Parent {
 
         registerLink.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
-                app.setView(app.getRegisterView());
+                ViewManager.changeViewTo(ViewManager.getRegisterView());
                 registerLink.setVisited(false);
             }
         });
 
+
     }
+
+
+
+    public void showWrongDataAlert(){
+
+    }
+    public void goToRegister(){
+       // ViewManager.changeViewTo(new RegisterView(ViewManager));
+    };
+
+    public void goToMain(){
+
+    };
 
     /*
 
