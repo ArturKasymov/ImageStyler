@@ -11,7 +11,7 @@ public class RegisterPresenter {
     }
 
     public void register(CharSequence login, CharSequence password){
-        
+        view.goToMain();
     }
 
 

@@ -10,11 +10,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 
 
 public class LoginViewImpl extends BaseView implements LoginView {
@@ -40,7 +38,7 @@ public class LoginViewImpl extends BaseView implements LoginView {
     private Button loginButton;
 
     @FXML
-    private Hyperlink registerLink;
+    private Button registerButton;
 
     private boolean filledIn() {
         return loginField.getCharacters().length()>0 && passwordField.getCharacters().length()>0;
@@ -88,11 +86,10 @@ public class LoginViewImpl extends BaseView implements LoginView {
     @FXML
     protected void onMoveToRegister(ActionEvent e) {
         presenter.register();
-        registerLink.setVisited(false);
     }
 
     public void showWrongDataAlert() {
-        
+
     }
 
     public void goToRegister(){
