@@ -7,40 +7,50 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+
+import static Utils.Constants.*;
+
 
 public class ViewManager extends Application {
     private Stage stage;
-    private static final String pre = "..";
-    private static final String TITLE = "Hello UJ";
-    private static final int WIDTH = 300;
-    private static final int HEIGHT = 275;
 
     private Parent LoginView, RegisterView, MainView;
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage){
         this.stage = primaryStage;
-
         initViews();
-
+        //System.out.println(LoginView);
         setView(LoginView);
     }
 
-    public void setView(Parent view) {
+    private void setView(Parent view) {
         stage.setTitle(TITLE);
         stage.setScene(new Scene(view, WIDTH, HEIGHT));
         stage.show();
     }
 
-    private Parent loadView(String path) throws IOException {
-        String layouts = "/Layouts";
-        return FXMLLoader.load(ViewManager.class.getResource(pre + layouts + path));
+    public void changeViewTo(Parent targetView){
+        setView(targetView);
     }
 
-    private void initViews() throws IOException {
-        LoginView = loadView("/LoginView.fxml");
-        RegisterView = loadView("/RegisterView.fxml");
-        MainView = loadView("/MainView.fxml");
+    private Parent loadView(String path) throws IOException {
+        String layouts = "/Layouts";
+        URL url = ViewManager.class.getResource(layouts+path);
+        FXMLLoader loader = new FXMLLoader(url);
+
+        return loader.load();
+    }
+
+    private void initViews() {
+        try {
+            LoginView = loadView("/LoginView.fxml");
+            RegisterView = loadView("/RegisterView.fxml");
+            MainView = loadView("/MainView.fxml");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     public Parent getRegisterView() {
