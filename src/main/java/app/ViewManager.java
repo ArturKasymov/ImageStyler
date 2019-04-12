@@ -1,6 +1,6 @@
 package app;
 
-import Views.BaseView;
+import Views.core.BaseView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -55,8 +55,8 @@ public class ViewManager extends Application {
         String layouts = "/Layouts";
         URL url = ViewManager.class.getResource(layouts+path);
         FXMLLoader loader = new FXMLLoader(url);
-        Parent view=loader.load();
-        BaseView controller=loader.getController();
+        Parent view = loader.load();
+        BaseView controller = loader.getController();
         controller.setViewManager(this);
         return view;
     }
@@ -73,10 +73,5 @@ public class ViewManager extends Application {
 
     public Parent getRegisterView() {
         return RegisterView;
-    }
-
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }
