@@ -5,15 +5,17 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import static main.java.Utils.Constants.*;
+import static Utils.Constants.*;
 
 
-public class ViewManager extends Application {
+public class AppManager extends Application {
     private Stage stage;
 
     private Parent LoginView, RegisterView, MainView;
@@ -21,15 +23,44 @@ public class ViewManager extends Application {
     @Override
     public void start(Stage primaryStage){
         this.stage = primaryStage;
+        initModel();
         initViews();
-        setView(LoginView);
+        initStage();
+    }
+
+    private void initModel(){
+        checkAppRootDir();
 
     }
 
-    private void setView(Parent view) {
+
+    private void initStage(){
         stage.setTitle(TITLE);
-        stage.setScene(new Scene(view, WIDTH, HEIGHT));
+        stage.setScene(new Scene(LoginView, WIDTH, HEIGHT));
         stage.show();
+    }
+
+    private void initViews() {
+        try {
+            LoginView = loadView("/LoginView.fxml");
+            RegisterView = loadView("/RegisterView.fxml");
+            MainView = loadView("/MainView.fxml");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void checkAppRootDir()  {
+        File dir = new File(APP_ROOT_DIRECTORY);
+        if (!dir.exists())dir.mkdirs();
+        System.out.println(dir);
+    }
+
+    private void setView(Parent view) {
+        /*stage.setTitle(TITLE);
+        stage.setScene(new Scene(view, WIDTH, HEIGHT));
+        stage.show();*/
+        stage.getScene().setRoot(view);
     }
 
     public void changeViewTo(BaseView targetView){
@@ -47,27 +78,17 @@ public class ViewManager extends Application {
                 break;
         }
 
-
-
     }
 
     private Parent loadView(String path) throws IOException {
         String layouts = "/Layouts";
-        URL url = ViewManager.class.getResource(layouts+path);
+        URL url = AppManager.class.getResource(layouts+path);
         FXMLLoader loader = new FXMLLoader(url);
         Parent view = loader.load();
         BaseView controller = loader.getController();
-        controller.setViewManager(this);
+        controller.setAppManager(this);
         return view;
     }
 
-    private void initViews() {
-        try {
-            LoginView = loadView("/LoginView.fxml");
-            RegisterView = loadView("/RegisterView.fxml");
-            MainView = loadView("/MainView.fxml");
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
+
 }
