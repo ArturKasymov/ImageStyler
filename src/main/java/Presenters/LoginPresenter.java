@@ -1,6 +1,6 @@
 package Presenters;
 
-import Views.LoginViewImpl;
+import Views.Implementations.LoginViewImpl;
 
 public class LoginPresenter {
     private LoginViewImpl view;

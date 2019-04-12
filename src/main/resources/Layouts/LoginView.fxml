@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER" prefHeight="600.00" prefWidth="400.00" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="Views.LoginViewImpl">
+      fx:controller="Views.Implementations.LoginViewImpl">
    <children>
       <TextField id="loginField" fx:id="loginField" alignment="CENTER"
                  opacity="0.75" prefWidth="240.0" promptText="login" VBox.vgrow="NEVER">
