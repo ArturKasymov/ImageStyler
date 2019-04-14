@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root type="javafx.scene.layout.VBox" prefHeight="360.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <TextField fx:id="imagesSearch" promptText="Search..." />
+        <Separator />
+        <ListView fx:id="imagesListView" prefHeight="1000.0" style="-fx-background-color: blue;" />
+    </children>
+</fx:root>

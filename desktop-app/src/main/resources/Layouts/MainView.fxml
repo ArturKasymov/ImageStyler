@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import Utils.controls.ImagesListView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane maxHeight="Infinity" maxWidth="Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.MainViewImpl">
+<?import javafx.scene.layout.HBox?>
+<GridPane fx:id="base" maxHeight="Infinity" maxWidth="Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.MainViewImpl">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="200.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="400.0" />
@@ -21,21 +26,43 @@
    <children>
       <ToolBar maxHeight="Infinity" maxWidth="Infinity" prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: yellow;" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
         <items>
-            <Button fx:id="logOutButton" mnemonicParsing="false" text="LOG OUT" prefHeight="20.0" prefWidth="70.0" onAction="#onLogOut">
+            <MenuButton fx:id="settingsButton" mnemonicParsing="false" prefHeight="20.0" prefWidth="80.0" text="Settings">
                <font>
                   <Font size="12.0" />
                </font>
-            </Button>
-            <Button fx:id="settingsButton" mnemonicParsing="false" prefHeight="20.0" prefWidth="70.0" text="Settings" onAction="#onSettings">
-               <font>
-                  <Font size="12.0" />
-               </font>
-            </Button>
-            <Button fx:id="generateButton" mnemonicParsing="false" text="+" onAction="#onGenerate"/>
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#onCleanCache" text="Clean cache" />
+                    <MenuItem mnemonicParsing="false" onAction="#onProfSettings" text="Profile settings" />
+                    <MenuItem mnemonicParsing="false" onAction="#onLogOut" text="LOG OUT" />
+                </items>
+            </MenuButton>
+            <Button fx:id="generateButton" mnemonicParsing="false" onAction="#onGenerate" text="+" />
         </items>
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
       </ToolBar>
+       <ImagesListView fx:id="imagesListView" minWidth="0.0" prefHeight="320.0" prefWidth="200.0" GridPane.rowIndex="1">
+
+       </ImagesListView>
+      <HBox fx:id="rightPane" nodeOrientation="LEFT_TO_RIGHT" opacity="1.0" prefHeight="320.0" prefWidth="400.0" style="" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+         <children>
+             <ImageView fx:id="contentImage" pickOnBounds="true" preserveRatio="true" visible="false">
+                 <HBox.margin>
+                     <Insets bottom="0.0" left="0.0" right="0.0" top="0.0" />
+                 </HBox.margin>
+             </ImageView>
+             <ImageView fx:id="styleImage" pickOnBounds="true" preserveRatio="true" visible="false">
+                 <HBox.margin>
+                     <Insets bottom="0.0" left="0.0" right="0.0" top="0.0" />
+                 </HBox.margin>
+             </ImageView>
+            <ImageView fx:id="resultImage" fitHeight="320.0" fitWidth="320.0" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                  <Insets left="40.0" top="20.0" />
+               </HBox.margin>
+            </ImageView>
+         </children>
+      </HBox>
    </children>
 </GridPane>

@@ -24,11 +24,9 @@ public class ViewManager extends Application {
         initViews();
         initStage();
 
-
     }
 
     private void initStage(){
-
         stage.setTitle(TITLE);
 
         stage.setScene(new Scene(LoginView, WIDTH, HEIGHT));
@@ -53,8 +51,6 @@ public class ViewManager extends Application {
                 setView(MainView);
                 break;
         }
-
-
 
     }
 

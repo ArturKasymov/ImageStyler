@@ -9,6 +9,7 @@ public class MainPresenter {
     public void logout() {
         view.goToLogin();
     }
-    public void showSettings() {}
+    public void goToSettings() {}
     public void goToGenerator() {}
+    public void cleanCache() {}
 }

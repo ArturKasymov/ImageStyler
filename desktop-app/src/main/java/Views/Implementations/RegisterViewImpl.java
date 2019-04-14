@@ -53,6 +53,21 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
         changeViewTo(new MainViewImpl());
     }
 
+    private void buttonToggle() {
+        if (filledIn() && passwordsMatch()) registerButton.setDisable(false);
+        else registerButton.setDisable(true);
+    }
+
+    private void maybeLogin(KeyEvent event) {
+        if (event==null || (event.getCode().getName().equals("Enter") && filledIn() && passwordsMatch())) {
+            registerButton.setDisable(false);
+            presenter.register(loginField.getCharacters(), passwordField.getCharacters());
+            loginField.clear();
+            passwordField.clear();
+            onceMorePasswordField.clear();
+        }
+    }
+
     @FXML
     public void initialize() {
         registerButton.setDisable(true);
@@ -60,54 +75,42 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
         loginField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (filledIn() && passwordsMatch()) registerButton.setDisable(false);
-                else registerButton.setDisable(true);
+                buttonToggle();
             }
         });
 
         passwordField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (filledIn() && passwordsMatch()) registerButton.setDisable(false);
-                else registerButton.setDisable(true);
+                buttonToggle();
             }
         });
 
         onceMorePasswordField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (filledIn() && passwordsMatch()) registerButton.setDisable(false);
-                else registerButton.setDisable(true);
+                buttonToggle();
             }
         });
 
         loginField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (event.getCode().getName()=="Enter" && filledIn() && passwordsMatch()) {
-                    registerButton.setDisable(false);
-                    presenter.register(loginField.getCharacters(), passwordField.getCharacters());
-                }
+                maybeLogin(event);
             }
         });
 
         passwordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (event.getCode().getName()=="Enter" && filledIn() & passwordsMatch()) {
-                    registerButton.setDisable(false);
-                    presenter.register(loginField.getCharacters(), passwordField.getCharacters());
-                }
+                maybeLogin(event);
             }
         });
 
         onceMorePasswordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (event.getCode().getName()=="Enter" && filledIn() && passwordsMatch()) {
-                    registerButton.setDisable(false);
-                    presenter.register(loginField.getCharacters(), passwordField.getCharacters());
-                }
+                maybeLogin(event);
             }
         });
 
@@ -115,6 +118,6 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
 
     @FXML
     protected void onRegister(ActionEvent e) {
-        presenter.register(loginField.getCharacters(), passwordField.getCharacters());
+        maybeLogin(null);
     }
 }

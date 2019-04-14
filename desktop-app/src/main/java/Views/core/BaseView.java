@@ -12,7 +12,11 @@ public abstract class BaseView extends Parent {
     public abstract ViewByID getViewID();
 
     public void setViewManager(ViewManager viewManager){
-        this.viewManager=viewManager;
+        this.viewManager = viewManager;
+    }
+
+    public ViewManager getViewManager() {
+        return this.viewManager;
     }
 
     protected void changeViewTo(BaseView baseView) {
