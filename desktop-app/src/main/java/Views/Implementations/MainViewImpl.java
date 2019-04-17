@@ -2,6 +2,7 @@ package Views.Implementations;
 
 import Presenters.MainPresenter;
 import Utils.controls.ImagesListView;
+import Views.Interfaces.GeneratorView;
 import Views.Interfaces.MainView;
 import Views.core.BaseView;
 import Views.core.ViewByID;
@@ -10,7 +11,9 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.image.Image;
@@ -43,16 +46,13 @@ public class MainViewImpl extends BaseView implements MainView {
     private MenuButton settingsButton;
 
     @FXML
-    private Button generateButton;
+    private Button goToGenerateButton;
+
+    @FXML
+    private Button fullButton;
 
     @FXML
     private ImagesListView imagesListView;
-
-    @FXML
-    private ImageView contentImage;
-
-    @FXML
-    private ImageView styleImage;
 
     @FXML
     private ImageView resultImage;
@@ -60,8 +60,11 @@ public class MainViewImpl extends BaseView implements MainView {
     @FXML
     private HBox rightPane;
 
-    private Transition rightPaneTransitionGenMode;
-    private Transition rightPaneTransitionGallMode;
+    @FXML
+    private HBox contentBox;
+
+    private Transition rightPaneTransitionFullMode;
+    private Transition rightPaneTransitionShowMode;
     private double width;
 
     @FXML
@@ -85,14 +88,15 @@ public class MainViewImpl extends BaseView implements MainView {
     }
 
     @FXML
-    protected void onGenerate() {
-        if (generateButton.getText().equals("+")) {
+    protected void onFull() {
+        /*
+        if (fullButton.getText().equals("FULL")) {
             imagesListView.hide();
-            if (rightPaneTransitionGenMode == null) {
+            if (rightPaneTransitionFullMode == null) {
                 final double startWidth = rightPane.getWidth();
                 width = startWidth;
                 final double endWidth = base.getWidth();
-                rightPaneTransitionGenMode = new Transition() {
+                rightPaneTransitionFullMode = new Transition() {
                     {
                         setCycleDuration(Duration.millis(250));
                     }
@@ -104,15 +108,15 @@ public class MainViewImpl extends BaseView implements MainView {
                     }
                 };
             }
-            rightPaneTransitionGenMode.play();
-            switchToGenerateMode(true);
-            generateButton.setText("-");
+            rightPaneTransitionFullMode.play();
+            goToFullMode(true);
+            fullButton.setText("SHOW");
         } else {
             imagesListView.show();
-            if (rightPaneTransitionGallMode == null) {
+            if (rightPaneTransitionShowMode == null) {
                 final double startWidth = rightPane.getWidth();
                 final double endWidth = width;
-                rightPaneTransitionGallMode = new Transition() {
+                rightPaneTransitionShowMode = new Transition() {
                     {
                         setCycleDuration(Duration.millis(250));
                     }
@@ -124,9 +128,32 @@ public class MainViewImpl extends BaseView implements MainView {
                     }
                 };
             }
-            rightPaneTransitionGallMode.play();
-            switchToGenerateMode(false);
-            generateButton.setText("+");
+            rightPaneTransitionShowMode.play();
+            goToFullMode(false);
+            fullButton.setText("FULL");
+        }
+        */
+    }
+
+    @FXML
+    protected void onGoToGenerate() throws IOException{
+        if (goToGenerateButton.getText().equals("+")) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getViewManager().getClass()
+                        .getResource("/Layouts/GeneratorView.fxml"));
+                Parent generatorView = loader.load();
+                GeneratorView ctrl = loader.getController();
+                ctrl.setViewsToggler(this);
+                contentBox.getChildren().setAll(generatorView);
+                goToGenerateButton.textProperty().setValue("-");
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println(e);
+                throw new IOException("Failed to load GeneratroView.fxml");
+            }
+        } else {
+            contentBox.getChildren().setAll(imagesListView, rightPane);
+            goToGenerateButton.textProperty().setValue("+");
         }
     }
 
@@ -141,42 +168,11 @@ public class MainViewImpl extends BaseView implements MainView {
         imgView.setImage(image);
     }
 
-    private void setImageView(final ImageView img) {
-        img.setVisible(true);
-        img.setFitHeight(150.0);
-        img.setFitWidth(150.0);
-        changeImage(img);
-        img.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                FileChooser filechooser = new FileChooser();
-                FileChooser.ExtensionFilter extFilterJPG = new FileChooser.ExtensionFilter("JPG files (*.jpg)", "*.JPG");
-                FileChooser.ExtensionFilter extFilterPNG = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.PNG");
-                filechooser.getExtensionFilters().addAll(extFilterJPG, extFilterPNG);
-
-                File file = filechooser.showOpenDialog(null);
-                try {
-                    BufferedImage buffimage = ImageIO.read(file);
-                    Image image = SwingFXUtils.toFXImage(buffimage, null);
-                    img.setImage(image);
-                } catch (IOException e) {
-                    System.out.println(e);
-                }
-            }
-        });
-        resultImage.setFitWidth(150.0);
-        resultImage.setFitHeight(150.0);
-        HBox.setMargin(resultImage, new Insets(80.0, 20.0, 80.0, 40.0));
-        HBox.setMargin(img, new Insets(80.0, 20.0, 80.0, 20.0));
-    }
-
-    private void switchToGenerateMode(boolean to) {
-        if (to) {
-            setImageView(contentImage);
-            setImageView(styleImage);
+    private void goToFullMode(boolean really) {
+        if (really) {
+            HBox.setMargin(resultImage, new Insets(20, 0, 0, 0));
         } else {
-            contentImage.setVisible(false);
-            styleImage.setVisible(false);
+            HBox.setMargin(resultImage, new Insets(20, 0, 0, 0));
         }
     }
 

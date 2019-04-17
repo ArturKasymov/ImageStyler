@@ -9,12 +9,12 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.layout.HBox?>
-<GridPane fx:id="base" maxHeight="Infinity" maxWidth="Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.MainViewImpl">
+<GridPane fx:id="base" maxHeight="Infinity" maxWidth="Infinity" prefHeight="400.0" prefWidth="600.0"
+          xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.MainViewImpl">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="200.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="400.0" />
@@ -36,32 +36,27 @@
                     <MenuItem mnemonicParsing="false" onAction="#onLogOut" text="LOG OUT" />
                 </items>
             </MenuButton>
-            <Button fx:id="generateButton" mnemonicParsing="false" onAction="#onGenerate" text="+" />
+            <Button fx:id="goToGenerateButton" mnemonicParsing="false" onAction="#onGoToGenerate" text="+" />
+            <Button fx:id="fullButton" mnemonicParsing="false" onAction="#onFull" text="FULL" />
         </items>
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
       </ToolBar>
-       <ImagesListView fx:id="imagesListView" minWidth="0.0" prefHeight="320.0" prefWidth="200.0" GridPane.rowIndex="1">
-
-       </ImagesListView>
-      <HBox fx:id="rightPane" nodeOrientation="LEFT_TO_RIGHT" opacity="1.0" prefHeight="320.0" prefWidth="400.0" style="" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+      <HBox fx:id="contentBox" visible="true" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
          <children>
-             <ImageView fx:id="contentImage" pickOnBounds="true" preserveRatio="true" visible="false">
-                 <HBox.margin>
-                     <Insets bottom="0.0" left="0.0" right="0.0" top="0.0" />
-                 </HBox.margin>
-             </ImageView>
-             <ImageView fx:id="styleImage" pickOnBounds="true" preserveRatio="true" visible="false">
-                 <HBox.margin>
-                     <Insets bottom="0.0" left="0.0" right="0.0" top="0.0" />
-                 </HBox.margin>
-             </ImageView>
-            <ImageView fx:id="resultImage" fitHeight="320.0" fitWidth="320.0" pickOnBounds="true" preserveRatio="true">
-               <HBox.margin>
-                  <Insets left="40.0" top="20.0" />
-               </HBox.margin>
-            </ImageView>
+             <ImagesListView fx:id="imagesListView" minWidth="0.0" prefHeight="320.0" prefWidth="200.0">
+
+            </ImagesListView>
+            <HBox fx:id="rightPane" nodeOrientation="LEFT_TO_RIGHT" opacity="1.0" prefHeight="320.0" prefWidth="400.0" style="">
+               <children>
+                  <ImageView fx:id="resultImage" fitHeight="320.0" fitWidth="320.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets left="40.0" top="20.0" />
+                     </HBox.margin>
+                  </ImageView>
+               </children>
+            </HBox>
          </children>
       </HBox>
    </children>
