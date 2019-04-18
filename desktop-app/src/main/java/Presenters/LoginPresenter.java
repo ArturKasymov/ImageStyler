@@ -1,19 +1,21 @@
 package Presenters;
 
+import Model.Interactors.Interactor;
+import Model.Interactors.LoginInteractor;
 import Views.Implementations.LoginViewImpl;
 
-//for testing
-import java.util.Random;
 
 public class LoginPresenter {
     private LoginViewImpl view;
+    private LoginInteractor interactor;
 
     public LoginPresenter(LoginViewImpl view) {
-        this.view = view;
+        this.view=view;
+        this.interactor=Interactor.getInstance();
     }
 
     public void login(CharSequence login, CharSequence password) {
-        if (true) view.goToMain();
+        if (interactor.checkUserData(login,password)) view.goToMain();
         else view.showWrongDataAlert();
     }
 
