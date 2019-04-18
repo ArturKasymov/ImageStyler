@@ -21,5 +21,7 @@ public class SQLiteQueries {
             "\tvector_value VARCHAR(4294967296)\n" +
             ");";
     public final static String INSERT_USER="INSERT INTO users(user_name,password_hash) VALUES(?,?)";
-    public final static String GET_USER_NAMES="SELECT UNIQUE user_name FROM users";
+    public final static String GET_USER_NAMES="SELECT user_name FROM users";
+    public final static String GET_USER_ID="SELECT id_user FROM users WHERE user_name= ? AND password_hash = ?";
+    public final static String GET_USER="SELECT id_user, user_name, password_hash FROM users WHERE user_name= ?";
 }
