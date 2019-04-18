@@ -120,4 +120,9 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
     protected void onRegister(ActionEvent e) {
         maybeLogin(null);
     }
+
+    @Override
+    public void showAlert() {
+        throw new RuntimeException();
+    }
 }

@@ -59,6 +59,7 @@ public class SQLiteLocalDataProvider {
     public User getUser(String userName){
         try {
             PreparedStatement pstmt = connection.prepareStatement(GET_USER);
+            pstmt.setString(1,userName);
             ResultSet rs = pstmt.executeQuery();
             return new User(rs.getInt("id_user"),
                     rs.getString("user_name"),

@@ -15,9 +15,13 @@ public class RegisterPresenter {
     }
 
     public void register(CharSequence login, CharSequence password){
-        view.goToMain();
+        if (!interactor.checkUserExists(login)) {
+            interactor.insertUser(login, password);
+            view.goToMain();
+        } else {
+            view.showAlert();
+        }
     }
-
 
     public void unsubscribe(){
         this.view=null;
