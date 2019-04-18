@@ -1,5 +1,6 @@
 package app;
 
+import Model.Interactors.Interactor;
 import Views.core.BaseView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,7 @@ public class AppManager extends Application {
     private Stage stage;
 
     private Parent LoginView, RegisterView, MainView;
+    private Interactor interactor;
 
     @Override
     public void start(Stage primaryStage){
@@ -29,7 +31,7 @@ public class AppManager extends Application {
 
     private void initModel(){
         checkAppRootDir();
-
+        interactor=Interactor.getInstance();
     }
 
 
@@ -49,12 +51,11 @@ public class AppManager extends Application {
         }
     }
 
-    private void checkAppRootDir()  {
+    private void checkAppRootDir(){
         File dir = new File(APP_ROOT_DIRECTORY);
         if (!dir.exists())dir.mkdirs();
         System.out.println(dir);
     }
-
 
     private void setView(Parent view) {
         stage.getScene().setRoot(view);

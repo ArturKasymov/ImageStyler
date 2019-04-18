@@ -4,6 +4,7 @@ import Presenters.GeneratorPresenter;
 import Views.Interfaces.GeneratorView;
 import Views.core.BaseView;
 import Views.core.ViewByID;
+import app.AppManager;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,6 +19,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 public class GeneratorViewImpl extends BaseView implements GeneratorView {
 
@@ -43,8 +45,11 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
 
     @FXML
     public void initialize() {
-        File img = new File("/Demko/Projects/ImageStyler/desktop-app/src/main/java/Utils/images/img1.png");
+        //TODO Rewrite
+        URL url=AppManager.class.getResource("/TestImages/img1.png");
+        File img = new File(url.getFile());
         Image image = new Image(img.toURI().toString());
+
         contentImage.setImage(image);
         styleImage.setImage(image);
         generatedImage.setImage(image);

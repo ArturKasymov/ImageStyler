@@ -1,10 +1,17 @@
 package Presenters;
 
+import Model.Interactors.Interactor;
+import Model.Interactors.MainInteractor;
 import Views.Implementations.MainViewImpl;
 
 public class MainPresenter {
     private MainViewImpl view;
-    public MainPresenter(MainViewImpl view) { this.view = view; }
+    private MainInteractor interactor;
+
+    public MainPresenter(MainViewImpl view) {
+        this.view = view;
+        this.interactor= Interactor.getInstance();
+    }
     public void unsubscribe() { this.view = null; }
     public void logout() {
         view.goToLogin();

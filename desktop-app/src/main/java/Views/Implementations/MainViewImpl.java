@@ -166,7 +166,7 @@ public class MainViewImpl extends BaseView implements MainView {
     }
 
     private void changeImage(ImageView imgView) {
-
+        //TODO REWRITE
         URL url=AppManager.class.getResource("/TestImages/img1.png");
         File img = new File(url.getFile());
 

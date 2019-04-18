@@ -1,5 +1,7 @@
 package Views.Implementations;
 
+import Model.Interactors.Interactor;
+import Model.Interactors.MainInteractor;
 import Presenters.LoginPresenter;
 
 import javafx.beans.value.ChangeListener;
@@ -20,8 +22,10 @@ import Views.core.ViewByID;
 public class LoginViewImpl extends BaseView implements LoginView {
 
     private LoginPresenter presenter;
+    private MainInteractor interactor;
     public LoginViewImpl() {
         this.presenter = new LoginPresenter(this);
+        this.interactor= Interactor.getInstance();
     }
 
     @Override
