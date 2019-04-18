@@ -15,7 +15,7 @@ public class LoginPresenter {
     }
 
     public void login(CharSequence login, CharSequence password) {
-        if (interactor.checkUserData(login,password)) view.goToMain();
+        if (interactor.checkUserData(login, password)) view.goToMain();
         else view.showWrongDataAlert();
     }
 

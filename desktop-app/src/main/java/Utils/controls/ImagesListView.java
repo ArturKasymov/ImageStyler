@@ -1,6 +1,6 @@
 package Utils.controls;
 
-import app.ViewManager;
+import app.AppManager;
 import javafx.animation.Animation;
 import javafx.animation.Transition;
 import javafx.event.ActionEvent;
@@ -78,7 +78,7 @@ public class ImagesListView extends VBox {
 
     private Parent attachView(String path, Object controller, Object root) throws IOException {
         String layouts = "/Layouts";
-        URL url = ViewManager.class.getResource(layouts+path);
+        URL url = AppManager.class.getResource(layouts+path);
         FXMLLoader loader = new FXMLLoader(url);
         loader.setController(controller);
         loader.setRoot(root);
