@@ -8,9 +8,7 @@ import Views.core.BaseView;
 import Views.core.ViewByID;
 import app.AppManager;
 import javafx.animation.Transition;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -19,18 +17,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
-import javafx.util.Duration;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
+import javafx.scene.control.Label;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URL;
 
 public class MainViewImpl extends BaseView implements MainView {
@@ -66,12 +57,16 @@ public class MainViewImpl extends BaseView implements MainView {
     @FXML
     private HBox contentBox;
 
+    @FXML
+    private Label username;
+
     private Transition rightPaneTransitionFullMode;
     private Transition rightPaneTransitionShowMode;
     private double width;
 
     @FXML
     public void initialize() {
+        username.setText("Hello UJ");
         changeImage(resultImage);
     }
 
@@ -180,6 +175,10 @@ public class MainViewImpl extends BaseView implements MainView {
         } else {
             HBox.setMargin(resultImage, new Insets(20, 0, 0, 0));
         }
+    }
+
+    public void setUsernameLabel(String s) {
+        username.setText(s);
     }
 
 }

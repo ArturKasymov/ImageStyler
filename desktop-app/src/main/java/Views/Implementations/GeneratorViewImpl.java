@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -20,6 +21,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 
 public class GeneratorViewImpl extends BaseView implements GeneratorView {
 
@@ -28,6 +30,7 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
     public GeneratorViewImpl() {
         this.presenter = new GeneratorPresenter(this);
     }
+
     @Override
     public ViewByID getViewID() { return ViewByID.GENERATOR_VIEW; }
 
@@ -44,9 +47,15 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
     private Button generateButton;
 
     @FXML
+    private TextField photoName;
+
+    @FXML
+    private Button saveButton;
+
+    @FXML
     public void initialize() {
         //TODO Rewrite
-        URL url=AppManager.class.getResource("/TestImages/img1.png");
+        URL url = AppManager.class.getResource("/TestImages/img1.png");
         File img = new File(url.getFile());
         Image image = new Image(img.toURI().toString());
 
@@ -55,6 +64,7 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
         generatedImage.setImage(image);
         setOnImageClick(contentImage);
         setOnImageClick(styleImage);
+        setOnSaveButtonClick();
     }
 
     @FXML
@@ -81,6 +91,23 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
                 }
             }
         });
+    }
+
+    private void setOnSaveButtonClick() {
+        saveButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (photoName.getCharacters().length()>0) {
+                    presenter.saveGeneratedImage(generatedImage.getImage(), photoName.getCharacters().toString(), new Date());
+                } else {
+                    showNoPhotoNameAlert();
+                }
+            }
+        });
+    }
+
+    private void showNoPhotoNameAlert() {
+        throw new RuntimeException();
     }
 
     public void setViewsToggler(BaseView view) {

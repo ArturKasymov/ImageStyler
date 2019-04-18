@@ -3,15 +3,15 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" prefHeight="400.0" prefWidth="600.0"
-          xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="Views.Implementations.GeneratorViewImpl">
+<GridPane alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.GeneratorViewImpl">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" prefWidth="150.0" />
         <ColumnConstraints hgrow="SOMETIMES" prefWidth="75.0" />
@@ -41,15 +41,38 @@
               <Insets />
           </GridPane.margin>
       </ImageView>
-      <Button fx:id="generateButton" onAction="#onGenerate" mnemonicParsing="false" style="-fx-background-color: orange;" text="=" textAlignment="CENTER" GridPane.columnIndex="3">
+      <Button fx:id="generateButton" mnemonicParsing="false" onAction="#onGenerate" style="-fx-background-color: orange;" text="=" textAlignment="CENTER" GridPane.columnIndex="3">
          <GridPane.margin>
             <Insets left="19.0" />
          </GridPane.margin>
       </Button>
-      <ImageView fx:id="generatedImage" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4">
-          <GridPane.margin>
-              <Insets />
-          </GridPane.margin>
-      </ImageView>
+      <GridPane prefHeight="400.0" GridPane.columnIndex="4">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints prefHeight="125.0" vgrow="SOMETIMES" />
+             <RowConstraints prefHeight="150.0" vgrow="SOMETIMES" />
+             <RowConstraints prefHeight="125.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+             <TextField fx:id="photoName" alignment="CENTER" prefWidth="150.0" promptText="Name a photo" GridPane.rowIndex="0">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets top="40.0" />
+               </GridPane.margin></TextField>
+            <ImageView fx:id="generatedImage" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1" />
+            <AnchorPane GridPane.rowIndex="2">
+               <children>
+                  <Button fx:id="saveButton" mnemonicParsing="false" text="SAVE" AnchorPane.leftAnchor="55.0" AnchorPane.topAnchor="20.0" />
+               </children>
+            </AnchorPane>
+         </children>
+      </GridPane>
    </children>
 </GridPane>
