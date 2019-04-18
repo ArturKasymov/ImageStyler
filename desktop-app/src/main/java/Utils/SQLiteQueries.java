@@ -20,4 +20,6 @@ public class SQLiteQueries {
             "\tstyle_name VARCHAR(32) NOT NULL,\t\n" +
             "\tvector_value VARCHAR(4294967296)\n" +
             ");";
+    public final static String INSERT_USER="INSERT INTO users(user_name,password_hash) VALUES(?,?)";
+    public final static String GET_USER_NAMES="SELECT UNIQUE user_name FROM users";
 }
