@@ -6,6 +6,7 @@ import Views.Interfaces.GeneratorView;
 import Views.Interfaces.MainView;
 import Views.core.BaseView;
 import Views.core.ViewByID;
+import app.AppManager;
 import javafx.animation.Transition;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -29,6 +30,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
 
 public class MainViewImpl extends BaseView implements MainView {
     private MainPresenter presenter;
@@ -139,7 +142,7 @@ public class MainViewImpl extends BaseView implements MainView {
     protected void onGoToGenerate() throws IOException{
         if (goToGenerateButton.getText().equals("+")) {
             try {
-                FXMLLoader loader = new FXMLLoader(getViewManager().getClass()
+                FXMLLoader loader = new FXMLLoader(getAppManager().getClass()
                         .getResource("/Layouts/GeneratorView.fxml"));
                 Parent generatorView = loader.load();
                 GeneratorView ctrl = loader.getController();
@@ -163,7 +166,10 @@ public class MainViewImpl extends BaseView implements MainView {
     }
 
     private void changeImage(ImageView imgView) {
-        File img = new File("/Demko/Projects/ImageStyler/desktop-app/src/main/java/Utils/images/img1.png");
+
+        URL url=AppManager.class.getResource("/TestImages/img1.png");
+        File img = new File(url.getFile());
+
         Image image = new Image(img.toURI().toString());
         imgView.setImage(image);
     }

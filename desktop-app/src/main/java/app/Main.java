@@ -24,7 +24,7 @@ public class Main {
             return;
         }
 
-        Application.launch(ViewManager.class, args);
+        Application.launch(AppManager.class, args);
     }
 
     public static void main(String[] args) throws Exception {
