@@ -35,7 +35,6 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
             String userLogin = login.toString();
             String userPassword = password.toString();
             User storedUser = dataProvider.getUser(userLogin);
-            System.out.println(storedUser.getPasswordHash());
             return cryptoRepo.checkPassword(userPassword, storedUser.getPasswordHash());
         } catch (Exception e) {
             e.printStackTrace();
