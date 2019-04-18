@@ -1,5 +1,6 @@
 package Model.Database.provider;
 
+import Model.Database.Entity.User;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
@@ -41,6 +42,32 @@ public class SQLiteLocalDataProvider {
         } catch (SQLException  e) {
             e.printStackTrace();
         }
+    }
+
+    public int getUserID(String userName, String passwordHash){
+        try {
+            Statement stmt=connection.createStatement();
+            ResultSet rs = stmt.executeQuery(GET_USER_ID);
+
+        } catch (SQLException  e) {
+            e.printStackTrace();
+        }
+        return -1;
+
+    }
+
+    public User getUser(String userName){
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(GET_USER);
+            ResultSet rs = pstmt.executeQuery();
+            return new User(rs.getInt("id_user"),
+                    rs.getString("user_name"),
+                    rs.getString("password_hash")
+            );
+        } catch (SQLException  e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public List<String> getLocalUsersNameList(){
