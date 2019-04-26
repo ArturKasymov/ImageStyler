@@ -1,10 +1,18 @@
 package Model.Database.provider;
 
 import Model.Database.Entity.User;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static Utils.SQLiteQueries.*;
@@ -40,6 +48,23 @@ public class SQLiteLocalDataProvider {
             pstmt.setString(2, passwordHash);
             pstmt.executeUpdate();
         } catch (SQLException  e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void insertGeneratedImage(Image image, String name, Date date) {
+        try {
+            //TODO Save image and insert into db
+            PreparedStatement NOTCOMPILINGWITHOUTIT = connection.prepareStatement(INSERT_USER);
+
+            /*
+            BufferedImage buffImage = SwingFXUtils.fromFXImage(image, null);
+            File file = new File(".")
+            ImageIO.write(buffImage, ".png", file);
+            PreparedStatement pstmt = connection.prepareStatement(INSERT_GENERATED_IMAGE);
+            pstmt.executeUpdate();
+            */
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

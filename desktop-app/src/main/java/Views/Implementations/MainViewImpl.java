@@ -73,6 +73,11 @@ public class MainViewImpl extends BaseView implements MainView {
     @FXML
     protected void onLogOut(ActionEvent e) {
         presenter.logout();
+        try {
+            onGoToGenerate();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     @FXML
@@ -162,7 +167,7 @@ public class MainViewImpl extends BaseView implements MainView {
 
     private void changeImage(ImageView imgView) {
         //TODO REWRITE
-        URL url=AppManager.class.getResource("/TestImages/img1.png");
+        URL url = AppManager.class.getResource("/TestImages/img1.png");
         File img = new File(url.getFile());
 
         Image image = new Image(img.toURI().toString());
