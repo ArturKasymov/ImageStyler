@@ -12,10 +12,10 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="base" maxHeight="Infinity" maxWidth="Infinity" prefHeight="400.0" prefWidth="600.0"
-          xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.MainViewImpl">
+<GridPane fx:id="base" maxHeight="Infinity" maxWidth="Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.MainViewImpl">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="200.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="400.0" />
@@ -37,7 +37,7 @@
                     <MenuItem mnemonicParsing="false" onAction="#onLogOut" text="LOG OUT" />
                 </items>
             </MenuButton>
-            <Button fx:id="goToGenerateButton" mnemonicParsing="false" onAction="#onGoToGenerate" text="+" />
+            <Button fx:id="goToGenerateButton" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" onAction="#onGoToGenerate" prefHeight="25.0" prefWidth="25.0" text="+" />
             <Button fx:id="fullButton" mnemonicParsing="false" onAction="#onFull" text="FULL" />
             <Label fx:id="username" alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: red;" text="Hello UJ" translateX="320.0" />
         </items>
@@ -50,15 +50,19 @@
              <ImagesListView fx:id="imagesListView" minWidth="0.0" prefHeight="320.0" prefWidth="200.0">
 
             </ImagesListView>
-            <HBox fx:id="rightPane" nodeOrientation="LEFT_TO_RIGHT" opacity="1.0" prefHeight="320.0" prefWidth="400.0">
+            <VBox fx:id="rightPane" opacity="1.0" prefHeight="320.0" prefWidth="400.0">
                <children>
-                  <ImageView fx:id="resultImage" fitHeight="320.0" fitWidth="320.0" pickOnBounds="true" preserveRatio="true">
-                     <HBox.margin>
-                        <Insets left="40.0" top="20.0" />
-                     </HBox.margin>
+                   <Label fx:id="photoName" alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="200.0" text="LOL">
+                     <VBox.margin>
+                        <Insets left="97.0" top="7.0" />
+                     </VBox.margin></Label>
+                  <ImageView fx:id="resultImage" fitHeight="310.0" fitWidth="310.0" pickOnBounds="true" preserveRatio="true">
+                     <VBox.margin>
+                        <Insets left="45.0" top="1.5" />
+                     </VBox.margin>
                   </ImageView>
                </children>
-            </HBox>
+            </VBox>
          </children>
       </HBox>
    </children>

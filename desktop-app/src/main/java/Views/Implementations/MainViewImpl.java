@@ -20,6 +20,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -52,7 +54,7 @@ public class MainViewImpl extends BaseView implements MainView {
     private ImageView resultImage;
 
     @FXML
-    private HBox rightPane;
+    private VBox rightPane;
 
     @FXML
     private HBox contentBox;
@@ -60,14 +62,18 @@ public class MainViewImpl extends BaseView implements MainView {
     @FXML
     private Label username;
 
+    @FXML
+    private Label photoName;
+
     private Transition rightPaneTransitionFullMode;
     private Transition rightPaneTransitionShowMode;
     private double width;
 
     @FXML
     public void initialize() {
-        username.setText("Hello UJ");
-        changeImage(resultImage);
+        setUsernameLabel("Hello UJ");
+        changeImage(resultImage, "/TestImages/img1.png");
+        imagesListView.setView(this);
     }
 
     @FXML
@@ -165,9 +171,14 @@ public class MainViewImpl extends BaseView implements MainView {
         changeViewTo(new LoginViewImpl());
     }
 
-    private void changeImage(ImageView imgView) {
-        //TODO REWRITE
-        URL url = AppManager.class.getResource("/TestImages/img1.png");
+    public void setResultImage(Utils.controls.Image newImage) {
+        String path = newImage.getImageUrl();
+        changeImage(resultImage, path);
+        photoName.setText(newImage.getImageName());
+    }
+
+    private void changeImage(ImageView imgView, String path) {
+        URL url = AppManager.class.getResource(path);
         File img = new File(url.getFile());
 
         Image image = new Image(img.toURI().toString());

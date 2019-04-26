@@ -2,6 +2,7 @@ package Presenters;
 
 import Model.Interactors.Interactor;
 import Model.Interactors.MainInteractor;
+import Utils.controls.Image;
 import Views.Implementations.MainViewImpl;
 
 public class MainPresenter {
