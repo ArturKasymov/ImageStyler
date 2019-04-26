@@ -159,7 +159,7 @@ public class MainViewImpl extends BaseView implements MainView {
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println(e);
-                throw new IOException("Failed to load GeneratroView.fxml");
+                throw new IOException("Failed to load GeneratorView.fxml");
             }
         } else {
             contentBox.getChildren().setAll(imagesListView, rightPane);

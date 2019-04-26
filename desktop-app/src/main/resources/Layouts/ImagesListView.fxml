@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
 
-<fx:root type="javafx.scene.layout.VBox" prefHeight="360.0" prefWidth="200.0"
-         xmlns:fx="http://javafx.com/fxml/1">
+<fx:root prefHeight="360.0" prefWidth="200.0" stylesheets="@../stylesheets/imagesListViewStyle.css" type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.172-ea">
     <children>
         <TextField fx:id="imagesSearch" promptText="Search..." />
         <Separator />
-        <ListView fx:id="imagesListView" prefHeight="1000.0" />
+        <ListView styleClass="imagesListView" fx:id="imagesListView" prefHeight="1000.0" />
     </children>
 </fx:root>
