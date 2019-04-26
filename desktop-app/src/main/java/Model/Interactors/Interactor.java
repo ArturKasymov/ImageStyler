@@ -2,9 +2,12 @@ package Model.Interactors;
 
 import Model.Database.Entity.User;
 import Model.Database.provider.SQLiteLocalDataProvider;
+import Model.Repositories.ImageRepo;
 import Model.Repositories.cryptoRepo;
+import javafx.scene.image.Image;
 
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -55,5 +58,16 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void insertGeneratedImage(Image image, String name, Date date) {
+        dataProvider.insertGeneratedImage(image, name, date);
+    }
+
+    @Override
+    public Image generate(Image contentImage, Image styleImage) {
+        ImageRepo generator = new ImageRepo(contentImage, styleImage);
+        return generator.generate();
     }
 }

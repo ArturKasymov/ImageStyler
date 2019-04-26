@@ -21,6 +21,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.Buffer;
 import java.util.Date;
 
 public class GeneratorViewImpl extends BaseView implements GeneratorView {
@@ -69,7 +70,11 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
 
     @FXML
     public void onGenerate(ActionEvent e) {
-        presenter.generate();
+        presenter.generate(contentImage.getImage(), styleImage.getImage());
+    }
+
+    public void setGeneratedImageView(Image img) {
+        generatedImage.setImage(img);
     }
 
     private void setOnImageClick(final ImageView imgView) {
@@ -107,7 +112,13 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
     }
 
     private void showNoPhotoNameAlert() {
-        throw new RuntimeException();
+        photoName.styleProperty().setValue("-fx-border-color: red;");
+        photoName.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                photoName.styleProperty().setValue("");
+            }
+        });
     }
 
     public void setViewsToggler(BaseView view) {

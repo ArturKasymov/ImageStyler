@@ -4,6 +4,7 @@ import Model.Interactors.GeneratorInteractor;
 import Model.Interactors.Interactor;
 import Views.Implementations.GeneratorViewImpl;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.awt.image.BufferedImage;
 import java.util.Date;
@@ -17,9 +18,11 @@ public class GeneratorPresenter {
         this.interactor= Interactor.getInstance();
     }
 
-    public void generate() {}
+    public void generate(Image contentImage, Image styleImage) {
+        view.setGeneratedImageView(interactor.generate(contentImage, styleImage));
+    }
 
     public void saveGeneratedImage(Image image, String photoName, Date date) {
-
+        interactor.insertGeneratedImage(image, photoName, date);
     }
 }
