@@ -39,7 +39,7 @@
             </MenuButton>
             <Button fx:id="goToGenerateButton" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" onAction="#onGoToGenerate" prefHeight="25.0" prefWidth="25.0" text="+" />
             <Button fx:id="fullButton" mnemonicParsing="false" onAction="#onFull" text="HIDE" minWidth="70.0" prefWidth="70.0" />
-            <Label fx:id="username" alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: red;" text="Hello UJ" translateX="320.0" />
+            <Label fx:id="username" alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: red;" text="Hello UJ" translateX="300.0" />
         </items>
          <GridPane.margin>
             <Insets />

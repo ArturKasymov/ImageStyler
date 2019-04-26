@@ -1,0 +1,24 @@
+.list-cell:filled:selected:odd {
+    /* 4: (Styling when out of focus)*/
+    -fx-background-color: AntiqueWhite;
+}
+
+.list-cell:filled:selected:even {
+    -fx-background-color: Aquamarine;
+}
+
+.list-view:focused .list-cell:filled:selected {
+    -fx-background-color: linear-gradient(#300 0%, #700 25%, #a00 75%, #e00 100%);
+}
+
+.list-cell { -fx-text-fill: black; }
+.list-cell:odd { -fx-background-color: AntiqueWhite; }
+.list-cell:even { -fx-background-color: Aquamarine; }
+.list-cell:filled:hover {
+    -fx-background-color: #0f0;
+    -fx-text-fill: white;
+}
+
+.imagesListView:focused {
+    -fx-background-color: transparent;
+}
