@@ -1,8 +1,16 @@
 package Utils.controls;
 
+import Presenters.MainPresenter;
+import Views.Implementations.MainViewImpl;
+import Views.Interfaces.MainView;
+import Views.core.BaseView;
 import app.AppManager;
 import javafx.animation.Animation;
 import javafx.animation.Transition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -17,6 +25,7 @@ import java.io.IOException;
 import java.net.URL;
 
 public class ImagesListView extends VBox {
+    private MainView view;
     @FXML
     private TextField imagesSearch;
 
@@ -32,6 +41,10 @@ public class ImagesListView extends VBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void setView(MainView view) {
+        this.view = view;
     }
 
     public void hide() {
@@ -87,6 +100,18 @@ public class ImagesListView extends VBox {
 
     @FXML
     public void initialize() {
+        imagesListView.setCellFactory(x->new ImageListCell());
 
+        ObservableList<Image> items = FXCollections.observableArrayList();
+        items.add(new Image("abc", "/TestImages/la_muse.jpg", "2014-02-21"));
+        items.add(new Image("def", "/TestImages/rain_princess.jpg", "2019-04-26"));
+        imagesListView.setItems(items);
+
+        imagesListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Image>() {
+            @Override
+            public void changed(ObservableValue<? extends Image> observable, Image oldValue, Image newValue) {
+                view.setResultImage(newValue);
+            }
+        });
     }
 }

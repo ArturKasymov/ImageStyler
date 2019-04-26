@@ -75,7 +75,6 @@ public class AppManager extends Application {
                 setView(MainView);
                 break;
         }
-
     }
 
     private Parent loadView(String path) throws IOException {

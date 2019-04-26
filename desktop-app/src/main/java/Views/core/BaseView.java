@@ -1,6 +1,7 @@
 package Views.core;
 
 
+import Utils.controls.Image;
 import javafx.scene.Parent;
 import app.AppManager;
 
@@ -22,4 +23,5 @@ public abstract class BaseView extends Parent {
     protected void changeViewTo(BaseView baseView) {
         appManager.changeViewTo(baseView);
     }
+
 }
