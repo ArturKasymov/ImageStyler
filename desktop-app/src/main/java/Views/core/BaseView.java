@@ -22,4 +22,8 @@ public abstract class BaseView extends Parent {
     protected void changeViewTo(BaseView baseView) {
         appManager.changeViewTo(baseView);
     }
+
+    public void initViewData(){
+
+    }
 }

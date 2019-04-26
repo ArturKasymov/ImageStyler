@@ -86,6 +86,8 @@ public class SQLiteLocalDataProvider {
             PreparedStatement pstmt = connection.prepareStatement(GET_USER);
             pstmt.setString(1,userName);
             ResultSet rs = pstmt.executeQuery();
+            if(rs.isClosed()) return null;
+
             return new User(rs.getInt("id_user"),
                     rs.getString("user_name"),
                     rs.getString("password_hash")

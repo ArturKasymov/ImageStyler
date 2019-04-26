@@ -14,9 +14,13 @@ public class MainPresenter {
     }
     public void unsubscribe() { this.view = null; }
     public void logout() {
+        interactor.logout();
         view.goToLogin();
     }
     public void goToSettings() {}
     public void goToGenerator() {}
     public void cleanCache() {}
+    public void initUserData(){
+        view.setUsernameLabel(interactor.getCurrentUserName());
+    };
 }

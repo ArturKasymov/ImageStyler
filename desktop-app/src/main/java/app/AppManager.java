@@ -1,6 +1,8 @@
 package app;
 
+import Client.SessionManager;
 import Model.Interactors.Interactor;
+import Views.Implementations.MainViewImpl;
 import Views.core.BaseView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +21,7 @@ public class AppManager extends Application {
     private Stage stage;
 
     private Parent LoginView, RegisterView, MainView;
+    private BaseView[] controllers=new BaseView[3];
     private Interactor interactor;
 
     @Override
@@ -59,23 +62,25 @@ public class AppManager extends Application {
 
     private void setView(Parent view) {
         stage.getScene().setRoot(view);
+
     }
 
     public void changeViewTo(BaseView targetView){
-
         switch (targetView.getViewID())
         {
             case LOGIN_VIEW:
                 setView(LoginView);
+                controllers[0].initViewData();
                 break;
             case REGISTER_VIEW:
                 setView(RegisterView);
+                controllers[1].initViewData();
                 break;
             case MAIN_VIEW:
                 setView(MainView);
+                controllers[2].initViewData();
                 break;
         }
-
     }
 
     private Parent loadView(String path) throws IOException {
@@ -84,9 +89,23 @@ public class AppManager extends Application {
         FXMLLoader loader = new FXMLLoader(url);
         Parent view = loader.load();
         BaseView controller = loader.getController();
+        saveController(controller);
         controller.setAppManager(this);
         return view;
     }
 
-
+    private void saveController(BaseView controller){
+        switch (controller.getViewID())
+        {
+            case LOGIN_VIEW:
+                controllers[0]=controller;
+                break;
+            case REGISTER_VIEW:
+                controllers[1]=controller;
+                break;
+            case MAIN_VIEW:
+                controllers[2]=controller;
+                break;
+        }
+    }
 }
