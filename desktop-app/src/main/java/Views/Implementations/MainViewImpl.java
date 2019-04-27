@@ -9,6 +9,7 @@ import Views.core.ViewByID;
 import app.AppManager;
 import javafx.animation.Transition;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -20,6 +21,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import javafx.util.Duration;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -52,7 +56,7 @@ public class MainViewImpl extends BaseView implements MainView {
     private ImageView resultImage;
 
     @FXML
-    private HBox rightPane;
+    private VBox rightPane;
 
     @FXML
     private HBox contentBox;
@@ -60,13 +64,17 @@ public class MainViewImpl extends BaseView implements MainView {
     @FXML
     private Label username;
 
+    @FXML
+    private Label photoName;
+
     private Transition rightPaneTransitionFullMode;
     private Transition rightPaneTransitionShowMode;
     private double width;
 
     @FXML
     public void initialize() {
-        changeImage(resultImage);
+        changeImage(resultImage, "/TestImages/img1.png");
+        imagesListView.setView(this);
     }
 
     @Override
@@ -96,13 +104,12 @@ public class MainViewImpl extends BaseView implements MainView {
 
     @FXML
     protected void onFull() {
-        /*
-        if (fullButton.getText().equals("FULL")) {
+        if (fullButton.getText().equals("HIDE")) {
             imagesListView.hide();
             if (rightPaneTransitionFullMode == null) {
                 final double startWidth = rightPane.getWidth();
-                width = startWidth;
-                final double endWidth = base.getWidth();
+                final double endWidth = (base.getWidth()+startWidth)/2;
+                width = endWidth;
                 rightPaneTransitionFullMode = new Transition() {
                     {
                         setCycleDuration(Duration.millis(250));
@@ -123,6 +130,7 @@ public class MainViewImpl extends BaseView implements MainView {
             if (rightPaneTransitionShowMode == null) {
                 final double startWidth = rightPane.getWidth();
                 final double endWidth = width;
+                final double d = startWidth - endWidth;
                 rightPaneTransitionShowMode = new Transition() {
                     {
                         setCycleDuration(Duration.millis(250));
@@ -131,15 +139,14 @@ public class MainViewImpl extends BaseView implements MainView {
                     @Override
                     protected void interpolate(double frac) {
                         final double delta = (endWidth - startWidth) * (frac);
-                        rightPane.setTranslateX(delta);
+                        rightPane.setTranslateX(d+delta);
                     }
                 };
             }
             rightPaneTransitionShowMode.play();
             goToFullMode(false);
-            fullButton.setText("FULL");
+            fullButton.setText("HIDE");
         }
-        */
     }
 
     @FXML
@@ -156,7 +163,7 @@ public class MainViewImpl extends BaseView implements MainView {
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println(e);
-                throw new IOException("Failed to load GeneratroView.fxml");
+                throw new IOException("Failed to load GeneratorView.fxml");
             }
         } else {
             contentBox.getChildren().setAll(imagesListView, rightPane);
@@ -169,9 +176,14 @@ public class MainViewImpl extends BaseView implements MainView {
         changeViewTo(new LoginViewImpl());
     }
 
-    private void changeImage(ImageView imgView) {
-        //TODO REWRITE
-        URL url = AppManager.class.getResource("/TestImages/img1.png");
+    public void setResultImage(Utils.controls.Image newImage) {
+        String path = newImage.getImageUrl();
+        changeImage(resultImage, path);
+        photoName.setText(newImage.getImageName());
+    }
+
+    private void changeImage(ImageView imgView, String path) {
+        URL url = AppManager.class.getResource(path);
         File img = new File(url.getFile());
 
         Image image = new Image(img.toURI().toString());

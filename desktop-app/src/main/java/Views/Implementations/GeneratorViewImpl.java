@@ -24,12 +24,16 @@ import java.net.URL;
 import java.nio.Buffer;
 import java.util.Date;
 
-public class GeneratorViewImpl extends BaseView implements GeneratorView {
+import static Utils.Constants.NUM_STYLE_IMAGES;
 
+public class GeneratorViewImpl extends BaseView implements GeneratorView {
+    private Image styleImages[] = new Image[NUM_STYLE_IMAGES];
+    private int styleImageIndex = 0;
     private GeneratorPresenter presenter;
     private BaseView toggler;
     public GeneratorViewImpl() {
         this.presenter = new GeneratorPresenter(this);
+        loadStyleImages();
     }
 
     @Override
@@ -55,16 +59,13 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
 
     @FXML
     public void initialize() {
-        //TODO Rewrite
-        URL url = AppManager.class.getResource("/TestImages/img1.png");
-        File img = new File(url.getFile());
-        Image image = new Image(img.toURI().toString());
+        Image image = styleImages[0];
 
         contentImage.setImage(image);
         styleImage.setImage(image);
         generatedImage.setImage(image);
         setOnImageClick(contentImage);
-        setOnImageClick(styleImage);
+        //setOnImageClick(styleImage);
         setOnSaveButtonClick();
     }
 
@@ -73,8 +74,35 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
         presenter.generate(contentImage.getImage(), styleImage.getImage());
     }
 
+    @FXML
+    public void onShiftLeftStyleImage() {
+        styleImageIndex = (styleImageIndex-1) % NUM_STYLE_IMAGES;
+        if (styleImageIndex<0) styleImageIndex += NUM_STYLE_IMAGES;
+        styleImage.setImage(styleImages[styleImageIndex]);
+    }
+
+    @FXML
+    public void onShiftRightStyleImage(){
+        styleImageIndex = (styleImageIndex+1) % NUM_STYLE_IMAGES;
+        styleImage.setImage(styleImages[styleImageIndex]);
+    }
+
     public void setGeneratedImageView(Image img) {
         generatedImage.setImage(img);
+    }
+
+    private Image getImage(String path) {
+        URL url = AppManager.class.getResource(path);
+        File file = new File(url.getFile());
+        Image image = new Image(file.toURI().toString());
+        return image;
+    }
+
+    private void loadStyleImages() {
+        styleImages[0] = getImage("/TestImages/img1.png");
+        styleImages[1] = getImage("/TestImages/la_muse.jpg");
+        styleImages[2] = getImage("/TestImages/rain_princess.jpg");
+        styleImages[3] = getImage("/TestImages/udnie.jpg");
     }
 
     private void setOnImageClick(final ImageView imgView) {
