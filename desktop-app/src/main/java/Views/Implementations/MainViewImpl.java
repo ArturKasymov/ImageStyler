@@ -73,9 +73,13 @@ public class MainViewImpl extends BaseView implements MainView {
 
     @FXML
     public void initialize() {
-        setUsernameLabel("Hello UJ");
         changeImage(resultImage, "/TestImages/img1.png");
         imagesListView.setView(this);
+    }
+
+    @Override
+    public void initViewData() {
+        presenter.initUserData();
     }
 
     @FXML
@@ -194,6 +198,7 @@ public class MainViewImpl extends BaseView implements MainView {
         }
     }
 
+    @Override
     public void setUsernameLabel(String s) {
         username.setText(s);
     }

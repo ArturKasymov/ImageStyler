@@ -24,4 +24,6 @@ public abstract class BaseView extends Parent {
         appManager.changeViewTo(baseView);
     }
 
+    public void initViewData(){}
+
 }
