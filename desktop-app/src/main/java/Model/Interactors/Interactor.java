@@ -9,6 +9,7 @@ import Model.Repositories.cryptoRepo;
 import javafx.scene.image.Image;
 
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -75,10 +76,9 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public void insertGeneratedImage(Image image, String name, Date date) {
-
-
+    public Utils.controls.Image insertGeneratedImage(Image image, String name, Date date) {
         dataProvider.insertGeneratedImage(image, name, date);
+        return new Utils.controls.Image(name, name+".jpg", date);
     }
 
     @Override
@@ -91,6 +91,11 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     @Override
     public String getCurrentUserName() {
         return sessionManager.getCurrentUserName();
+    }
+
+    @Override
+    public ArrayList<Utils.controls.Image> getCurrentUserImages() {
+        return sessionManager.getCurrentUserImages();
     }
 
     @Override

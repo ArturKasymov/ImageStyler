@@ -1,28 +1,33 @@
 package Utils.controls;
 
-import Presenters.MainPresenter;
-import Views.Implementations.MainViewImpl;
+import Utils.Constants;
 import Views.Interfaces.MainView;
-import Views.core.BaseView;
 import app.AppManager;
 import javafx.animation.Animation;
 import javafx.animation.Transition;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.function.Predicate;
 
 public class ImagesListView extends VBox {
     private MainView view;
@@ -32,8 +37,15 @@ public class ImagesListView extends VBox {
     @FXML
     private ListView<Image> imagesListView;
 
+    @FXML
+    private ComboBox<String> sortBy;
+
     private Animation hidePane;
     private Animation showPane;
+
+    private ObservableList<Image> userImages;
+
+    private Constants.SORT_BY currentSort = Constants.SORT_BY.NAME_ASC;
 
     public ImagesListView() {
         try {
@@ -61,12 +73,6 @@ public class ImagesListView extends VBox {
                     setTranslateX(-delta);
                 }
             };
-            hidePane.onFinishedProperty().set(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    setVisible(false);
-                }
-            });
         }
         hidePane.play();
     }
@@ -85,8 +91,8 @@ public class ImagesListView extends VBox {
                 }
             };
         }
-        setVisible(true);
         showPane.play();
+
     }
 
     private Parent attachView(String path, Object controller, Object root) throws IOException {
@@ -98,20 +104,109 @@ public class ImagesListView extends VBox {
         return loader.load();
     }
 
+    public void notifyList(Image savedImage) {
+        userImages.add(savedImage);
+        userImages.sort(getComparator(currentSort));
+        updateImagesList(userImages);
+    }
+
+    private void updateImagesList(ObservableList<Image> images) {
+        imagesListView.setCellFactory(x->null);
+        imagesListView.setCellFactory(x->new ImageListCell());
+        imagesListView.setItems(images);
+    }
+
+    private Comparator<Image> getComparator(Constants.SORT_BY sortMode) {
+        switch (sortMode) {
+            case NAME_ASC:
+                return new Comparator<Image>() {
+                    @Override
+                    public int compare(Image o1, Image o2) {
+                        return o1.getImageName().compareTo(o2.getImageName());
+                    }
+                };
+            case NAME_DESC:
+                return new Comparator<Image>() {
+                    @Override
+                    public int compare(Image o1, Image o2) {
+                        return o2.getImageName().compareTo(o1.getImageName());
+                    }
+                };
+            case DATE_ASC:
+                return new Comparator<Image>() {
+                    @Override
+                    public int compare(Image o1, Image o2) {
+
+                        return o1.getImageDate().compareTo(o2.getImageDate());
+                    }
+                };
+            case DATE_DESC:
+                return new Comparator<Image>() {
+                    @Override
+                    public int compare(Image o1, Image o2) {
+                        return o2.getImageDate().compareTo(o1.getImageDate());
+                    }
+                };
+        }
+        return null;
+    }
+
     @FXML
     public void initialize() {
-        imagesListView.setCellFactory(x->new ImageListCell());
 
-        ObservableList<Image> items = FXCollections.observableArrayList();
-        items.add(new Image("abc", "/TestImages/la_muse.jpg", "2014-02-21"));
-        items.add(new Image("def", "/TestImages/rain_princess.jpg", "2019-04-26"));
-        imagesListView.setItems(items);
+        // TODO: FETCH FROM DATABASE
+        userImages = FXCollections.observableArrayList();
+        userImages.add(new Image("def", "/TestImages/la_muse.jpg", new Date()));
+        Date tmpDate = new Date();
+        tmpDate.setYear(114);
+        userImages.add(new Image("abc", "/TestImages/rain_princess.jpg", tmpDate));
+        userImages.sort(getComparator(currentSort));
+        updateImagesList(userImages);
+
+        imagesSearch.setFocusTraversable(false);
+        sortBy.setFocusTraversable(false);
 
         imagesListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Image>() {
             @Override
             public void changed(ObservableValue<? extends Image> observable, Image oldValue, Image newValue) {
-                view.setResultImage(newValue);
+                if (newValue!=null) view.setResultImage(newValue);
             }
         });
+
+        imagesSearch.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                ObservableList<Image> realTimeSearch = userImages.filtered(new Predicate<Image>() {
+                    @Override
+                    public boolean test(Image image) {
+                        return image.getImageName().indexOf(imagesSearch.getCharacters().toString())==0;
+                    }
+                });
+                updateImagesList(realTimeSearch);
+                imagesListView.refresh();
+            }
+        });
+
+        sortBy.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                userImages.sort(getComparator(getSortMode(newValue)));
+                updateImagesList(userImages);
+            }
+        });
+    }
+
+    private Constants.SORT_BY getSortMode(String userChoice) {
+        switch (userChoice) {
+            case "Name (a-z)":
+                return Constants.SORT_BY.NAME_ASC;
+            case "Name (z-a)":
+                return Constants.SORT_BY.NAME_DESC;
+            case "Date (0-9)":
+                return Constants.SORT_BY.DATE_ASC;
+            case "Date (9-0)":
+                return Constants.SORT_BY.DATE_DESC;
+        }
+        return null;
     }
 }

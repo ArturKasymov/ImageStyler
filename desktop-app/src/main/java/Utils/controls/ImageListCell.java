@@ -11,7 +11,6 @@ import javafx.scene.control.Label;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class ImageListCell extends ListCell<Image> {
 
@@ -39,7 +38,7 @@ public class ImageListCell extends ListCell<Image> {
         if (elem != null) {
             image.setImageName(elem.getImageName());
             photoName.setText(elem.getImageName());
-            String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(elem.getImageDate());
             date.setText(formattedDate);
         } else {
             image = new Image();

@@ -23,6 +23,6 @@ public class GeneratorPresenter {
     }
 
     public void saveGeneratedImage(Image image, String photoName, Date date) {
-        interactor.insertGeneratedImage(image, photoName, date);
+        view.notifyList(interactor.insertGeneratedImage(image, photoName, date));
     }
 }

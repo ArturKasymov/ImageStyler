@@ -2,6 +2,7 @@ package Views.Implementations;
 
 import Presenters.GeneratorPresenter;
 import Views.Interfaces.GeneratorView;
+import Views.Interfaces.MainView;
 import Views.core.BaseView;
 import Views.core.ViewByID;
 import app.AppManager;
@@ -30,7 +31,7 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
     private Image styleImages[] = new Image[NUM_STYLE_IMAGES];
     private int styleImageIndex = 0;
     private GeneratorPresenter presenter;
-    private BaseView toggler;
+    private MainView toggler;
     public GeneratorViewImpl() {
         this.presenter = new GeneratorPresenter(this);
         loadStyleImages();
@@ -149,8 +150,12 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
         });
     }
 
-    public void setViewsToggler(BaseView view) {
+    public void setViewsToggler(MainView view) {
         this.toggler = view;
+    }
+
+    public void notifyList(Utils.controls.Image savedImage) {
+        toggler.notifyList(savedImage);
     }
 
 }
