@@ -1,24 +1,95 @@
-.list-cell:filled:selected:odd {
-    /* 4: (Styling when out of focus)*/
-    -fx-background-color: AntiqueWhite;
-}
-
-.list-cell:filled:selected:even {
-    -fx-background-color: Aquamarine;
-}
-
-.list-view:focused .list-cell:filled:selected {
-    -fx-background-color: linear-gradient(#300 0%, #700 25%, #a00 75%, #e00 100%);
-}
-
-.list-cell { -fx-text-fill: black; }
-.list-cell:odd { -fx-background-color: AntiqueWhite; }
-.list-cell:even { -fx-background-color: Aquamarine; }
 .list-cell:filled:hover {
     -fx-background-color: #0f0;
+    -fx-cursor: hand;
+}
+.imagesListView .list-cell:filled:selected {
+    -fx-background-color: linear-gradient(#300 0%, #700 25%, #a00 75%, #e00 100%);
+    -fx-test-fill: white;
+    -fx-text-fill: green;
+}
+
+.imagesListView .list-cell:filled:selected .dateLabel {
     -fx-text-fill: white;
 }
 
+.imagesListView .list-cell:filled:selected .photoNameLabel {
+    -fx-text-fill: white;
+}
+
+.imagesListView .list-cell:filled:selected:hover {
+    -fx-background-color: linear-gradient(#300 0%, #700 25%, #a00 75%, #e00 100%);
+    -fx-text-fill: white;
+    -fx-cursor: pointer;
+}
+
+.list-cell { -fx-text-color: black; }
+.list-cell:odd { -fx-background-color: AntiqueWhite; }
+.list-cell:even { -fx-background-color: Aquamarine; }
+
+
 .imagesListView:focused {
     -fx-background-color: transparent;
+}
+
+
+
+.combo-box .list-cell
+{
+    -fx-text-fill: -fx-text-base-color;
+    -fx-padding: 3 0 2 7;
+    -fx-cell-size: 2em;
+    -fx-background-color: transparent;
+}
+
+.combo-box-popup .list-view
+{
+    -fx-background-color: white, white;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 8, 0.0 , 0 , 0 );
+}
+
+.combo-box-popup .list-view .list-cell
+{
+    -fx-padding: 4 0 4 5;
+}
+
+.combo-box-popup .list-view .list-cell:odd {
+    -fx-background-color: AntiqueWhite;
+}
+
+.combo-box-popup .list-view .list-cell:even {
+    -fx-background-color: Aquamarine;
+}
+
+/*.combo-box-popup .list-view .list-cell:filled:selected, .combo-box-popup .list-view .list-cell:filled:selected:hover
+{
+    -fx-background: -fx-accent;
+    -fx-background-color: -fx-selection-bar;
+    -fx-text-fill: -fx-selection-bar-text;
+}*/
+
+.combo-box-popup .list-view .list-cell:filled:hover
+{
+    -fx-background-color: #0f0;
+    -fx-text-fill: -fx-text-inner-color;
+}
+
+.combo-box-base:hover
+{
+    -fx-color: -fx-hover-base;
+}
+
+.combo-box-base:showing
+{
+    -fx-color: -fx-pressed-base;
+}
+
+.combo-box-base:focused {
+    -fx-background-color: -fx-focus-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-radius: 6.4, 4, 5, 3;
+    -fx-background-insets: -1.4, 0, 1, 2;
+}
+
+.combo-box-base:disabled {
+    -fx-opacity: .4;
 }

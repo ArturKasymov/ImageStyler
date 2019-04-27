@@ -9,7 +9,6 @@ import Views.core.ViewByID;
 import app.AppManager;
 import javafx.animation.Transition;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -201,6 +200,10 @@ public class MainViewImpl extends BaseView implements MainView {
     @Override
     public void setUsernameLabel(String s) {
         username.setText(s);
+    }
+
+    public void notifyList(Utils.controls.Image savedImage) {
+        imagesListView.notifyList(savedImage);
     }
 
 }

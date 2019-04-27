@@ -23,5 +23,6 @@ public class MainPresenter {
     public void cleanCache() {}
     public void initUserData(){
         view.setUsernameLabel(interactor.getCurrentUserName());
+
     };
 }

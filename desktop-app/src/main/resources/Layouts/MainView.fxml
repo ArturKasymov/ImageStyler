@@ -52,7 +52,7 @@
             </ImagesListView>
             <VBox fx:id="rightPane" opacity="1.0" prefHeight="320.0" prefWidth="400.0">
                <children>
-                   <Label fx:id="photoName" alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="200.0" text="LOL">
+                   <Label fx:id="photoName" alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="200.0" text="Hello UJ">
                      <VBox.margin>
                         <Insets left="100.0" top="7.0" />
                      </VBox.margin></Label>

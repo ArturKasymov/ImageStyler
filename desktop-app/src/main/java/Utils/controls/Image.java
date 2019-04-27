@@ -1,15 +1,17 @@
 package Utils.controls;
 
+import java.util.Date;
+
 public class Image {
     private String imageName;
     private String imageUrl;
-    private String imageDate;
+    private Date imageDate;
 
     public Image() {
 
     }
 
-    public Image(String name, String url, String date) {
+    public Image(String name, String url, Date date) {
         setImageName(name);
         setImageUrl(url);
         setImageDate(date);
@@ -31,9 +33,12 @@ public class Image {
         return imageName;
     }
 
-    public void setImageDate(String date) { imageDate = date; }
+    public void setImageDate(Date date) { imageDate = date; }
 
-    public String getImageDate() { return imageDate; }
+    public Date getImageDate() { return imageDate; }
 
+    public void clear() {
+        imageName = "";
 
+    }
 }
