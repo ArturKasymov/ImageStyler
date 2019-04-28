@@ -2,7 +2,7 @@ package Client;
 
 import Model.Database.Entity.Session;
 import Model.Database.Entity.User;
-import Utils.controls.Image;
+import Model.Database.Entity.UserImage;
 
 import java.util.ArrayList;
 
@@ -14,7 +14,18 @@ public class SessionManager {
         return currentSession.getUserName();
     }
 
-    public ArrayList<Image> getCurrentUserImages() { return currentSession.getImages(); }
+    public int getCurrentUserId(){
+        return currentSession.getUserId();
+    }
+
+    public ArrayList<UserImage> checkCurrentUserImages() {
+        //TODO get Images from server
+        return null;
+    }
+
+    public String getCurrentUserPath(){
+        return currentSession.getCurrentUserPath();
+    }
 
     public void startSession(long sessionId, User user){
         this.currentSession=new Session(sessionId,user);

@@ -1,5 +1,6 @@
 package Views.Implementations;
 
+import Model.Database.Entity.UserImage;
 import Presenters.GeneratorPresenter;
 import Views.Interfaces.GeneratorView;
 import Views.Interfaces.MainView;
@@ -22,7 +23,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.Buffer;
 import java.util.Date;
 
 import static Utils.Constants.NUM_STYLE_IMAGES;
@@ -107,55 +107,44 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
     }
 
     private void setOnImageClick(final ImageView imgView) {
-        imgView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                FileChooser chooser = new FileChooser();
-                FileChooser.ExtensionFilter extFilterPNG = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.PNG");
-                FileChooser.ExtensionFilter extFilterJPG = new FileChooser.ExtensionFilter("JPG files (*.jpg)", "*.JPG");
-                chooser.getExtensionFilters().addAll(extFilterPNG, extFilterJPG);
+        imgView.setOnMouseClicked(event -> {
+            FileChooser chooser = new FileChooser();
+            FileChooser.ExtensionFilter extFilterPNG = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.PNG");
+            FileChooser.ExtensionFilter extFilterJPG = new FileChooser.ExtensionFilter("JPG files (*.jpg)", "*.JPG");
+            chooser.getExtensionFilters().addAll(extFilterPNG, extFilterJPG);
 
-                File file = chooser.showOpenDialog(null);
-                try {
-                    BufferedImage buffimage = ImageIO.read(file);
-                    Image image = SwingFXUtils.toFXImage(buffimage, null);
-                    imgView.setImage(image);
-                } catch (IOException e) {
-                    System.out.println(e);
-                }
+            File file = chooser.showOpenDialog(null);
+            try {
+                BufferedImage buffimage = ImageIO.read(file);
+                Image image = SwingFXUtils.toFXImage(buffimage, null);
+                imgView.setImage(image);
+            } catch (IOException e) {
+                System.out.println(e);
             }
         });
     }
 
     private void setOnSaveButtonClick() {
-        saveButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (photoName.getCharacters().length()>0) {
-                    presenter.saveGeneratedImage(generatedImage.getImage(), photoName.getCharacters().toString(), new Date());
-                } else {
-                    showNoPhotoNameAlert();
-                }
+        saveButton.setOnMouseClicked(event -> {
+            if (photoName.getCharacters().length()>0) {
+                presenter.saveGeneratedImage(generatedImage.getImage(), photoName.getCharacters().toString(), new Date());
+            } else {
+                showNoPhotoNameAlert();
             }
         });
     }
 
     private void showNoPhotoNameAlert() {
         photoName.styleProperty().setValue("-fx-border-color: red;");
-        photoName.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                photoName.styleProperty().setValue("");
-            }
-        });
+        photoName.setOnMouseClicked(event -> photoName.styleProperty().setValue(""));
     }
 
     public void setViewsToggler(MainView view) {
         this.toggler = view;
     }
 
-    public void notifyList(Utils.controls.Image savedImage) {
-        toggler.notifyList(savedImage);
+    public void notifyList(UserImage savedUserImage) {
+        toggler.notifyList(savedUserImage);
     }
 
 }

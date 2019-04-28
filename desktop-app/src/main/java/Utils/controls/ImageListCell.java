@@ -1,5 +1,6 @@
 package Utils.controls;
 
+import Model.Database.Entity.UserImage;
 import app.AppManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +13,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 
-public class ImageListCell extends ListCell<Image> {
+public class ImageListCell extends ListCell<UserImage> {
 
     @FXML
     private Label photoName;
@@ -20,7 +21,7 @@ public class ImageListCell extends ListCell<Image> {
     @FXML
     private Label date;
 
-    private Image image;
+    private UserImage userImage;
 
     private Node view;
 
@@ -33,15 +34,15 @@ public class ImageListCell extends ListCell<Image> {
     }
 
     @Override
-    protected void updateItem(Image elem, boolean empty) {
+    protected void updateItem(UserImage elem, boolean empty) {
         super.updateItem(elem, empty);
         if (elem != null) {
-            image.setImageName(elem.getImageName());
+            userImage.setImageName(elem.getImageName());
             photoName.setText(elem.getImageName());
             String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(elem.getImageDate());
             date.setText(formattedDate);
         } else {
-            image = new Image();
+            userImage = new UserImage();
             setGraphic(view);
         }
     }

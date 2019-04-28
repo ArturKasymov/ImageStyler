@@ -4,12 +4,13 @@ CREATE TABLE IF NOT EXISTS users (
     password_hash VARCHAR(32) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS user_fotos (
-    id_foto INTEGER PRIMARY KEY AUTOINCREMENT,
-    foto_name VARCHAR(32) NOT NULL,
+CREATE TABLE IF NOT EXISTS user_images (
+    id_image INTEGER PRIMARY KEY AUTOINCREMENT,
+    image_name VARCHAR(32) NOT NULL,
 
     id_user INTEGER NOT NULL REFERENCES users(id_user),
-    time TIMESTAMP NOT NULL DEFAULT current_timestamp
+    image_date TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    isDownloaded INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS style_feature_vectors (

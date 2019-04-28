@@ -1,9 +1,11 @@
 package Presenters;
 
+import Model.Database.Entity.UserImage;
 import Model.Interactors.Interactor;
 import Model.Interactors.MainInteractor;
-import Utils.controls.Image;
 import Views.Implementations.MainViewImpl;
+
+import java.util.ArrayList;
 
 public class MainPresenter {
     private MainViewImpl view;
@@ -25,4 +27,8 @@ public class MainPresenter {
         view.setUsernameLabel(interactor.getCurrentUserName());
 
     };
+
+    public ArrayList<UserImage> getUserImagesList() {
+        return interactor.getCurrentUserImagesList();
+    }
 }

@@ -1,10 +1,11 @@
 package Model.Interactors;
 
+import Model.Database.Entity.UserImage;
 import javafx.scene.image.Image;
 
 import java.util.Date;
 
 public interface GeneratorInteractor {
-    Utils.controls.Image insertGeneratedImage(Image image, String name, Date date);
+    UserImage insertUserImage(Image image, String name, Date date);
     Image generate(Image contentImage, Image styleImage);
 }

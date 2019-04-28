@@ -1,11 +1,11 @@
 package Model.Interactors;
 
-import Utils.controls.Image;
+import Model.Database.Entity.UserImage;
 
 import java.util.ArrayList;
 
 public interface MainInteractor {
     String getCurrentUserName();
-    ArrayList<Image> getCurrentUserImages();
     void logout();
+    ArrayList<UserImage> getCurrentUserImagesList();
 }

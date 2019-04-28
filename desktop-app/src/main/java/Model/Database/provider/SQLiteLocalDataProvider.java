@@ -1,15 +1,10 @@
 package Model.Database.provider;
 
 import Model.Database.Entity.User;
-import javafx.embed.swing.SwingFXUtils;
+import Model.Database.Entity.UserImage;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
-import java.io.File;
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,9 +19,6 @@ public class SQLiteLocalDataProvider {
         try {
             connection = DriverManager.getConnection(String.format("jdbc:sqlite:%s", dbname));
 
-            DatabaseMetaData meta = connection.getMetaData();
-            System.out.println("A new database has been created.\nThe driver name is " + meta.getDriverName());
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -35,7 +27,9 @@ public class SQLiteLocalDataProvider {
     public void checkTables(){
         try {
             Statement stmt=connection.createStatement();
-            stmt.execute(CHECK_TABLES);
+            stmt.execute(CHECK_USERS);
+            stmt.execute(CHECK_USER_IMAGES);
+            stmt.execute(CHECK_STYLES);
         } catch (SQLException  e) {
             e.printStackTrace();
         }
@@ -52,32 +46,22 @@ public class SQLiteLocalDataProvider {
         }
     }
 
-    public void insertGeneratedImage(Image image, String name, Date date) {
+    public int insertUserImage(String imageName, int userID ,Date date, boolean isDownloaded) {
         try {
-            //TODO Save image and insert into db
-            PreparedStatement NOTCOMPILINGWITHOUTIT = connection.prepareStatement(INSERT_USER);
-
-            /*
-            BufferedImage buffImage = SwingFXUtils.fromFXImage(image, null);
-            File file = new File(".")
-            ImageIO.write(buffImage, ".png", file);
-            PreparedStatement pstmt = connection.prepareStatement(INSERT_GENERATED_IMAGE);
+            PreparedStatement pstmt = connection.prepareStatement(INSERT_IMAGE);
+            pstmt.setString(1,imageName);
+            pstmt.setInt(2,userID);
+            pstmt.setDate(3,new java.sql.Date(date.getTime()));
+            pstmt.setBoolean(4,isDownloaded);
             pstmt.executeUpdate();
-            */
+            return connection.createStatement().executeQuery(GET_LAST_ROW_ID).getInt(1);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return -1;
     }
 
-    public int getUserID(String userName, String passwordHash){
-        try {
-            Statement stmt=connection.createStatement();
-            ResultSet rs = stmt.executeQuery(GET_USER_ID);
-
-        } catch (SQLException  e) {
-            e.printStackTrace();
-        }
-        return -1;
+    public void insertImages(ArrayList<UserImage> images){
 
     }
 
@@ -113,4 +97,24 @@ public class SQLiteLocalDataProvider {
         return null;
     }
 
+    public ArrayList<UserImage> getUserImages(int currentUserId) {
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(GET_USER_IMAGES);
+            pstmt.setInt(1,currentUserId);
+            ResultSet rs = pstmt.executeQuery();
+            ArrayList<UserImage> userImages=new ArrayList<>();
+            while(rs.next()) {
+                userImages.add(new UserImage(rs.getInt("id_image"),
+                        rs.getString("image_name"),
+                        rs.getInt("id_user"),
+                        rs.getDate("image_date"),
+                        rs.getBoolean("is_downloaded")
+                        ));
+            }
+            return userImages;
+        } catch (SQLException  e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
