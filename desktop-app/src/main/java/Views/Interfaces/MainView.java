@@ -9,5 +9,6 @@ public interface MainView {
     void setUsernameLabel(String s);
     void setResultImage(UserImage newUserImage);
     void notifyList(UserImage savedUserImage);
+
     ArrayList<UserImage> getUserImagesList();
 }

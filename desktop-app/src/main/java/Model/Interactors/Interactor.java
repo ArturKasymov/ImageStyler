@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,7 +52,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
             User storedUser = dataProvider.getUser(userLogin);
             if(storedUser==null) return false;
             //ToDo rewrite Server check
-            boolean result=cryptoRepo.checkPassword(userPassword, storedUser.getPasswordHash());
+            boolean result = cryptoRepo.checkPassword(userPassword, storedUser.getPasswordHash());
 
             if(result) sessionManager.startSession(new Random().nextLong(),storedUser);
 
@@ -59,6 +60,25 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    @Override
+    public boolean checkChangePassword(CharSequence oldPassword) {
+        try {
+            return cryptoRepo.checkPassword(oldPassword.toString(), sessionManager.getCurrentUserPassword());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public void changeUserPassword(CharSequence newPassword) {
+        try {
+            dataProvider.changePassword(sessionManager.getCurrentUserName(), cryptoRepo.getSaltedHash(newPassword.toString()));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

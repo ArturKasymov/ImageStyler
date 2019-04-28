@@ -105,15 +105,20 @@ public class LoginViewImpl extends BaseView implements LoginView {
 
     public void showWrongDataAlert() {
         warning.setVisible(true);
+        loginField.requestFocus();
     }
+
+    private void hideWrongDataAlert() { warning.setVisible(false); }
 
     public void goToRegister(){
         //presenter.unsubscribe();
+        hideWrongDataAlert();
         changeViewTo(new RegisterViewImpl());
     }
 
     public void goToMain(){
         //presenter.unsubscribe();
+        hideWrongDataAlert();
         changeViewTo(new MainViewImpl());
     }
 

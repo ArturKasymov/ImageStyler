@@ -7,14 +7,15 @@ import app.AppManager;
 import com.sun.javafx.scene.control.skin.ListViewSkin;
 import javafx.animation.Animation;
 import javafx.animation.Transition;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Orientation;
+import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -108,6 +109,7 @@ public class ImagesListView extends VBox {
         imagesListView.setCellFactory(x->null);
         imagesListView.setCellFactory(x->new ImageListCell());
         imagesListView.setItems(userImages);
+        checkForVerticalBar();
     }
 
     private Comparator<UserImage> getComparator(Constants.SORT_BY sortMode) {
@@ -124,6 +126,23 @@ public class ImagesListView extends VBox {
         return null;
     }
 
+    private void checkForVerticalBar() {
+        // TODO: listen for visibility of bar, not for elements number
+        if (userImages.size()>=10) {
+            imagesListView.setCellFactory(x->new ImageListCell() {
+                {
+                    changeDateLabelPosition(105.0);
+                }
+            });
+        } else {
+            imagesListView.setCellFactory(x->new ImageListCell() {
+                {
+                    changeDateLabelPosition(115.0);
+                }
+            });
+        }
+    }
+
     public void initList(){
         try {
             userImages.setAll(view.getUserImagesList());
@@ -132,7 +151,10 @@ public class ImagesListView extends VBox {
         }
         userImages.sort(getComparator(currentSort));
         updateImagesList(userImages);
-        if (userImages.size()>0) view.setResultImage(userImages.get(0));
+        if (userImages.size()>0) {
+            imagesListView.getSelectionModel().selectFirst();
+            view.setResultImage(userImages.get(0));
+        }
     }
 
     @FXML
