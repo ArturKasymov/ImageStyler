@@ -21,7 +21,6 @@ public class MainPresenter {
         view.goToLogin();
     }
     public void goToSettings() {}
-    public void goToGenerator() {}
     public void cleanCache() {}
     public void initUserData(){
         view.setUsernameLabel(interactor.getCurrentUserName());

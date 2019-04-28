@@ -16,11 +16,11 @@ public class UserImage {
 
     }
 
-    public UserImage(int imageID, String name, int usedID, Date date, boolean isDownloaded) {
+    public UserImage(int imageID, String name, int userID, Date date, boolean isDownloaded) {
         this.imageID=imageID;
         this.imageName=name;
         this.imageDate=date;
-        this.userID=usedID;
+        this.userID=userID;
         this.isDownloaded=isDownloaded;
     }
 

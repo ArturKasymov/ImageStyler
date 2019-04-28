@@ -77,7 +77,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
 
     private void checkUserDirectory(){
         File dir = new File(sessionManager.getCurrentUserPath());
-        if (!dir.exists())dir.mkdirs();
+        if (!dir.exists()) dir.mkdirs();
     }
 
     @Override
@@ -87,7 +87,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
 
             //ToDo write server
             sessionManager.startSession(new Random().nextLong(),dataProvider.getUser(login.toString()));
-
+            checkUserDirectory();
         } catch (Exception e) {
             e.printStackTrace();
         }

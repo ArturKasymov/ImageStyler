@@ -18,8 +18,6 @@ import Views.Interfaces.LoginView;
 import Views.core.BaseView;
 import Views.core.ViewByID;
 
-import java.util.List;
-
 
 public class LoginViewImpl extends BaseView implements LoginView {
 
