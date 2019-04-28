@@ -41,7 +41,18 @@ public class SQLiteLocalDataProvider {
             pstmt.setString(1, userName);
             pstmt.setString(2, passwordHash);
             pstmt.executeUpdate();
-        } catch (SQLException  e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void changePassword(String userName, String passwordHash) {
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(CHANGE_PASSWORD);
+            pstmt.setString(1, passwordHash);
+            pstmt.setString(2, userName);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

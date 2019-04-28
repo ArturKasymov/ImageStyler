@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -57,5 +58,9 @@ public class ImageListCell extends ListCell<UserImage> {
 
     @FXML
     public void initialize() {
+    }
+
+    public void changeDateLabelPosition(double newMargin) {
+        AnchorPane.setLeftAnchor(date, newMargin);
     }
 }

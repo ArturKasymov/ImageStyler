@@ -9,18 +9,20 @@ import Views.core.BaseView;
 import Views.core.ViewByID;
 import app.AppManager;
 import javafx.animation.Transition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuButton;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -40,6 +42,9 @@ public class MainViewImpl extends BaseView implements MainView {
 
     @FXML
     private GridPane base;
+
+    @FXML
+    private ToolBar toolbar;
 
     @FXML
     private MenuButton settingsButton;
@@ -63,6 +68,24 @@ public class MainViewImpl extends BaseView implements MainView {
     private HBox contentBox;
 
     @FXML
+    private DialogPane settingsDialog;
+
+    @FXML
+    private Button exitSettingsButton;
+
+    @FXML
+    private PasswordField oldPasswordField;
+
+    @FXML
+    private PasswordField newPasswordField;
+
+    @FXML
+    private PasswordField onceMoreNewPasswordField;
+
+    @FXML
+    private Button changePasswordButton;
+
+    @FXML
     private Label username;
 
     @FXML
@@ -76,6 +99,45 @@ public class MainViewImpl extends BaseView implements MainView {
     public void initialize() {
         changeImage(resultImage, "/TestImages/img1.png");
         imagesListView.setView(this);
+        oldPasswordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                maybeChange(event);
+            }
+        });
+        newPasswordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                maybeChange(event);
+            }
+        });
+        onceMoreNewPasswordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                maybeChange(event);
+            }
+        });
+
+        oldPasswordField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                buttonToggle();
+            }
+        });
+        newPasswordField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                buttonToggle();
+            }
+        });
+        onceMoreNewPasswordField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                buttonToggle();
+            }
+        });
+
+        changePasswordButton.setDisable(true);
     }
 
     @Override
@@ -97,7 +159,7 @@ public class MainViewImpl extends BaseView implements MainView {
 
     @FXML
     protected void onProfSettings(ActionEvent e) {
-        presenter.goToSettings();
+        showSettingsScreen(true);
     }
 
     @FXML
@@ -148,6 +210,19 @@ public class MainViewImpl extends BaseView implements MainView {
     }
 
     @FXML
+    protected void onCloseSettingsDialog() {
+        showSettingsScreen(false);
+        clearPasswordFields();
+    }
+
+    @FXML
+    protected void onChangePassword() {
+        // presenter change
+        showSettingsScreen(false);
+        clearPasswordFields();
+    }
+
+    @FXML
     protected void onGoToGenerate() throws IOException{
         if (goToGenerateButton.getText().equals("+")) {
             try {
@@ -156,8 +231,11 @@ public class MainViewImpl extends BaseView implements MainView {
                 Parent generatorView = loader.load();
                 GeneratorView ctrl = loader.getController();
                 ctrl.setViewsToggler(this);
+                BaseView genCtrl = loader.getController();
+                genCtrl.setAppManager(getAppManager());
                 contentBox.getChildren().setAll(generatorView);
                 goToGenerateButton.textProperty().setValue("-");
+                fullButton.setDisable(true);
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println(e);
@@ -166,14 +244,17 @@ public class MainViewImpl extends BaseView implements MainView {
         } else {
             contentBox.getChildren().setAll(imagesListView, rightPane);
             goToGenerateButton.textProperty().setValue("+");
+            fullButton.setDisable(false);
         }
     }
 
+    @Override
     public void goToLogin() {
         //presenter.unsubscribe();
         changeViewTo(new LoginViewImpl());
     }
 
+    @Override
     public void setResultImage(UserImage newUserImage) {
         String path = newUserImage.getImageUrl();
 
@@ -202,6 +283,7 @@ public class MainViewImpl extends BaseView implements MainView {
         username.setText(s);
     }
 
+    @Override
     public void notifyList(UserImage savedUserImage) {
         imagesListView.notifyList(savedUserImage);
     }
@@ -209,6 +291,46 @@ public class MainViewImpl extends BaseView implements MainView {
     @Override
     public ArrayList<UserImage> getUserImagesList() {
         return presenter.getUserImagesList();
+    }
+
+    private void buttonToggle() {
+        if (filledIn() && passwordsMatch()) changePasswordButton.setDisable(false);
+        else changePasswordButton.setDisable(true);
+    }
+
+    private void showSettingsScreen(boolean show) {
+        settingsDialog.setVisible(show);
+        toolbar.setDisable(show);
+        contentBox.setDisable(show);
+        resultImage.setOpacity(show ? 0.5 : 1);
+        oldPasswordField.requestFocus();
+    }
+
+    private void clearPasswordFields() {
+        oldPasswordField.clear();
+        newPasswordField.clear();
+        onceMoreNewPasswordField.clear();
+    }
+
+    public void showChangeAlert() {
+        throw new RuntimeException();
+    }
+
+    private void maybeChange(KeyEvent event) {
+        if (event==null || (event.getCode().getName().equals("Enter") && filledIn() && passwordsMatch())) {
+            changePasswordButton.setDisable(false);
+            presenter.changePassword(oldPasswordField.getCharacters(), newPasswordField.getCharacters());
+            clearPasswordFields();
+            showSettingsScreen(false);
+        }
+    }
+
+    private boolean filledIn() {
+        return oldPasswordField.getCharacters().length()>0 && newPasswordField.getCharacters().length()>0 && onceMoreNewPasswordField.getCharacters().length()>0;
+    }
+
+    private boolean passwordsMatch() {
+        return newPasswordField.getCharacters().toString().equals(onceMoreNewPasswordField.getCharacters().toString());
     }
 
 }

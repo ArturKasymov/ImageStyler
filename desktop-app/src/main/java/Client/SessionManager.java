@@ -18,6 +18,8 @@ public class SessionManager {
         return currentSession.getUserId();
     }
 
+    public String getCurrentUserPassword() { return currentSession.getCurrentUserPassword(); }
+
     public ArrayList<UserImage> checkCurrentUserImages() {
         //TODO get Images from server
         return null;

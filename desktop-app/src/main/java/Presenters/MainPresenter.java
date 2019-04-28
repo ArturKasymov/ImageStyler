@@ -20,12 +20,19 @@ public class MainPresenter {
         interactor.logout();
         view.goToLogin();
     }
-    public void goToSettings() {}
     public void cleanCache() {}
     public void initUserData(){
         view.setUsernameLabel(interactor.getCurrentUserName());
 
-    };
+    }
+
+    public void changePassword(CharSequence oldPassword, CharSequence newPassword) {
+        if (interactor.checkChangePassword(oldPassword)) {
+            interactor.changeUserPassword(newPassword);
+        } else {
+            view.showChangeAlert();
+        }
+    }
 
     public ArrayList<UserImage> getUserImagesList() {
         return interactor.getCurrentUserImagesList();

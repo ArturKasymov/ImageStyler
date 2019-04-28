@@ -23,4 +23,5 @@ public class Session {
     public String getCurrentUserPath(){
         return currentUserPath;
     }
+    public String getCurrentUserPassword() { return currentUser.getPasswordHash(); }
 }

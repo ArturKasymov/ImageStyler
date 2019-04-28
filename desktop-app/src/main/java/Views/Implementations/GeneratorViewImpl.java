@@ -127,7 +127,10 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
     private void setOnSaveButtonClick() {
         saveButton.setOnMouseClicked(event -> {
             if (photoName.getCharacters().length()>0) {
-                presenter.saveGeneratedImage(generatedImage.getImage(), photoName.getCharacters().toString(), new Date());
+                //presenter.saveGeneratedImage(generatedImage.getImage(), photoName.getCharacters().toString(), new Date());
+                getAppManager().asyncTask(()->{
+                    presenter.saveGeneratedImage(generatedImage.getImage(), photoName.getCharacters().toString(), new Date());
+                });
             } else {
                 showNoPhotoNameAlert();
             }
