@@ -96,12 +96,12 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     @Override
     public UserImage insertUserImage(Image image, String name, Date date) {
         int imageID=dataProvider.insertUserImage(name, sessionManager.getCurrentUserId(),date,true);
-        File imageFile = new File(sessionManager.getCurrentUserPath()+"\\."+imageID+".png");
+        File imageFile = new File(sessionManager.getCurrentUserPath()+"\\."+imageID+".jpg");
         OutputStream out=null;
         try {
             //TODO write Image in the another Thread
             out = new FileOutputStream(imageFile);
-            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", out);
+            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "jpg", out);
         }
         catch (IOException e)
         {
