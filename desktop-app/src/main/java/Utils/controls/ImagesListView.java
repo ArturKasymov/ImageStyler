@@ -6,26 +6,22 @@ import Views.Interfaces.MainView;
 import app.AppManager;
 import javafx.animation.Animation;
 import javafx.animation.Transition;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.function.Predicate;
+
+import static Utils.Constants.SORT_BY.*;
 
 public class ImagesListView extends VBox {
     private MainView view;
@@ -43,7 +39,7 @@ public class ImagesListView extends VBox {
 
     private ObservableList<UserImage> userImages;
 
-    private Constants.SORT_BY currentSort = Constants.SORT_BY.NAME_ASC;
+    private Constants.SORT_BY currentSort = NAME_ASC;
 
     public ImagesListView() {
         try {
@@ -90,7 +86,6 @@ public class ImagesListView extends VBox {
             };
         }
         showPane.play();
-
     }
 
     private Parent attachView(String path, Object controller, Object root) throws IOException {
@@ -109,7 +104,6 @@ public class ImagesListView extends VBox {
     }
 
     private void updateImagesList(ObservableList<UserImage> userImages) {
-        //imagesListView.setCellFactory(x->null);
         imagesListView.setCellFactory(x->new ImageListCell());
         imagesListView.setItems(userImages);
     }
@@ -153,33 +147,19 @@ public class ImagesListView extends VBox {
 
         imagesSearch.setFocusTraversable(false);
         sortBy.setFocusTraversable(false);
-        imagesListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<UserImage>() {
-            @Override
-            public void changed(ObservableValue<? extends UserImage> observable, UserImage oldValue, UserImage newValue) {
-                if (newValue!=null) view.setResultImage(newValue);
-            }
+        imagesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue!=null) view.setResultImage(newValue);
         });
 
-        imagesSearch.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                ObservableList<UserImage> realTimeSearch = userImages.filtered(new Predicate<UserImage>() {
-                    @Override
-                    public boolean test(UserImage image) {
-                        return image.getImageName().indexOf(imagesSearch.getCharacters().toString())==0;
-                    }
-                });
-                updateImagesList(realTimeSearch);
-                imagesListView.refresh();
-            }
+        imagesSearch.setOnKeyReleased(event -> {
+            ObservableList<UserImage> realTimeSearch = userImages.filtered(image -> image.getImageName().indexOf(imagesSearch.getCharacters().toString())==0);
+            updateImagesList(realTimeSearch);
+            imagesListView.refresh();
         });
 
-        sortBy.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                userImages.sort(getComparator(getSortMode(newValue)));
-                updateImagesList(userImages);
-            }
+        sortBy.valueProperty().addListener((observable, oldValue, newValue) -> {
+            userImages.sort(getComparator(getSortMode(newValue)));
+            updateImagesList(userImages);
         });
     }
 
@@ -188,14 +168,19 @@ public class ImagesListView extends VBox {
     private Constants.SORT_BY getSortMode(String userChoice) {
         switch (userChoice) {
             case "Name (a-z)":
-                return Constants.SORT_BY.NAME_ASC;
+                return NAME_ASC;
             case "Name (z-a)":
-                return Constants.SORT_BY.NAME_DESC;
+                return NAME_DESC;
             case "Date (0-9)":
-                return Constants.SORT_BY.DATE_ASC;
+                return DATE_ASC;
             case "Date (9-0)":
-                return Constants.SORT_BY.DATE_DESC;
+                return DATE_DESC;
         }
         return null;
+    }
+
+    public void cleanList() {
+        userImages.clear();
+        imagesListView.setCellFactory(x->null);
     }
 }

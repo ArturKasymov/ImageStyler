@@ -28,7 +28,7 @@ public class UserImage {
         return imageID;
     }
     public String getImageUrl() {
-        return APP_ROOT_DIRECTORY+"\\."+userID+"\\."+imageID+".png";
+        return APP_ROOT_DIRECTORY+"\\."+userID+"\\."+imageID+".jpg";
     }
 
     public boolean getIsDownloaded(){
