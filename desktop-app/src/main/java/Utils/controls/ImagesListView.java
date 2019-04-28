@@ -4,6 +4,7 @@ import Model.Database.Entity.UserImage;
 import Utils.Constants;
 import Views.Interfaces.MainView;
 import app.AppManager;
+import com.sun.javafx.scene.control.skin.ListViewSkin;
 import javafx.animation.Animation;
 import javafx.animation.Transition;
 import javafx.collections.FXCollections;
@@ -104,6 +105,7 @@ public class ImagesListView extends VBox {
     }
 
     private void updateImagesList(ObservableList<UserImage> userImages) {
+        imagesListView.setCellFactory(x->null);
         imagesListView.setCellFactory(x->new ImageListCell());
         imagesListView.setItems(userImages);
     }
@@ -124,25 +126,27 @@ public class ImagesListView extends VBox {
 
     public void initList(){
         try {
-            userImages.addAll(view.getUserImagesList());
+            userImages.setAll(view.getUserImagesList());
         } catch(NullPointerException e) {
             e.printStackTrace();
         }
         userImages.sort(getComparator(currentSort));
         updateImagesList(userImages);
+        if (userImages.size()>0) view.setResultImage(userImages.get(0));
     }
 
     @FXML
     public void initialize() {
-
-        // TODO: FETCH FROM DATABASE
         userImages = FXCollections.observableArrayList();
+        updateImagesList(userImages);
 
-
-        //userImages.add(new UserImage("def", "/TestImages/la_muse.jpg", new Date()));
-        //Date tmpDate = new Date();
-        //tmpDate.setYear(114);
-        //userImages.add(new UserImage("abc", "/TestImages/rain_princess.jpg", tmpDate));
+        imagesListView.setSkin(new ListViewSkin(imagesListView) {
+            @Override
+            public int getItemCount() {
+                int r = super.getItemCount();
+                return r==0 ? 1 : r;
+            }
+        });
 
 
         imagesSearch.setFocusTraversable(false);

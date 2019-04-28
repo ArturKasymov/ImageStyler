@@ -3,6 +3,7 @@ package app;
 import Client.SessionManager;
 import Model.Interactors.Interactor;
 import Views.Implementations.MainViewImpl;
+import Views.Interfaces.MainView;
 import Views.core.BaseView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -49,7 +50,7 @@ public class AppManager extends Application {
             LoginView = loadView("/LoginView.fxml");
             RegisterView = loadView("/RegisterView.fxml");
             MainView = loadView("/MainView.fxml");
-        }catch (IOException e){
+        } catch (IOException e){
             e.printStackTrace();
         }
     }
