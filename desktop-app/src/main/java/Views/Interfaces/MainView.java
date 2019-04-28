@@ -1,10 +1,13 @@
 package Views.Interfaces;
 
-import Utils.controls.Image;
+import Model.Database.Entity.UserImage;
+
+import java.util.ArrayList;
 
 public interface MainView {
     void goToLogin();
     void setUsernameLabel(String s);
-    void setResultImage(Image newImage);
-    void notifyList(Image savedImage);
+    void setResultImage(UserImage newUserImage);
+    void notifyList(UserImage savedUserImage);
+    ArrayList<UserImage> getUserImagesList();
 }

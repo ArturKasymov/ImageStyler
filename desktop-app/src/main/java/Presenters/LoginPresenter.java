@@ -15,7 +15,12 @@ public class LoginPresenter {
     }
 
     public void login(CharSequence login, CharSequence password) {
-        if (interactor.checkUserData(login, password)) view.goToMain();
+        if (interactor.checkLoginData(login, password)){
+            //ToDo add animation while getting data from server + make MultiThread
+            interactor.checkUserData();
+
+            view.goToMain();
+        }
         else view.showWrongDataAlert();
     }
 

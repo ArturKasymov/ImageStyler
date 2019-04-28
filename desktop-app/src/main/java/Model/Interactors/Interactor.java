@@ -1,14 +1,20 @@
 package Model.Interactors;
 
 import Client.SessionManager;
-import Model.Database.Entity.Session;
 import Model.Database.Entity.User;
+import Model.Database.Entity.UserImage;
 import Model.Database.provider.SQLiteLocalDataProvider;
 import Model.Repositories.ImageRepo;
 import Model.Repositories.cryptoRepo;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
 
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,7 +44,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public boolean checkUserData(CharSequence login, CharSequence password) {
+    public boolean checkLoginData(CharSequence login, CharSequence password) {
         try {
             String userLogin = login.toString();
             String userPassword = password.toString();
@@ -63,6 +69,18 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
+    public void checkUserData() {
+        checkUserDirectory();
+        //ToDO compareWithServer
+        dataProvider.insertImages(sessionManager.checkCurrentUserImages());
+    }
+
+    private void checkUserDirectory(){
+        File dir = new File(sessionManager.getCurrentUserPath());
+        if (!dir.exists())dir.mkdirs();
+    }
+
+    @Override
     public void insertUser(CharSequence login, CharSequence password) {
         try {
             dataProvider.insertUser(login.toString(), cryptoRepo.getSaltedHash(password.toString()));
@@ -76,9 +94,20 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public Utils.controls.Image insertGeneratedImage(Image image, String name, Date date) {
-        dataProvider.insertGeneratedImage(image, name, date);
-        return new Utils.controls.Image(name, name+".jpg", date);
+    public UserImage insertUserImage(Image image, String name, Date date) {
+        int imageID=dataProvider.insertUserImage(name, sessionManager.getCurrentUserId(),date,true);
+        File imageFile = new File(sessionManager.getCurrentUserPath()+"\\."+imageID+".png");
+        OutputStream out=null;
+        try {
+            //TODO write Image in the another Thread
+            out = new FileOutputStream(imageFile);
+            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", out);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return new UserImage(imageID,name,sessionManager.getCurrentUserId(),date,true);
     }
 
     @Override
@@ -94,12 +123,12 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public ArrayList<Utils.controls.Image> getCurrentUserImages() {
-        return sessionManager.getCurrentUserImages();
+    public void logout() {
+        sessionManager.finishSession();
     }
 
     @Override
-    public void logout() {
-        sessionManager.finishSession();
+    public ArrayList<UserImage> getCurrentUserImagesList() {
+        return dataProvider.getUserImages(sessionManager.getCurrentUserId());
     }
 }

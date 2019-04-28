@@ -1,5 +1,6 @@
 package Views.Implementations;
 
+import Model.Database.Entity.UserImage;
 import Presenters.MainPresenter;
 import Utils.controls.ImagesListView;
 import Views.Interfaces.GeneratorView;
@@ -26,6 +27,7 @@ import javafx.util.Duration;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class MainViewImpl extends BaseView implements MainView {
     private MainPresenter presenter;
@@ -79,6 +81,7 @@ public class MainViewImpl extends BaseView implements MainView {
     @Override
     public void initViewData() {
         presenter.initUserData();
+        imagesListView.initList();
     }
 
     @FXML
@@ -175,15 +178,16 @@ public class MainViewImpl extends BaseView implements MainView {
         changeViewTo(new LoginViewImpl());
     }
 
-    public void setResultImage(Utils.controls.Image newImage) {
-        String path = newImage.getImageUrl();
+    public void setResultImage(UserImage newUserImage) {
+        String path = newUserImage.getImageUrl();
+
         changeImage(resultImage, path);
-        photoName.setText(newImage.getImageName());
+        photoName.setText(newUserImage.getImageName());
     }
 
     private void changeImage(ImageView imgView, String path) {
-        URL url = AppManager.class.getResource(path);
-        File img = new File(url.getFile());
+        File img= new File(path);
+        //File img = new File(url.getFile());
 
         Image image = new Image(img.toURI().toString());
         imgView.setImage(image);
@@ -202,8 +206,13 @@ public class MainViewImpl extends BaseView implements MainView {
         username.setText(s);
     }
 
-    public void notifyList(Utils.controls.Image savedImage) {
-        imagesListView.notifyList(savedImage);
+    public void notifyList(UserImage savedUserImage) {
+        imagesListView.notifyList(savedUserImage);
+    }
+
+    @Override
+    public ArrayList<UserImage> getUserImagesList() {
+        return presenter.getUserImagesList();
     }
 
 }

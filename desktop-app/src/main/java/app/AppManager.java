@@ -57,7 +57,6 @@ public class AppManager extends Application {
     private void checkAppRootDir(){
         File dir = new File(APP_ROOT_DIRECTORY);
         if (!dir.exists())dir.mkdirs();
-        System.out.println(dir);
     }
 
     private void setView(Parent view) {
