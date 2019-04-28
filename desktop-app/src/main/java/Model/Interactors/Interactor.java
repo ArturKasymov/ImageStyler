@@ -6,6 +6,7 @@ import Model.Database.Entity.UserImage;
 import Model.Database.provider.SQLiteLocalDataProvider;
 import Model.Repositories.ImageRepo;
 import Model.Repositories.cryptoRepo;
+import Utils.GenerationException;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
@@ -116,12 +117,12 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     @Override
     public UserImage insertUserImage(Image image, String name, Date date) {
         int imageID=dataProvider.insertUserImage(name, sessionManager.getCurrentUserId(),date,true);
-        File imageFile = new File(sessionManager.getCurrentUserPath()+"\\."+imageID+".jpg");
+        File imageFile = new File(sessionManager.getCurrentUserPath()+"\\."+imageID+".png");
         OutputStream out=null;
         try {
             //TODO write Image in the another Thread
             out = new FileOutputStream(imageFile);
-            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "jpg", out);
+            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", out);
         }
         catch (IOException e)
         {
@@ -131,7 +132,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public Image generate(Image contentImage, Image styleImage) {
+    public Image generate(Image contentImage, Image styleImage) throws GenerationException {
         ImageRepo generator = new ImageRepo(contentImage, styleImage);
         return generator.generate();
     }

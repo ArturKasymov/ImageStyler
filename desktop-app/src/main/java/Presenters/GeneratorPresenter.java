@@ -2,6 +2,7 @@ package Presenters;
 
 import Model.Interactors.GeneratorInteractor;
 import Model.Interactors.Interactor;
+import Utils.GenerationException;
 import Views.Implementations.GeneratorViewImpl;
 import javafx.scene.image.Image;
 
@@ -17,7 +18,11 @@ public class GeneratorPresenter {
     }
 
     public void generate(Image contentImage, Image styleImage) {
-        view.setGeneratedImageView(interactor.generate(contentImage, styleImage));
+        try {
+            view.setGeneratedImageView(interactor.generate(contentImage, styleImage));
+        } catch (GenerationException e) {
+            e.printStackTrace();
+        }
     }
 
     public void saveGeneratedImage(Image image, String photoName, Date date) {
