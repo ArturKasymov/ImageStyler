@@ -78,7 +78,7 @@ public class AppManager extends Application {
                 break;
             case MAIN_VIEW:
                 setView(MainView);
-                //controllers[2].initViewData();
+                controllers[2].initViewData();
                 break;
         }
     }

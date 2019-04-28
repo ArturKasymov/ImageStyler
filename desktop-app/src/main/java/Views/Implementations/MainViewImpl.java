@@ -88,11 +88,6 @@ public class MainViewImpl extends BaseView implements MainView {
     protected void onLogOut(ActionEvent e) {
         presenter.logout();
         imagesListView.cleanList();
-        try {
-            onGoToGenerate();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
     }
 
     @FXML

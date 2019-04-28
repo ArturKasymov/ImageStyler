@@ -38,6 +38,7 @@
             </rowConstraints>
         </GridPane>
         <Separator />
-        <ListView fx:id="imagesListView" prefHeight="1000.0" styleClass="imagesListView" />
+        <ListView fx:id="imagesListView" prefHeight="1000.0" styleClass="imagesListView">
+        </ListView>
     </children>
 </fx:root>
