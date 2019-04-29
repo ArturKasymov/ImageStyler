@@ -5,8 +5,11 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import net.coobird.thumbnailator.Thumbnails;
 import org.datavec.image.loader.ImageLoader;
+import org.deeplearning4j.nn.api.Layer;
 import org.deeplearning4j.nn.graph.ComputationGraph;
+import org.deeplearning4j.nn.workspace.LayerWorkspaceMgr;
 import org.deeplearning4j.zoo.PretrainedType;
+import org.deeplearning4j.zoo.model.SqueezeNet;
 import org.deeplearning4j.zoo.model.VGG16;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.preprocessor.VGG16ImagePreProcessor;
@@ -25,6 +28,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ImageRepo {
     protected static final Logger log = LoggerFactory.getLogger(ImageRepo.class);
@@ -42,8 +46,9 @@ public class ImageRepo {
     private static final double BETA1 = 0.8;
     private static final double BETA2 = 0.999;
     private static final double EPSILON = 0.00000008;
+    private static final double NOISE = 0.1;
 
-    private static final int ITERATIONS = 1000;
+    private static final int ITERATIONS = 200;
 
     private static final String[] ALL_LAYERS = new String[]{
             "input_1",
@@ -76,6 +81,10 @@ public class ImageRepo {
             "block4_conv2,3.0",
             "block5_conv1,4.0"
     };
+    private static final String CONTENT_LAYER_NAME = "block4_conv2";
+
+    private static final double ALPHA = 0.025;
+    private static final double BETA = 5.0;
 
     private final VGG16ImagePreProcessor IMAGE_PREPROCESSOR = new VGG16ImagePreProcessor();
     private final ImageLoader LOADER = new ImageLoader(HEIGHT, WIDTH, CHANNELS);
@@ -98,7 +107,7 @@ public class ImageRepo {
     public Image generate() throws GenerationException {
         try {
             ComputationGraph vgg16Graph = loadModel(false);
-            INDArray generatedImage = initGeneratedImage(true);
+            INDArray generatedImage = initGeneratedImage();
             Map<String, INDArray> contentActivation = vgg16Graph.feedForward(contentImage, true);
             Map<String, INDArray> styleActivation = vgg16Graph.feedForward(styleImage, true);
             HashMap<String, INDArray> styleActivationGram = initStyleGramMap(styleActivation);
@@ -107,11 +116,18 @@ public class ImageRepo {
                 log.info("iteration " + i);
                 Map<String, INDArray> forwardActivation = vgg16Graph.feedForward(new INDArray[] { generatedImage }, true, false);
 
+                INDArray styleGrad = backPropStyles(vgg16Graph, styleActivationGram, forwardActivation);
+                INDArray contentGrad = backPropContent(vgg16Graph, contentActivation, forwardActivation);
+                INDArray totalGrad = contentGrad.muli(ALPHA).addi(styleGrad.muli(BETA));
+                optim.applyUpdater(totalGrad, i, 0);
+                generatedImage.subi(totalGrad);
+
+                // TODO: log total loss
 
             }
 
-            //return fromMatrix(generatedImage);
-            return fromMatrix(mirrored(contentImage));
+            return fromMatrix(generatedImage);
+            //return fromMatrix(mirrored(contentImage));
         } catch (Exception e) {
             e.printStackTrace();
             throw new GenerationException();
@@ -183,12 +199,14 @@ public class ImageRepo {
         return x.reshape(shape[0] * shape[1], shape[2] * shape[3]);
     }
 
-    private INDArray initGeneratedImage(boolean random) {
-        if (random) {
-            return Nd4j.rand(contentImage.shape());
-        } else {
-            return contentImage;
+    private INDArray initGeneratedImage() {
+        int totalEntries = CHANNELS * HEIGHT * WIDTH;
+        double[] result = new double[totalEntries];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = ThreadLocalRandom.current().nextDouble(-20, 20);
         }
+        INDArray randomMatrix = Nd4j.create(result, new int[]{1, CHANNELS, HEIGHT, WIDTH});
+        return randomMatrix.muli(NOISE).addi(contentImage.muli(1 - NOISE));
     }
 
     private HashMap<String, INDArray> initStyleGramMap(Map<String, INDArray> styleActivation) {
@@ -212,9 +230,9 @@ public class ImageRepo {
             INDArray forwardActivation = forwardActivations.get(layerName);
             int index = layerIndex(layerName);
             INDArray derivativeStyle = derivStyleLossInLayer(gramActivation, forwardActivation).transpose();
-            // TODO: add weighted dStyle to backProp
+            backProp.addi(backPropagate(graph, derivativeStyle.reshape(forwardActivation.shape()), index).muli(weight));
         }
-        return null;
+        return backProp;
     }
 
     private INDArray derivStyleLossInLayer(INDArray gramFeatures, INDArray targetFeatures) {
@@ -237,7 +255,26 @@ public class ImageRepo {
         // divide by weight
         INDArray derivative = fTmulGA.muli(styleWeight);
 
-        return derivative.muli(checkPositive(derivative));
+        return derivative.muli(checkPositive(fTranspose));
+    }
+
+    private INDArray backPropContent(ComputationGraph graph, Map<String, INDArray> contentActivations, Map<String, INDArray> forwardActivations) {
+        INDArray contentActivation = contentActivations.get(CONTENT_LAYER_NAME);
+        INDArray forwardActivation = forwardActivations.get(CONTENT_LAYER_NAME);
+        INDArray derivativeContent = derivContentLossInLayer(contentActivation, forwardActivation);
+        return backPropagate(graph, derivativeContent.reshape(forwardActivation.shape()), layerIndex(CONTENT_LAYER_NAME));
+    }
+
+    private INDArray derivContentLossInLayer(INDArray contentFeatures, INDArray targetFeatures) {
+        targetFeatures = targetFeatures.dup();
+        contentFeatures = contentFeatures.dup();
+        double C = targetFeatures.shape()[0];
+        double W = targetFeatures.shape()[1];
+        double H = targetFeatures.shape()[2];
+
+        double contentWeight = 1.0 / (2 * C * H * W);
+        INDArray derivative = targetFeatures.sub(contentFeatures);
+        return flatten(derivative.muli(contentWeight).muli(checkPositive(targetFeatures)));
     }
 
     private INDArray checkPositive(INDArray matrix) {
@@ -251,6 +288,14 @@ public class ImageRepo {
             if (layerName.equalsIgnoreCase(ALL_LAYERS[i])) return i;
         }
         return -1;
+    }
+
+    private INDArray backPropagate(ComputationGraph graph, INDArray dLdA, int startIndex) {
+        for (int i = startIndex; i > 0; i--) {
+            Layer layer = graph.getLayer(ALL_LAYERS[i]);
+            dLdA = layer.backpropGradient(dLdA, LayerWorkspaceMgr.noWorkspaces()).getSecond();
+        }
+        return dLdA;
     }
 
 }
