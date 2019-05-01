@@ -60,7 +60,7 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
 
     @FXML
     public void initialize() {
-        Image image = styleImages[0];
+        Image image = styleImages[5];
 
         contentImage.setImage(image);
         styleImage.setImage(image);
@@ -104,6 +104,8 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
         styleImages[1] = getImage("/TestImages/la_muse.jpg");
         styleImages[2] = getImage("/TestImages/rain_princess.jpg");
         styleImages[3] = getImage("/TestImages/udnie.jpg");
+        styleImages[4] = getImage("/TestImages/starry_night_sq.jpg");
+        styleImages[5] = getImage("/TestImages/tubingen_sq.jpg");
     }
 
     private void setOnImageClick(final ImageView imgView) {

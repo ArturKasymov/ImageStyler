@@ -2,7 +2,7 @@ package Presenters;
 
 import Model.Interactors.GeneratorInteractor;
 import Model.Interactors.Interactor;
-import Utils.GenerationException;
+import Model.Repositories.Generation.core.GenerationException;
 import Views.Implementations.GeneratorViewImpl;
 import javafx.scene.image.Image;
 

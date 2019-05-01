@@ -1,6 +1,5 @@
-package Model.Repositories;
+package Model.Repositories.Generation.core;
 
-import Utils.GenerationException;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import net.coobird.thumbnailator.Thumbnails;
@@ -8,13 +7,9 @@ import org.datavec.image.loader.ImageLoader;
 import org.deeplearning4j.nn.api.Layer;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.workspace.LayerWorkspaceMgr;
-import org.deeplearning4j.zoo.PretrainedType;
-import org.deeplearning4j.zoo.model.SqueezeNet;
-import org.deeplearning4j.zoo.model.VGG16;
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.dataset.api.preprocessor.VGG16ImagePreProcessor;
+import org.nd4j.linalg.dataset.api.preprocessor.DataNormalization;
 import org.nd4j.linalg.factory.Nd4j;
-import org.deeplearning4j.zoo.ZooModel;
 import org.nd4j.linalg.indexing.BooleanIndexing;
 import org.nd4j.linalg.indexing.conditions.Conditions;
 import org.nd4j.linalg.indexing.functions.Value;
@@ -26,70 +21,44 @@ import org.slf4j.LoggerFactory;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class ImageRepo {
-    protected static final Logger log = LoggerFactory.getLogger(ImageRepo.class);
-    private INDArray contentImage;
-    private INDArray styleImage;
+public abstract class BaseGenerationRepo implements Generator {
+    protected static final Logger log = LoggerFactory.getLogger(BaseGenerationRepo.class);
 
-    private int INITIAL_HEIGHT;
-    private int INITIAL_WIDTH;
+    protected INDArray contentImage;
+    protected INDArray styleImage;
 
-    private final static int HEIGHT = 224;
-    private final static int WIDTH = 224;
-    private final static int CHANNELS = 3;
+    protected int INITIAL_HEIGHT;
+    protected int INITIAL_WIDTH;
 
-    private final static double LEARNING_RATE = 2;
-    private static final double BETA1 = 0.8;
-    private static final double BETA2 = 0.999;
-    private static final double EPSILON = 0.00000008;
-    private static final double NOISE = 0.1;
+    protected static int HEIGHT;
+    protected static int WIDTH;
+    protected final static int CHANNELS = 3;
 
-    private static final int ITERATIONS = 200;
+    protected static double LEARNING_RATE;
+    protected static double BETA1;
+    protected static double BETA2;
+    protected static double EPSILON;
+    protected static double NOISE;
 
-    private static final String[] ALL_LAYERS = new String[]{
-            "input_1",
-            "block1_conv1",
-            "block1_conv2",
-            "block1_pool",
-            "block2_conv1",
-            "block2_conv2",
-            "block2_pool",
-            "block3_conv1",
-            "block3_conv2",
-            "block3_conv3",
-            "block3_pool",
-            "block4_conv1",
-            "block4_conv2",
-            "block4_conv3",
-            "block4_pool",
-            "block5_conv1",
-            "block5_conv2",
-            "block5_conv3",
-            "block5_pool",
-            "flatten",
-            "fc1",
-            "fc2"
-    };
-    private static final String[] STYLE_LAYERS = new String[]{
-            "block1_conv1,0.5",
-            "block2_conv1,1.0",
-            "block3_conv1,1.5",
-            "block4_conv2,3.0",
-            "block5_conv1,4.0"
-    };
-    private static final String CONTENT_LAYER_NAME = "block4_conv2";
+    protected static int ITERATIONS;
 
-    private static final double ALPHA = 0.025;
-    private static final double BETA = 5.0;
+    protected static String[] ALL_LAYERS;
+    protected static String[] STYLE_LAYERS;
+    protected static String CONTENT_LAYER_NAME;
 
-    private final VGG16ImagePreProcessor IMAGE_PREPROCESSOR = new VGG16ImagePreProcessor();
-    private final ImageLoader LOADER = new ImageLoader(HEIGHT, WIDTH, CHANNELS);
+    protected static double ALPHA;
+    protected static double BETA;
 
-    public ImageRepo(Image contentImage, Image styleImage) {
+    protected DataNormalization IMAGE_PREPROCESSOR;
+    protected final ImageLoader LOADER = new ImageLoader(HEIGHT, WIDTH, CHANNELS);
+
+    public BaseGenerationRepo(Image contentImage, Image styleImage) {
+        initHyperParams();
         INITIAL_HEIGHT = (int) contentImage.getHeight();
         INITIAL_WIDTH = (int) contentImage.getWidth();
         try {
@@ -100,24 +69,31 @@ public class ImageRepo {
         }
     }
 
-    private INDArray mirrored(INDArray image) {
+    protected void initHyperParams() {
+
+    }
+
+    protected INDArray mirrored(INDArray image) {
         return image.permute(0, 1, 3, 2);
     }
 
     public Image generate() throws GenerationException {
         try {
-            ComputationGraph vgg16Graph = loadModel(false);
+
+            ComputationGraph Graph = loadModel(false);
             INDArray generatedImage = initGeneratedImage();
-            Map<String, INDArray> contentActivation = vgg16Graph.feedForward(contentImage, true);
-            Map<String, INDArray> styleActivation = vgg16Graph.feedForward(styleImage, true);
+            Map<String, INDArray> contentActivation = Graph.feedForward(new INDArray[] {contentImage}, true, false);
+            Map<String, INDArray> styleActivation = Graph.feedForward(new INDArray[] {styleImage}, true, false);
             HashMap<String, INDArray> styleActivationGram = initStyleGramMap(styleActivation);
             AdamUpdater optim = createAdamUpdater();
             for (int i = 0; i < ITERATIONS; i++) {
-                log.info("iteration " + i);
-                Map<String, INDArray> forwardActivation = vgg16Graph.feedForward(new INDArray[] { generatedImage }, true, false);
+                if (i % 5 == 0) log.info("iteration " + i);
+                Map<String, INDArray> forwardActivation = Graph.feedForward(new INDArray[] { generatedImage }, true, false);
 
-                INDArray styleGrad = backPropStyles(vgg16Graph, styleActivationGram, forwardActivation);
-                INDArray contentGrad = backPropContent(vgg16Graph, contentActivation, forwardActivation);
+                INDArray styleGrad = backPropStyles(Graph, styleActivationGram, generatedImage);
+                // BUG ISSUE - clearInputs does not clear them
+                forwardActivation = Graph.feedForward(new INDArray[] { generatedImage }, true, false);
+                INDArray contentGrad = backPropContent(Graph, contentActivation, forwardActivation);
                 INDArray totalGrad = contentGrad.muli(ALPHA).addi(styleGrad.muli(BETA));
                 optim.applyUpdater(totalGrad, i, 0);
                 generatedImage.subi(totalGrad);
@@ -127,6 +103,7 @@ public class ImageRepo {
             }
 
             return fromMatrix(generatedImage);
+
             //return fromMatrix(mirrored(contentImage));
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,33 +111,28 @@ public class ImageRepo {
         }
     }
 
-    private AdamUpdater createAdamUpdater() {
+    protected AdamUpdater createAdamUpdater() {
         AdamUpdater adam = new AdamUpdater(new Adam(LEARNING_RATE, BETA1, BETA2, EPSILON));
         adam.setStateViewArray(Nd4j.zeros(1, 2* CHANNELS * WIDTH * HEIGHT),
                 new long[] {1, CHANNELS, HEIGHT, WIDTH}, 'c', true);
         return adam;
     }
 
-    private ComputationGraph loadModel(boolean logIt) throws IOException {
-        ZooModel zooModel = VGG16.builder().build();
-        ComputationGraph vgg16 = (ComputationGraph) zooModel.initPretrained(PretrainedType.IMAGENET);
-        vgg16.initGradientsView();
-        if (logIt) log.info(vgg16.summary());
-        return vgg16;
+    protected ComputationGraph loadModel(boolean logIt) throws IOException {
+        return null;
     }
 
-    private INDArray toMatrix(Image image) throws IOException {
+    protected INDArray toMatrix(Image image) throws IOException {
         BufferedImage temp = SwingFXUtils.fromFXImage(image, null);
         BufferedImage tmp = new BufferedImage((int) image.getWidth(), (int) image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
         tmp.getGraphics().drawImage(temp, 0, 0, null);
-        //INDArray imgMatrix = LOADER.asMatrix(tmp);
         INDArray imgMatrix = LOADER.asMatrix(Thumbnails.of(tmp).size(WIDTH, HEIGHT).asBufferedImage());
         imgMatrix = imgMatrix.reshape(1, 3, WIDTH, HEIGHT);
         IMAGE_PREPROCESSOR.transform(imgMatrix);
         return imgMatrix;
     }
 
-    private Image fromMatrix(INDArray matrix) {
+    protected Image fromMatrix(INDArray matrix) {
         long[] shape = matrix.shape();
         IMAGE_PREPROCESSOR.revertFeatures(matrix);
         long height = shape[2];
@@ -185,7 +157,7 @@ public class ImageRepo {
         return SwingFXUtils.toFXImage(image, null);
     }
 
-    private INDArray gramMatrix(INDArray activation, boolean normalize) {
+    protected INDArray gramMatrix(INDArray activation, boolean normalize) {
         INDArray flat = flatten(activation);
         if (normalize) {
             return flat.mmul(flat.transpose()).divi(activation.shape()[3]*activation.shape()[1]*activation.shape()[2]);
@@ -194,12 +166,12 @@ public class ImageRepo {
         }
     }
 
-    private INDArray flatten(INDArray x) {
+    protected INDArray flatten(INDArray x) {
         long[] shape = x.shape();
         return x.reshape(shape[0] * shape[1], shape[2] * shape[3]);
     }
 
-    private INDArray initGeneratedImage() {
+    protected INDArray initGeneratedImage() {
         int totalEntries = CHANNELS * HEIGHT * WIDTH;
         double[] result = new double[totalEntries];
         for (int i = 0; i < result.length; i++) {
@@ -209,7 +181,7 @@ public class ImageRepo {
         return randomMatrix.muli(NOISE).addi(contentImage.muli(1 - NOISE));
     }
 
-    private HashMap<String, INDArray> initStyleGramMap(Map<String, INDArray> styleActivation) {
+    protected HashMap<String, INDArray> initStyleGramMap(Map<String, INDArray> styleActivation) {
         HashMap<String, INDArray> gramMap = new HashMap<>();
         for (String s : STYLE_LAYERS) {
             String[] spl = s.split(",");
@@ -220,13 +192,14 @@ public class ImageRepo {
         return gramMap;
     }
 
-    private INDArray backPropStyles(ComputationGraph graph, HashMap<String, INDArray> gramActivations, Map<String, INDArray> forwardActivations) {
+    protected INDArray backPropStyles(ComputationGraph graph, HashMap<String, INDArray> gramActivations, INDArray image) {
         INDArray backProp = Nd4j.zeros(1, CHANNELS, HEIGHT, WIDTH);
         for (String s : STYLE_LAYERS) {
             String[] spl = s.split(",");
             String layerName = spl[0];
             double weight = Double.parseDouble(spl[1]);
             INDArray gramActivation = gramActivations.get(layerName);
+            Map<String, INDArray> forwardActivations = graph.feedForward(new INDArray[] {image}, true, false);
             INDArray forwardActivation = forwardActivations.get(layerName);
             int index = layerIndex(layerName);
             INDArray derivativeStyle = derivStyleLossInLayer(gramActivation, forwardActivation).transpose();
@@ -235,7 +208,7 @@ public class ImageRepo {
         return backProp;
     }
 
-    private INDArray derivStyleLossInLayer(INDArray gramFeatures, INDArray targetFeatures) {
+    protected INDArray derivStyleLossInLayer(INDArray gramFeatures, INDArray targetFeatures) {
         targetFeatures = targetFeatures.dup();
         double N = targetFeatures.shape()[0];
         double M = targetFeatures.shape()[1] * targetFeatures.shape()[2];
@@ -258,14 +231,14 @@ public class ImageRepo {
         return derivative.muli(checkPositive(fTranspose));
     }
 
-    private INDArray backPropContent(ComputationGraph graph, Map<String, INDArray> contentActivations, Map<String, INDArray> forwardActivations) {
+    protected INDArray backPropContent(ComputationGraph graph, Map<String, INDArray> contentActivations, Map<String, INDArray> forwardActivations) {
         INDArray contentActivation = contentActivations.get(CONTENT_LAYER_NAME);
         INDArray forwardActivation = forwardActivations.get(CONTENT_LAYER_NAME);
         INDArray derivativeContent = derivContentLossInLayer(contentActivation, forwardActivation);
         return backPropagate(graph, derivativeContent.reshape(forwardActivation.shape()), layerIndex(CONTENT_LAYER_NAME));
     }
 
-    private INDArray derivContentLossInLayer(INDArray contentFeatures, INDArray targetFeatures) {
+    protected INDArray derivContentLossInLayer(INDArray contentFeatures, INDArray targetFeatures) {
         targetFeatures = targetFeatures.dup();
         contentFeatures = contentFeatures.dup();
         double C = targetFeatures.shape()[0];
@@ -277,22 +250,24 @@ public class ImageRepo {
         return flatten(derivative.muli(contentWeight).muli(checkPositive(targetFeatures)));
     }
 
-    private INDArray checkPositive(INDArray matrix) {
+    protected INDArray checkPositive(INDArray matrix) {
         BooleanIndexing.applyWhere(matrix, Conditions.lessThan(0.0f), new Value(0.0f));
         BooleanIndexing.applyWhere(matrix, Conditions.greaterThan(0.0f), new Value(1.0f));
         return matrix;
     }
 
-    private int layerIndex(String layerName) {
+    protected int layerIndex(String layerName) {
         for (int i = 0; i < ALL_LAYERS.length; i++) {
             if (layerName.equalsIgnoreCase(ALL_LAYERS[i])) return i;
         }
         return -1;
     }
 
-    private INDArray backPropagate(ComputationGraph graph, INDArray dLdA, int startIndex) {
+    protected INDArray backPropagate(ComputationGraph graph, INDArray dLdA, int startIndex) {
         for (int i = startIndex; i > 0; i--) {
+            //System.out.println(Arrays.toString(dLdA.shape()) + " " + ALL_LAYERS[i]);
             Layer layer = graph.getLayer(ALL_LAYERS[i]);
+            //System.out.println(layer);
             dLdA = layer.backpropGradient(dLdA, LayerWorkspaceMgr.noWorkspaces()).getSecond();
         }
         return dLdA;

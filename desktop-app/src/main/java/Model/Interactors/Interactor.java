@@ -4,9 +4,11 @@ import Client.SessionManager;
 import Model.Database.Entity.User;
 import Model.Database.Entity.UserImage;
 import Model.Database.provider.SQLiteLocalDataProvider;
-import Model.Repositories.ImageRepo;
-import Model.Repositories.cryptoRepo;
-import Utils.GenerationException;
+import Model.Repositories.Crypto.cryptoRepo;
+import Model.Repositories.Generation.BaseGeneration.DarkNet.DarkNetGenerator;
+import Model.Repositories.Generation.BaseGeneration.VGG16.VGG16Generator;
+import Model.Repositories.Generation.core.Generator;
+import Model.Repositories.Generation.core.GenerationException;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
@@ -16,7 +18,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -120,7 +121,6 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
         File imageFile = new File(sessionManager.getCurrentUserPath()+"\\."+imageID+".png");
         OutputStream out=null;
         try {
-            //TODO write Image in the another Thread
             out = new FileOutputStream(imageFile);
             ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", out);
         }
@@ -133,7 +133,9 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
 
     @Override
     public Image generate(Image contentImage, Image styleImage) throws GenerationException {
-        ImageRepo generator = new ImageRepo(contentImage, styleImage);
+        //Generator generator = new VGG16Generator(contentImage, styleImage);
+        //Generator generator = new SqueezeNetGenerator(contentImage, styleImage);
+        Generator generator = new DarkNetGenerator(contentImage, styleImage);
         return generator.generate();
     }
 
@@ -151,5 +153,12 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     @Override
     public ArrayList<UserImage> getCurrentUserImagesList() {
         return dataProvider.getUserImages(sessionManager.getCurrentUserId());
+    }
+
+    @Override
+    public void deleteImage(UserImage deletedImage) {
+        File file = new File(deletedImage.getImageUrl());
+        file.delete();
+        dataProvider.deleteUserImage(deletedImage);
     }
 }
