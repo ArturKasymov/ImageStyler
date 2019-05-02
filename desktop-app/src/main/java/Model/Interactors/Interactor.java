@@ -133,9 +133,9 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
 
     @Override
     public Image generate(Image contentImage, Image styleImage) throws GenerationException {
-        //Generator generator = new VGG16Generator(contentImage, styleImage);
+        Generator generator = new VGG16Generator(contentImage, styleImage);
         //Generator generator = new SqueezeNetGenerator(contentImage, styleImage);
-        Generator generator = new DarkNetGenerator(contentImage, styleImage);
+        //Generator generator = new DarkNetGenerator(contentImage, styleImage);
         return generator.generate();
     }
 

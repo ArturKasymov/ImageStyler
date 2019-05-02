@@ -82,17 +82,18 @@ public abstract class BaseGenerationRepo implements Generator {
 
             ComputationGraph Graph = loadModel(false);
             INDArray generatedImage = initGeneratedImage();
-            Map<String, INDArray> contentActivation = Graph.feedForward(new INDArray[] {contentImage}, true, false);
-            Map<String, INDArray> styleActivation = Graph.feedForward(new INDArray[] {styleImage}, true, false);
+            Map<String, INDArray> contentActivation = Graph.feedForward(contentImage, true);
+            Map<String, INDArray> styleActivation = Graph.feedForward(styleImage, true);
             HashMap<String, INDArray> styleActivationGram = initStyleGramMap(styleActivation);
             AdamUpdater optim = createAdamUpdater();
             for (int i = 0; i < ITERATIONS; i++) {
                 if (i % 5 == 0) log.info("iteration " + i);
                 Map<String, INDArray> forwardActivation = Graph.feedForward(new INDArray[] { generatedImage }, true, false);
+                INDArray styleGrad = backPropStyles(Graph, styleActivationGram, forwardActivation);
+                //INDArray styleGrad = backPropStyles(Graph, styleActivationGram, generatedImage);
 
-                INDArray styleGrad = backPropStyles(Graph, styleActivationGram, generatedImage);
                 // BUG ISSUE - clearInputs does not clear them
-                forwardActivation = Graph.feedForward(new INDArray[] { generatedImage }, true, false);
+                //forwardActivation = Graph.feedForward(new INDArray[] { generatedImage }, true, false);
                 INDArray contentGrad = backPropContent(Graph, contentActivation, forwardActivation);
                 INDArray totalGrad = contentGrad.muli(ALPHA).addi(styleGrad.muli(BETA));
                 optim.applyUpdater(totalGrad, i, 0);
@@ -192,6 +193,22 @@ public abstract class BaseGenerationRepo implements Generator {
         return gramMap;
     }
 
+    protected INDArray backPropStyles(ComputationGraph graph, HashMap<String, INDArray> gramActivations, Map<String, INDArray> forwardActivations) {
+        INDArray backProp = Nd4j.zeros(1, CHANNELS, HEIGHT, WIDTH);
+        for (String s : STYLE_LAYERS) {
+            String[] spl = s.split(",");
+            String layerName = spl[0];
+            double weight = Double.parseDouble(spl[1]);
+            INDArray gramActivation = gramActivations.get(layerName);
+            INDArray forwardActivation = forwardActivations.get(layerName);
+            int index = layerIndex(layerName);
+            INDArray derivativeStyle = derivStyleLossInLayer(gramActivation, forwardActivation).transpose();
+            backProp.addi(backPropagate(graph, derivativeStyle.reshape(forwardActivation.shape()), index).muli(weight));
+        }
+        return backProp;
+    }
+
+    /*
     protected INDArray backPropStyles(ComputationGraph graph, HashMap<String, INDArray> gramActivations, INDArray image) {
         INDArray backProp = Nd4j.zeros(1, CHANNELS, HEIGHT, WIDTH);
         for (String s : STYLE_LAYERS) {
@@ -207,6 +224,7 @@ public abstract class BaseGenerationRepo implements Generator {
         }
         return backProp;
     }
+    */
 
     protected INDArray derivStyleLossInLayer(INDArray gramFeatures, INDArray targetFeatures) {
         targetFeatures = targetFeatures.dup();
