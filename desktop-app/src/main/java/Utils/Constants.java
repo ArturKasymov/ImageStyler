@@ -9,6 +9,9 @@ public class Constants {
     public static final String LOCAL_DATABASE_NAME="localDatabase.db";
     public static final int NUM_STYLE_IMAGES = 4;
 
+    public static final int DEFAULT_SERVER_PORT=7777;
+    public static final String LOCAL_SERVER_IP="127.0.0.1";
+
     public enum SORT_BY {
         NAME_ASC,
         NAME_DESC,
