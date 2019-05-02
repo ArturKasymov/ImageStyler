@@ -48,6 +48,7 @@ public class AppManager extends Application {
         executor = Executors.newSingleThreadScheduledExecutor();
         checkAppRootDir();
         interactor=Interactor.getInstance();
+        interactor.startSessionManager(LOCAL_SERVER_IP,DEFAULT_SERVER_PORT);
         loadND4Jdata(true);
     }
 
@@ -138,5 +139,11 @@ public class AppManager extends Application {
         } catch (Nd4jBackend.NoAvailableBackendException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void stop() throws Exception {
+        interactor.stopSessionManager();
+        super.stop();
     }
 }

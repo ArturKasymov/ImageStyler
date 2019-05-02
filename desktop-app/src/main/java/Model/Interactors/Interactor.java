@@ -161,4 +161,13 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
         file.delete();
         dataProvider.deleteUserImage(deletedImage);
     }
+
+    public void stopSessionManager() {
+        sessionManager.stopConnection();
+    }
+
+    public void startSessionManager(String serverIP, int serverPort){
+        sessionManager.setSocketConfig(serverIP,serverPort);
+        sessionManager.start();
+    }
 }
