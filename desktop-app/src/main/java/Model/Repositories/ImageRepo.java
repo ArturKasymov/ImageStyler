@@ -48,7 +48,7 @@ public class ImageRepo {
     private static final double EPSILON = 0.00000008;
     private static final double NOISE = 0.1;
 
-    private static final int ITERATIONS = 200;
+    private static final int ITERATIONS = 5;
 
     private static final String[] ALL_LAYERS = new String[]{
             "input_1",

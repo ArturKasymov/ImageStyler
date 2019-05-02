@@ -152,4 +152,13 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     public ArrayList<UserImage> getCurrentUserImagesList() {
         return dataProvider.getUserImages(sessionManager.getCurrentUserId());
     }
+
+    public void stopSessionManager(){
+        sessionManager.stopConnection();
+    }
+
+    public void startSessionManager(String serverIP, int serverPort){
+        sessionManager.setSocketConfig(serverIP,serverPort);
+        sessionManager.start();
+    }
 }
