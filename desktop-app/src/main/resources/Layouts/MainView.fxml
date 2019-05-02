@@ -53,17 +53,24 @@
              <ImagesListView fx:id="imagesListView" minWidth="0.0" prefHeight="320.0" prefWidth="200.0">
 
             </ImagesListView>
-            <VBox fx:id="rightPane" opacity="1.0" prefHeight="320.0" prefWidth="400.0">
+            <VBox fx:id="rightPane" alignment="CENTER" opacity="1.0" prefHeight="320.0" prefWidth="400.0">
                <children>
                    <Label fx:id="photoName" alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="200.0" text="Hello UJ">
                      <VBox.margin>
-                        <Insets left="100.0" top="7.0" />
+                        <Insets left="5.0" top="5.0" />
                      </VBox.margin></Label>
-                  <ImageView fx:id="resultImage" fitHeight="310.0" fitWidth="310.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="resultImage" fitHeight="290.0" fitWidth="290.0" pickOnBounds="true" preserveRatio="true">
                      <VBox.margin>
-                        <Insets left="45.0" top="1.5" />
+                        <Insets top="1.5" />
                      </VBox.margin>
                   </ImageView>
+                  <Button fx:id="deleteImageButton" onAction="#onDeleteImage" alignment="CENTER" contentDisplay="CENTER" minHeight="32.0" mnemonicParsing="false" prefHeight="32.0" text="Delete image" textAlignment="CENTER">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin></Button>
                </children>
             </VBox>
          </children>

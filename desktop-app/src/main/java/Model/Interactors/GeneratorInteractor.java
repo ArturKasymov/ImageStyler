@@ -1,7 +1,7 @@
 package Model.Interactors;
 
 import Model.Database.Entity.UserImage;
-import Utils.GenerationException;
+import Model.Repositories.Generation.core.GenerationException;
 import javafx.scene.image.Image;
 
 import java.util.Date;

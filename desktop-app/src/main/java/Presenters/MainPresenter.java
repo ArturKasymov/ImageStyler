@@ -37,4 +37,8 @@ public class MainPresenter {
     public ArrayList<UserImage> getUserImagesList() {
         return interactor.getCurrentUserImagesList();
     }
+
+    public void deleteImage(UserImage deletedImage) {
+        interactor.deleteImage(deletedImage);
+    }
 }

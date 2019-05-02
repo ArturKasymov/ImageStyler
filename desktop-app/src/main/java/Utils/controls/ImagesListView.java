@@ -1,5 +1,6 @@
 package Utils.controls;
 
+import Model.Database.Entity.User;
 import Model.Database.Entity.UserImage;
 import Utils.Constants;
 import Views.Interfaces.MainView;
@@ -99,10 +100,23 @@ public class ImagesListView extends VBox {
         return loader.load();
     }
 
-    public void notifyList(UserImage savedUserImage) {
-        userImages.add(savedUserImage);
-        userImages.sort(getComparator(currentSort));
-        updateImagesList(userImages);
+    public boolean notifyList(UserImage userImage, boolean insert) {
+        if (insert) {
+            userImages.add(userImage);
+            userImages.sort(getComparator(currentSort));
+            updateImagesList(userImages);
+            return false;
+        } else {
+            userImages.remove(userImage);
+            updateImagesList(userImages);
+            if (userImages.size()>0) {
+                view.setResultImage(userImages.get(0));
+                return false;
+            } else {
+                view.setResultImage(null);
+                return true;
+            }
+        }
     }
 
     private void updateImagesList(ObservableList<UserImage> userImages) {

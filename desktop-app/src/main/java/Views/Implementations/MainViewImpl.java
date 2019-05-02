@@ -91,6 +91,11 @@ public class MainViewImpl extends BaseView implements MainView {
     @FXML
     private Label photoName;
 
+    @FXML
+    private Button deleteImageButton;
+
+    private UserImage currentImage;
+
     private Transition rightPaneTransitionFullMode;
     private Transition rightPaneTransitionShowMode;
     private double width;
@@ -217,7 +222,6 @@ public class MainViewImpl extends BaseView implements MainView {
 
     @FXML
     protected void onChangePassword() {
-        // presenter change
         showSettingsScreen(false);
         clearPasswordFields();
     }
@@ -256,10 +260,16 @@ public class MainViewImpl extends BaseView implements MainView {
 
     @Override
     public void setResultImage(UserImage newUserImage) {
-        String path = newUserImage.getImageUrl();
-
-        changeImage(resultImage, path);
-        photoName.setText(newUserImage.getImageName());
+        if (newUserImage==null) {
+            resultImage.setImage(null);
+            photoName.setText("Hello UJ");
+            deleteImageButton.setDisable(true);
+        } else {
+            String path = newUserImage.getImageUrl();
+            this.currentImage = newUserImage;
+            changeImage(resultImage, path);
+            photoName.setText(newUserImage.getImageName());
+        }
     }
 
     private void changeImage(ImageView imgView, String path) {
@@ -278,6 +288,13 @@ public class MainViewImpl extends BaseView implements MainView {
         }
     }
 
+    @FXML
+    public void onDeleteImage() {
+        presenter.deleteImage(this.currentImage);
+        boolean empty = imagesListView.notifyList(this.currentImage, false);
+        //if (empty) deleteImageButton.setDisable(true);
+    }
+
     @Override
     public void setUsernameLabel(String s) {
         username.setText(s);
@@ -285,7 +302,7 @@ public class MainViewImpl extends BaseView implements MainView {
 
     @Override
     public void notifyList(UserImage savedUserImage) {
-        imagesListView.notifyList(savedUserImage);
+        imagesListView.notifyList(savedUserImage, true);
     }
 
     @Override

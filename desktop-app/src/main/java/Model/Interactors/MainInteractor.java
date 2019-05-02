@@ -10,4 +10,5 @@ public interface MainInteractor {
     void changeUserPassword(CharSequence newPassword);
     void logout();
     ArrayList<UserImage> getCurrentUserImagesList();
+    void deleteImage(UserImage deletedImage);
 }
