@@ -1,4 +1,4 @@
-package Model.Repositories;
+package Model.Repositories.Crypto;
 
 import org.apache.commons.codec.binary.Base64;
 

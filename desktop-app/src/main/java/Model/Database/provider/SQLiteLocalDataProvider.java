@@ -128,4 +128,14 @@ public class SQLiteLocalDataProvider {
         }
         return null;
     }
+
+    public void deleteUserImage(UserImage deletedImage) {
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(DELETE_USER_IMAGE);
+            pstmt.setInt(1, deletedImage.getImageID());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
