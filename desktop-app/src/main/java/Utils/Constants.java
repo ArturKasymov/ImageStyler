@@ -10,7 +10,7 @@ public class Constants {
     public static final int NUM_STYLE_IMAGES = 6;
 
     public static final int DEFAULT_SERVER_PORT=7777;
-    public static final String LOCAL_SERVER_IP="127.0.0.1";
+    public static final String DEFAULT_SERVER_IP ="35.197.39.104";
 
     public enum SORT_BY {
         NAME_ASC,

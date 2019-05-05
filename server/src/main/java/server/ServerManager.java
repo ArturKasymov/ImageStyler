@@ -47,9 +47,9 @@ public class ServerManager {
 
                     DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
                     DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
-                    SessionHandler sessionHandler = new SessionHandler(clientSocket,dis,dos);
+                    ClientHandler clientHandler = new ClientHandler(clientSocket,dis,dos);
 
-                    sessionHandler.start();
+                    clientHandler.start();
                 }
                 catch (Exception e){
                     clientSocket.close();
