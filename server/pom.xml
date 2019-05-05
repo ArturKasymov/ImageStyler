@@ -16,7 +16,25 @@
                     <source>8</source>
                     <target>8</target>
                 </configuration>
+	</plugin>
+
+<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <classpathScope>test</classpathScope>
+                    <mainClass>server.Main</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>run-selenium</id>
+                        <phase>integration-test</phase>
+                        <goals><goal>java</goal></goals>
+                    </execution>
+                </executions>
             </plugin>
+
         </plugins>
     </build>
 
@@ -25,9 +43,24 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.1.1</version>
+            <version>42.2.5</version>
         </dependency>
+	<dependency>
+		<groupId>org.jetbrains</groupId>
+		<artifactId>annotations</artifactId>
+		<version>13.0</version>
+	</dependency>
+	<dependency>
+		<groupId>com.sun.istack</groupId>
+		<artifactId>istack-commons-tools</artifactId>
+		<version>3.0.5</version>
+	</dependency>
+	<dependency>
+		<groupId>postgresql</groupId>
+		<artifactId>postgresql</artifactId>
+		<version>9.0-801.jdbc4</version>
+	</dependency>
+</dependencies>
 
-    </dependencies>
 
 </project>

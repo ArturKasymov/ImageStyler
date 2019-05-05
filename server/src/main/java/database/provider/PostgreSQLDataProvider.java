@@ -1,7 +1,5 @@
 package database.provider;
 
-import com.sun.istack.internal.NotNull;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -13,10 +11,11 @@ public class PostgreSQLDataProvider {
 
     private Connection connection;
 
-    public PostgreSQLDataProvider( String dbname, @NotNull String username, @NotNull String password, String IP ,int port) {
+    public PostgreSQLDataProvider( String dbname, String username,  String password, String IP ,int port) {
         try {
+		//Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(String.format("jdbc:postgresql:%s:%d/%s",IP,port,dbname),username,password);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

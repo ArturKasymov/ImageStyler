@@ -8,7 +8,7 @@
     <artifactId>ImageStyler</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>ImageStyler</name>
-
+    <packaging>pom</packaging>
     <modules>
         <module>desktop-app</module>
     </modules>
