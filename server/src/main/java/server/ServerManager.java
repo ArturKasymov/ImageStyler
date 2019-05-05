@@ -35,6 +35,7 @@ public class ServerManager {
         try {
             serverSocket = new ServerSocket(serverPort);
 
+            System.out.println("Server started");
             while (true)
             {
                 Socket clientSocket = null;
@@ -46,14 +47,9 @@ public class ServerManager {
 
                     DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
                     DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
+                    SessionHandler sessionHandler = new SessionHandler(clientSocket,dis,dos);
 
-                    //SessionHandler s = new SessionHandler()
-
-                    //Thread t = new ClientHandler(s, dis, dos, SessionID++);
-
-                    // Invoking the start() method
-                    //t.start();
-
+                    sessionHandler.start();
                 }
                 catch (Exception e){
                     clientSocket.close();

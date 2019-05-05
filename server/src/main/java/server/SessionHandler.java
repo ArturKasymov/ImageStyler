@@ -8,14 +8,13 @@ import java.net.Socket;
 public class SessionHandler extends Thread{
 
     final Socket currentSocket;
-    private final long sessionID;
+    private long sessionID;
 
     final DataInputStream dis;
     final DataOutputStream dos;
 
 
-    public SessionHandler(long sessionID, Socket currentSocket, DataInputStream dis, DataOutputStream dos){
-        this.sessionID=sessionID;
+    public SessionHandler(Socket currentSocket, DataInputStream dis, DataOutputStream dos){
         this.currentSocket=currentSocket;
         this.dis=dis;
         this.dos=dos;
@@ -27,6 +26,10 @@ public class SessionHandler extends Thread{
     public void run() {
         String received;
         String toreturn;
+
+        // TODO runtime logs
+        System.out.println("new client added");
+
         while (true)
         {
             try {
