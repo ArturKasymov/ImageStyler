@@ -4,9 +4,13 @@ import Model.Database.Entity.Session;
 import Model.Database.Entity.User;
 import Model.Database.Entity.UserImage;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+
+import static Utils.ServerCommand.CLOSE_CONNECTION;
 
 public class SessionManager extends Thread {
     private Session currentSession;
@@ -29,7 +33,8 @@ public class SessionManager extends Thread {
     public void run() {
         try {
             socket=new Socket(serverIP,serverPort);
-
+            DataInputStream dis = new DataInputStream(socket.getInputStream());
+            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
             //TODO runtime logs
             System.out.println("server connect");
 
@@ -39,6 +44,7 @@ public class SessionManager extends Thread {
 
             }
 
+            dos.writeUTF(CLOSE_CONNECTION);
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();

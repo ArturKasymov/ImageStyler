@@ -1,9 +1,6 @@
 package app;
 
-import Client.SessionManager;
 import Model.Interactors.Interactor;
-import Views.Implementations.MainViewImpl;
-import Views.Interfaces.MainView;
 import Views.core.BaseView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,9 +10,6 @@ import javafx.stage.Stage;
 import org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner;
 import org.nd4j.linalg.factory.Nd4jBackend;
 import org.nd4j.nativeblas.NativeOpsHolder;
-import org.nd4j.nativeblas.Nd4jBlas;
-import org.slf4j.Logger;
-import org.slf4j.impl.SimpleLoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +42,7 @@ public class AppManager extends Application {
         executor = Executors.newSingleThreadScheduledExecutor();
         checkAppRootDir();
         interactor=Interactor.getInstance();
-        interactor.startSessionManager(LOCAL_SERVER_IP,DEFAULT_SERVER_PORT);
+        interactor.startSessionManager(DEFAULT_SERVER_IP,DEFAULT_SERVER_PORT);
         loadND4Jdata(true);
     }
 
