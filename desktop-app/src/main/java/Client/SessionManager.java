@@ -30,6 +30,8 @@ public class SessionManager extends Thread {
         try {
             socket=new Socket(serverIP,serverPort);
 
+            //TODO runtime logs
+            System.out.println("server connect");
 
             while(isContinue()){
                 System.out.println("I am running");
