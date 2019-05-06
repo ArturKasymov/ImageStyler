@@ -47,6 +47,7 @@ public class SessionManager extends Thread {
             String result;
             while(isContinue()){
                 result=dis.readUTF();
+                System.out.println(result);
                 if(result!=null)
                     commandsResults.put(result);
                 dos.writeUTF(commandsToServer.take());
@@ -61,6 +62,8 @@ public class SessionManager extends Thread {
     public synchronized User insertUser(String login, String password){
 
         try {
+            System.out.println(String.format("%s %s %s",REGISTER_USER,login,password));
+
             commandsToServer.put(String.format("%s %s %s",REGISTER_USER,login,password));
             String result=commandsResults.take();
             System.out.println(result);
