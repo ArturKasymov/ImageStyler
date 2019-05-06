@@ -15,10 +15,10 @@ public class cryptoRepo {
     private static int desiredKeyLen = 256;
 
     public static String getSaltedHash(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        /*TODO fix hash
         byte[] salt = SecureRandom.getInstance("SHA1PRNG").generateSeed(saltLen);
-        //TODO fix hash
+        return Base64.encodeBase64String(salt) + "$" + hash(password, salt);*/
         return password;
-        //return Base64.encodeBase64String(salt) + "$" + hash(password, salt);
     }
 
     public static boolean checkPassword(String password, String stored) throws NoSuchAlgorithmException, InvalidKeySpecException{
