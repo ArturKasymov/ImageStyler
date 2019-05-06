@@ -39,7 +39,10 @@ public class PostgreSQLDataProvider {
 
             pstmt.setString(1,userName);
             pstmt.setString(2,passwordHash);
-            ResultSet rs = pstmt.executeQuery();
+            pstmt.execute();
+            
+            ResultSet rs = pstmt.getResultSet();
+            System.out.println(rs.next());
 
             return rs.getInt(1);
     }
