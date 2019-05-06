@@ -82,6 +82,7 @@ public class SessionManager extends Thread {
 
 
     public void stopConnection(){
+        //TODO Stop Thread
         this.runningStatus=false;
     }
 
