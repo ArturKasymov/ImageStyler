@@ -1,6 +1,7 @@
 package server;
 
-import database.provider.PostgreSQLDataProvider;
+import model.Interactor;
+import model.database.provider.PostgreSQLDataProvider;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -14,16 +15,15 @@ import static util.Constants.SERVER_ROOT_DIRECTORY;
 public class ServerManager {
 
     private ServerSocket serverSocket;
-    private PostgreSQLDataProvider provider;
+    private Interactor interactor;
 
     public ServerManager(String dbname, String username,String password,String IP, int port){
-        provider= new PostgreSQLDataProvider(dbname,username,password,IP,port);
+        interactor = Interactor.createInstance(dbname,username,password,IP,port);
     }
 
     public void init(){
         checkServerRootDir();
-        provider.checkTables();
-
+        interactor.checkDataBase();
     }
 
     private void checkServerRootDir(){
