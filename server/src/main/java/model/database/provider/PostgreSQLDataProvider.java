@@ -40,10 +40,8 @@ public class PostgreSQLDataProvider {
             pstmt.setString(1,userName);
             pstmt.setString(2,passwordHash);
             pstmt.execute();
-            
-            ResultSet rs = pstmt.getResultSet();
-            System.out.println(rs.next());
 
+            ResultSet rs =  pstmt.getResultSet();
             return rs.getInt(1);
     }
 
@@ -53,8 +51,11 @@ public class PostgreSQLDataProvider {
             pstmt.setInt(1,userID);
             pstmt.setBoolean(2,true);
             pstmt.setDate(3,new java.sql.Date(lastUpdate.getTime()));
-            ResultSet rs = pstmt.executeQuery();
-            return rs.getInt("id_session");
+            pstmt.execute();
+
+            ResultSet rs= pstmt.getResultSet();
+            return rs.getInt(1);
+
         } catch (SQLException  e) {
             e.printStackTrace();
         }
