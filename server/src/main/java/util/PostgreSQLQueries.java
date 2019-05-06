@@ -9,7 +9,7 @@ public class PostgreSQLQueries {
     public static final String CHECK_SESSIONS="create table IF NOT EXISTS sessions (\n" +
             "id_session serial primary key,\n" +
             "id_user integer references users,\n" +
-            "isActive boolean\n" +
+            "isActive boolean,\n" +
             "last_update TIMESTAMP\n"+
             ");";
     public static final String CHECK_FOTOS=" CREATE TABLE IF NOT EXISTS user_images(\n" +
