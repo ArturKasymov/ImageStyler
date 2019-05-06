@@ -49,9 +49,8 @@ public class SessionManager extends Thread {
                 result=dis.readUTF();
                 if(result!=null)
                     commandsResults.put(result);
-                commandsToServer.take();
+                dos.writeUTF(commandsToServer.take());
             }
-
             dos.writeUTF(CLOSE_CONNECTION);
             socket.close();
         } catch (IOException | InterruptedException e) {
