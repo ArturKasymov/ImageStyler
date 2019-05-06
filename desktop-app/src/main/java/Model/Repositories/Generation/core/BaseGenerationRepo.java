@@ -5,12 +5,18 @@ import javafx.scene.image.Image;
 import net.coobird.thumbnailator.Thumbnails;
 import org.datavec.image.loader.ImageLoader;
 import org.deeplearning4j.nn.api.Layer;
+import org.deeplearning4j.nn.conf.CacheMode;
+import org.deeplearning4j.nn.conf.dropout.Dropout;
 import org.deeplearning4j.nn.graph.ComputationGraph;
+import org.deeplearning4j.nn.graph.vertex.GraphVertex;
+import org.deeplearning4j.nn.layers.AbstractLayer;
 import org.deeplearning4j.nn.workspace.LayerWorkspaceMgr;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.preprocessor.DataNormalization;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.BooleanIndexing;
+import org.nd4j.linalg.indexing.INDArrayIndex;
+import org.nd4j.linalg.indexing.NDArrayIndex;
 import org.nd4j.linalg.indexing.conditions.Conditions;
 import org.nd4j.linalg.indexing.functions.Value;
 import org.nd4j.linalg.learning.AdamUpdater;
@@ -21,6 +27,8 @@ import org.slf4j.LoggerFactory;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -83,22 +91,22 @@ public abstract class BaseGenerationRepo implements Generator {
             ComputationGraph Graph = loadModel(false);
             INDArray generatedImage = initGeneratedImage();
             Map<String, INDArray> contentActivation = Graph.feedForward(contentImage, true);
+            /*for (String s : ALL_LAYERS) {
+                System.out.println(s);
+                System.out.println(Arrays.toString(contentActivation.get(s).shape()));
+            }*/
             Map<String, INDArray> styleActivation = Graph.feedForward(styleImage, true);
             HashMap<String, INDArray> styleActivationGram = initStyleGramMap(styleActivation);
             AdamUpdater optim = createAdamUpdater();
             for (int i = 0; i < ITERATIONS; i++) {
                 if (i % 5 == 0) log.info("iteration " + i);
                 Map<String, INDArray> forwardActivation = Graph.feedForward(new INDArray[] { generatedImage }, true, false);
-                INDArray styleGrad = backPropStyles(Graph, styleActivationGram, forwardActivation);
-                //INDArray styleGrad = backPropStyles(Graph, styleActivationGram, generatedImage);
-
-                // BUG ISSUE - clearInputs does not clear them
-                //forwardActivation = Graph.feedForward(new INDArray[] { generatedImage }, true, false);
-                INDArray contentGrad = backPropContent(Graph, contentActivation, forwardActivation);
+                HashMap<String, INDArray> dropoutMasks = saveDropoutMasks(Graph);
+                INDArray styleGrad = backPropStyles(Graph, styleActivationGram, forwardActivation, dropoutMasks);
+                INDArray contentGrad = backPropContent(Graph, contentActivation, forwardActivation, dropoutMasks);
                 INDArray totalGrad = contentGrad.muli(ALPHA).addi(styleGrad.muli(BETA));
                 optim.applyUpdater(totalGrad, i, 0);
                 generatedImage.subi(totalGrad);
-
                 // TODO: log total loss
 
             }
@@ -112,9 +120,22 @@ public abstract class BaseGenerationRepo implements Generator {
         }
     }
 
+    protected HashMap<String, INDArray> saveDropoutMasks(ComputationGraph graph) {
+        HashMap<String, INDArray> masks = new HashMap<>();
+        for (String s : ALL_LAYERS) {
+            Layer layer = graph.getLayer(s);
+            if (layer!=null && (layer.type()==Layer.Type.CONVOLUTIONAL||layer.type()==Layer.Type.SUBSAMPLING)) {
+                //if (s.equals("globalpooling")) break;
+                INDArray dropoutMask = ((Dropout) ((AbstractLayer) layer).layerConf().getIDropout()).getMask();
+                masks.put(s, dropoutMask);
+            }
+        }
+        return masks;
+    }
+
     protected AdamUpdater createAdamUpdater() {
         AdamUpdater adam = new AdamUpdater(new Adam(LEARNING_RATE, BETA1, BETA2, EPSILON));
-        adam.setStateViewArray(Nd4j.zeros(1, 2* CHANNELS * WIDTH * HEIGHT),
+        adam.setStateViewArray(Nd4j.zeros(1, 2 * CHANNELS * WIDTH * HEIGHT),
                 new long[] {1, CHANNELS, HEIGHT, WIDTH}, 'c', true);
         return adam;
     }
@@ -179,7 +200,7 @@ public abstract class BaseGenerationRepo implements Generator {
             result[i] = ThreadLocalRandom.current().nextDouble(-20, 20);
         }
         INDArray randomMatrix = Nd4j.create(result, new int[]{1, CHANNELS, HEIGHT, WIDTH});
-        return randomMatrix.muli(NOISE).addi(contentImage.muli(1 - NOISE));
+        return randomMatrix.muli(NOISE).addi(contentImage.muli(1-NOISE));
     }
 
     protected HashMap<String, INDArray> initStyleGramMap(Map<String, INDArray> styleActivation) {
@@ -193,7 +214,7 @@ public abstract class BaseGenerationRepo implements Generator {
         return gramMap;
     }
 
-    protected INDArray backPropStyles(ComputationGraph graph, HashMap<String, INDArray> gramActivations, Map<String, INDArray> forwardActivations) {
+    protected INDArray backPropStyles(ComputationGraph graph, HashMap<String, INDArray> gramActivations, Map<String, INDArray> forwardActivations, HashMap<String, INDArray> dropoutMasks) {
         INDArray backProp = Nd4j.zeros(1, CHANNELS, HEIGHT, WIDTH);
         for (String s : STYLE_LAYERS) {
             String[] spl = s.split(",");
@@ -203,28 +224,10 @@ public abstract class BaseGenerationRepo implements Generator {
             INDArray forwardActivation = forwardActivations.get(layerName);
             int index = layerIndex(layerName);
             INDArray derivativeStyle = derivStyleLossInLayer(gramActivation, forwardActivation).transpose();
-            backProp.addi(backPropagate(graph, derivativeStyle.reshape(forwardActivation.shape()), index).muli(weight));
+            backProp.addi(backPropagate(graph, derivativeStyle.reshape(forwardActivation.shape()), index, dropoutMasks).muli(weight));
         }
         return backProp;
     }
-
-    /*
-    protected INDArray backPropStyles(ComputationGraph graph, HashMap<String, INDArray> gramActivations, INDArray image) {
-        INDArray backProp = Nd4j.zeros(1, CHANNELS, HEIGHT, WIDTH);
-        for (String s : STYLE_LAYERS) {
-            String[] spl = s.split(",");
-            String layerName = spl[0];
-            double weight = Double.parseDouble(spl[1]);
-            INDArray gramActivation = gramActivations.get(layerName);
-            Map<String, INDArray> forwardActivations = graph.feedForward(new INDArray[] {image}, true, false);
-            INDArray forwardActivation = forwardActivations.get(layerName);
-            int index = layerIndex(layerName);
-            INDArray derivativeStyle = derivStyleLossInLayer(gramActivation, forwardActivation).transpose();
-            backProp.addi(backPropagate(graph, derivativeStyle.reshape(forwardActivation.shape()), index).muli(weight));
-        }
-        return backProp;
-    }
-    */
 
     protected INDArray derivStyleLossInLayer(INDArray gramFeatures, INDArray targetFeatures) {
         targetFeatures = targetFeatures.dup();
@@ -249,11 +252,11 @@ public abstract class BaseGenerationRepo implements Generator {
         return derivative.muli(checkPositive(fTranspose));
     }
 
-    protected INDArray backPropContent(ComputationGraph graph, Map<String, INDArray> contentActivations, Map<String, INDArray> forwardActivations) {
+    protected INDArray backPropContent(ComputationGraph graph, Map<String, INDArray> contentActivations, Map<String, INDArray> forwardActivations, HashMap<String, INDArray> dropoutMasks) {
         INDArray contentActivation = contentActivations.get(CONTENT_LAYER_NAME);
         INDArray forwardActivation = forwardActivations.get(CONTENT_LAYER_NAME);
         INDArray derivativeContent = derivContentLossInLayer(contentActivation, forwardActivation);
-        return backPropagate(graph, derivativeContent.reshape(forwardActivation.shape()), layerIndex(CONTENT_LAYER_NAME));
+        return backPropagate(graph, derivativeContent.reshape(forwardActivation.shape()), layerIndex(CONTENT_LAYER_NAME), dropoutMasks);
     }
 
     protected INDArray derivContentLossInLayer(INDArray contentFeatures, INDArray targetFeatures) {
@@ -281,11 +284,9 @@ public abstract class BaseGenerationRepo implements Generator {
         return -1;
     }
 
-    protected INDArray backPropagate(ComputationGraph graph, INDArray dLdA, int startIndex) {
+    protected INDArray backPropagate(ComputationGraph graph, INDArray dLdA, int startIndex, HashMap<String, INDArray> masks) {
         for (int i = startIndex; i > 0; i--) {
-            //System.out.println(Arrays.toString(dLdA.shape()) + " " + ALL_LAYERS[i]);
             Layer layer = graph.getLayer(ALL_LAYERS[i]);
-            //System.out.println(layer);
             dLdA = layer.backpropGradient(dLdA, LayerWorkspaceMgr.noWorkspaces()).getSecond();
         }
         return dLdA;

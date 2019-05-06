@@ -1,6 +1,8 @@
 package Model.Repositories.Generation.BaseGeneration.VGG16;
 
+import org.deeplearning4j.zoo.ZooModel;
 import org.nd4j.linalg.dataset.api.preprocessor.VGG16ImagePreProcessor;
+
 
 public class VGG16HyperParameters {
 
