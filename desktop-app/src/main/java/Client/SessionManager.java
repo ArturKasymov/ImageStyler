@@ -9,6 +9,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import static Utils.ServerCommand.*;
@@ -73,6 +75,12 @@ public class SessionManager extends Thread {
             String result=commandsResults.take();
             if(result.equals(REGISTER_USER_EXCEPTION))return false;
             System.out.println(result);
+            Scanner resultScanner=new Scanner(result);
+            resultScanner.next();
+            int sessionID=resultScanner.nextInt();
+            int userID=resultScanner.nextInt();
+            //long lastUpdate=resultScanner.nextLong();
+            //Date date= new Date(lastUpdate);
             return true;
         } catch (InterruptedException e) {
             e.printStackTrace();
