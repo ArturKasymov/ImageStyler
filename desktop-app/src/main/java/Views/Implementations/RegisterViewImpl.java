@@ -123,6 +123,8 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
 
     @Override
     public void showAlert() {
-        throw new RuntimeException();
+        //TODO show Alert
+        System.out.println("Alert show");
+        //throw new RuntimeException();
     }
 }

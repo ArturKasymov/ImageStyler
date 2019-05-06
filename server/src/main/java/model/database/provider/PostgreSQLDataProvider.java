@@ -40,7 +40,8 @@ public class PostgreSQLDataProvider {
             pstmt.setString(1,userName);
             pstmt.setString(2,passwordHash);
             ResultSet rs = pstmt.executeQuery();
-            return rs.getInt("id_user");
+
+            return rs.getInt(1);
     }
 
     public int insertSession(int userID, Date lastUpdate){
