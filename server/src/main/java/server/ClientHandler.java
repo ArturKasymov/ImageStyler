@@ -46,6 +46,8 @@ public class ClientHandler extends Thread{
         {
             try {
                 received = dis.readUTF();
+                System.out.println(received);
+
                 Scanner commandScanner= new Scanner(received);
                 command=commandScanner.next();
                 switch (command) {
