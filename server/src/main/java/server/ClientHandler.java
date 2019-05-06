@@ -66,7 +66,7 @@ public class ClientHandler extends Thread{
                             this.currentSession=new Session(sessionID,userID,currentDate);
                             System.out.println(String.format("%s %d %d %s",REGISTER_USER_SUCCESS, sessionID,userID,currentDate));
 
-                            dos.writeUTF(String.format("%s %d %d %s",REGISTER_USER_SUCCESS, sessionID,userID,currentDate));
+                            dos.writeUTF(String.format("%s %d %d %s",REGISTER_USER_SUCCESS, sessionID,userID,currentDate.getTime()));
                         } catch (SQLException e){
                             e.printStackTrace();
                             dos.writeUTF(REGISTER_USER_EXCEPTION);
