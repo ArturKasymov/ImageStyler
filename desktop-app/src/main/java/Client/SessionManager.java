@@ -54,6 +54,7 @@ public class SessionManager extends Thread {
                 }
                 command=commandsToServer.take();
                 System.out.println(command);
+                if(command.equals(CLOSE_CONNECTION))break;
                 dos.writeUTF(command);
             }
             dos.writeUTF(CLOSE_CONNECTION);
@@ -82,7 +83,11 @@ public class SessionManager extends Thread {
 
 
     public void stopConnection(){
-        //TODO Stop Thread
+        try {
+            commandsToServer.put(CLOSE_CONNECTION);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         this.runningStatus=false;
     }
 
