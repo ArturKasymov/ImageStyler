@@ -42,6 +42,7 @@ public class PostgreSQLDataProvider {
             pstmt.execute();
 
             ResultSet rs =  pstmt.getResultSet();
+            rs.next();
             return rs.getInt(1);
     }
 
@@ -54,6 +55,7 @@ public class PostgreSQLDataProvider {
             pstmt.execute();
 
             ResultSet rs= pstmt.getResultSet();
+            rs.next();
             return rs.getInt(1);
 
         } catch (SQLException  e) {
