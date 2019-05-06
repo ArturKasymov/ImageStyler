@@ -102,13 +102,15 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public void insertUser(CharSequence login, CharSequence password) {
+    public boolean insertUser(CharSequence login, CharSequence password) {
         try {
-            sessionManager.insertUser(login.toString(),password.toString());
+            if(!sessionManager.insertUser(login.toString(),password.toString()))return false;
             checkUserDirectory();
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     @Override

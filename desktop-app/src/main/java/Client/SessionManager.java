@@ -47,12 +47,12 @@ public class SessionManager extends Thread {
             String command;
             while(isContinue()){
                 result=dis.readUTF();
+                System.out.println(result);
                 if(!result.equals(WAITING_COMMANDS)){
                     commandsResults.put(result);
                     continue;
                 }
                 command=commandsToServer.take();
-                System.out.println(command);
                 dos.writeUTF(command);
             }
             dos.writeUTF(CLOSE_CONNECTION);
@@ -62,19 +62,21 @@ public class SessionManager extends Thread {
         }
     }
 
-    public synchronized User insertUser(String login, String password){
+    public synchronized boolean insertUser(String login, String password){
 
         try {
             System.out.println(String.format("%s %s %s",REGISTER_USER,login,password));
             commandsToServer.put(String.format("%s %s %s",REGISTER_USER,login,password));
             System.out.println("command in Queue");
             String result=commandsResults.take();
+            if(result.equals(REGISTER_USER_EXCEPTION))return false;
             System.out.println(result);
+            return true;
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return false;
     }
 
 
