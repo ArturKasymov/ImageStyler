@@ -11,8 +11,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import static Utils.ServerCommand.CLOSE_CONNECTION;
-import static Utils.ServerCommand.REGISTER_USER;
+import static Utils.ServerCommand.*;
 
 public class SessionManager extends Thread {
     private Session currentSession;
@@ -42,15 +41,19 @@ public class SessionManager extends Thread {
             socket=new Socket(serverIP,serverPort);
             DataInputStream dis = new DataInputStream(socket.getInputStream());
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-            //TODO runtime logs
+            //TODO delete logs
             System.out.println("server connect");
             String result;
+            String command;
             while(isContinue()){
                 result=dis.readUTF();
-                System.out.println(result);
-                if(result!=null)
+                if(!result.equals(WAITING_COMMANDS)){
                     commandsResults.put(result);
-                dos.writeUTF(commandsToServer.take());
+                    continue;
+                }
+                command=commandsToServer.take();
+                System.out.println(command);
+                dos.writeUTF(command);
             }
             dos.writeUTF(CLOSE_CONNECTION);
             socket.close();
@@ -63,8 +66,8 @@ public class SessionManager extends Thread {
 
         try {
             System.out.println(String.format("%s %s %s",REGISTER_USER,login,password));
-
             commandsToServer.put(String.format("%s %s %s",REGISTER_USER,login,password));
+            System.out.println("command in Queue");
             String result=commandsResults.take();
             System.out.println(result);
         } catch (InterruptedException e) {

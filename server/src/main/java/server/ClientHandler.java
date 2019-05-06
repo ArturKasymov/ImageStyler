@@ -39,13 +39,17 @@ public class ClientHandler extends Thread{
         String command;
         boolean isRunning=true;
 
-        // TODO runtime logs
+        // TODO delete logs
         System.out.println("new client added");
 
         while (isRunning)
         {
             try {
+                dos.writeUTF(WAITING_COMMANDS);
+
                 received = dis.readUTF();
+
+                //TODO delete logs
                 System.out.println(received);
 
                 Scanner commandScanner= new Scanner(received);
@@ -83,7 +87,7 @@ public class ClientHandler extends Thread{
             this.dis.close();
             this.dos.close();
             this.currentSocket.close();
-            // TODO runtime logs
+            // TODO delete logs
             System.out.println("client connection closed");
         }catch(IOException e){
             e.printStackTrace();
