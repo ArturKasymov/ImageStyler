@@ -32,6 +32,11 @@ public class PostgreSQLDataProvider {
 
     public int insertUser(String userName, String passwordHash) throws SQLException {
             PreparedStatement pstmt = connection.prepareStatement(INSERT_USER);
+
+            //TODO delete logs
+            System.out.println(userName);
+            System.out.println(passwordHash);
+
             pstmt.setString(1,userName);
             pstmt.setString(2,passwordHash);
             ResultSet rs = pstmt.executeQuery();

@@ -15,8 +15,7 @@ public class RegisterPresenter {
     }
 
     public void register(CharSequence login, CharSequence password){
-        if (!interactor.checkUserExists(login)) {
-            interactor.insertUser(login, password);
+        if (interactor.insertUser(login, password)) {
             view.goToMain();
         } else {
             view.showAlert();

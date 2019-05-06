@@ -4,7 +4,7 @@ public class PostgreSQLQueries {
     public static final String CHECK_USERS = "create table IF NOT EXISTS users (\n" +
             "id_user serial primary key,\n" +
             "user_name varchar(32) not null unique,\n" +
-            "password_hash varchar(32) not null\n" +
+            "password_hash varchar(256) not null\n" +
             ");";
     public static final String CHECK_SESSIONS="create table IF NOT EXISTS sessions (\n" +
             "id_session serial primary key,\n" +
