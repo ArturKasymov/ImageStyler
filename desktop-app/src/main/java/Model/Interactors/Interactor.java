@@ -4,7 +4,6 @@ import Client.SessionManager;
 import Model.Database.Entity.User;
 import Model.Database.Entity.UserImage;
 import Model.Database.provider.SQLiteLocalDataProvider;
-import Model.Repositories.Crypto.cryptoRepo;
 import Model.Repositories.Generation.BaseGeneration.DarkNet.DarkNetGenerator;
 import Model.Repositories.Generation.BaseGeneration.SqueezeNet.SqueezeNetGenerator;
 import Model.Repositories.Generation.BaseGeneration.VGG16.VGG16Generator;
@@ -55,8 +54,8 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
             User storedUser = dataProvider.getUser(userLogin);
             if(storedUser==null) return false;
             //ToDo rewrite Server check
-            boolean result = cryptoRepo.checkPassword(userPassword, storedUser.getPasswordHash());
-
+            //boolean result = cryptoRepo.checkPassword(userPassword, storedUser.getPasswordHash());
+            boolean result=true;
             if(result) sessionManager.startSession(new Random().nextLong(),storedUser);
 
             return result;
@@ -69,7 +68,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     @Override
     public boolean checkChangePassword(CharSequence oldPassword) {
         try {
-            return cryptoRepo.checkPassword(oldPassword.toString(), sessionManager.getCurrentUserPassword());
+            //return cryptoRepo.checkPassword(oldPassword.toString(), sessionManager.getCurrentUserPassword());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -79,7 +78,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     @Override
     public void changeUserPassword(CharSequence newPassword) {
         try {
-            dataProvider.changePassword(sessionManager.getCurrentUserName(), cryptoRepo.getSaltedHash(newPassword.toString()));
+            //dataProvider.changePassword(sessionManager.getCurrentUserName(), cryptoRepo.getSaltedHash(newPassword.toString()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -106,10 +105,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     @Override
     public void insertUser(CharSequence login, CharSequence password) {
         try {
-            dataProvider.insertUser(login.toString(), cryptoRepo.getSaltedHash(password.toString()));
-
-            //ToDo write server
-            sessionManager.startSession(new Random().nextLong(),dataProvider.getUser(login.toString()));
+            sessionManager.insertUser(login.toString(),password.toString());
             checkUserDirectory();
         } catch (Exception e) {
             e.printStackTrace();

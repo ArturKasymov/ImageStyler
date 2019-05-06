@@ -35,11 +35,11 @@ public class SQLiteLocalDataProvider {
         }
     }
 
-    public void insertUser(String userName, String passwordHash){
+    public void insertUser(int userID,String userName){
         try {
             PreparedStatement pstmt = connection.prepareStatement(INSERT_USER);
-            pstmt.setString(1, userName);
-            pstmt.setString(2, passwordHash);
+            pstmt.setInt(1,userID);
+            pstmt.setString(2, userName);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -84,8 +84,7 @@ public class SQLiteLocalDataProvider {
             if(rs.isClosed()) return null;
 
             return new User(rs.getInt("id_user"),
-                    rs.getString("user_name"),
-                    rs.getString("password_hash")
+                    rs.getString("user_name")
             );
         } catch (SQLException  e) {
             e.printStackTrace();

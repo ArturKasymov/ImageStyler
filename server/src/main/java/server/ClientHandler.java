@@ -1,20 +1,29 @@
 package server;
 
+import model.ClientInteractor;
+import model.Interactor;
+import model.database.entity.Session;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.SQLException;
+import java.text.Format;
+import java.util.Date;
 import java.util.Scanner;
 
-import static util.ServerCommand.CLOSE_CONNECTION;
+import static util.ServerCommand.*;
 
 public class ClientHandler extends Thread{
 
-    final Socket currentSocket;
+    private final Socket currentSocket;
+    private final ClientInteractor interactor=Interactor.getInstance();
 
-    final DataInputStream dis;
-    final DataOutputStream dos;
+    private final DataInputStream dis;
+    private final DataOutputStream dos;
 
+    private Session currentSession;
 
     public ClientHandler(Socket currentSocket, DataInputStream dis, DataOutputStream dos){
         this.currentSocket=currentSocket;
@@ -27,7 +36,6 @@ public class ClientHandler extends Thread{
     @Override
     public void run() {
         String received;
-        String toreturn;
         String command;
         boolean isRunning=true;
 
@@ -37,18 +45,23 @@ public class ClientHandler extends Thread{
         while (isRunning)
         {
             try {
-                //dos.writeUTF("WRITE COMMAND");
-
-                // receive the answer from client
-
                 received = dis.readUTF();
-
                 Scanner commandScanner= new Scanner(received);
                 command=commandScanner.next();
-
                 switch (command) {
                     case CLOSE_CONNECTION:
                         isRunning=false;
+                        break;
+                    case REGISTER_USER:
+                        try {
+                            int userID=interactor.insertUser(commandScanner.next(),commandScanner.next());
+                            Date currentDate= new Date();
+                            int sessionID=interactor.insertSession(userID,currentDate);
+                            this.currentSession=new Session(sessionID,userID,currentDate);
+                            dos.writeUTF(String.format("%s %d %d %s",REGISTER_USER_SUCCESS, sessionID,userID,currentDate));
+                        } catch (SQLException e){
+                            dos.writeUTF(REGISTER_USER_EXCEPTION);
+                        }
                         break;
                     default:
                         dos.writeUTF("Invalid input");

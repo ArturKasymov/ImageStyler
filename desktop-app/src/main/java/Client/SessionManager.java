@@ -9,8 +9,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import static Utils.ServerCommand.CLOSE_CONNECTION;
+import static Utils.ServerCommand.REGISTER_USER;
 
 public class SessionManager extends Thread {
     private Session currentSession;
@@ -20,9 +22,14 @@ public class SessionManager extends Thread {
     private String serverIP;
     private int serverPort;
 
+    //TODO rewrite
+    private ArrayBlockingQueue<String> commandsToServer;
+    private ArrayBlockingQueue<String> commandsResults;
 
     public SessionManager(){
         this.runningStatus=true;
+        commandsToServer=new ArrayBlockingQueue<>(3);
+        commandsResults=new ArrayBlockingQueue<>(3);
     }
 
     private boolean isContinue(){
@@ -37,19 +44,34 @@ public class SessionManager extends Thread {
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
             //TODO runtime logs
             System.out.println("server connect");
-
+            String result;
             while(isContinue()){
-                System.out.println("I am running");
-
-
+                result=dis.readUTF();
+                if(result!=null)
+                    commandsResults.put(result);
+                commandsToServer.take();
             }
 
             dos.writeUTF(CLOSE_CONNECTION);
             socket.close();
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
+
+    public synchronized User insertUser(String login, String password){
+
+        try {
+            commandsToServer.put(String.format("%s %s %s",REGISTER_USER,login,password));
+            String result=commandsResults.take();
+            System.out.println(result);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
     public void stopConnection(){
         this.runningStatus=false;
@@ -67,8 +89,6 @@ public class SessionManager extends Thread {
     public int getCurrentUserId(){
         return currentSession.getUserId();
     }
-
-    public String getCurrentUserPassword() { return currentSession.getCurrentUserPassword(); }
 
     public ArrayList<UserImage> checkCurrentUserImages() {
         //TODO get Images from server

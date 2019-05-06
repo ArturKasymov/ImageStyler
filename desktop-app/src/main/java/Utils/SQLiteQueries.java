@@ -2,9 +2,8 @@ package Utils;
 
 public class SQLiteQueries {
     public final static String CHECK_USERS="CREATE TABLE IF NOT EXISTS users (\n" +
-            "    id_user INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-            "    user_name VARCHAR(32) NOT NULL UNIQUE,\n" +
-            "    password_hash VARCHAR(32) NOT NULL\n" +
+            "    id_user INTEGER PRIMARY KEY,\n" +
+            "    user_name VARCHAR(32) NOT NULL UNIQUE\n" +
             ");\n";
 
     public final static String CHECK_USER_IMAGES="CREATE TABLE IF NOT EXISTS user_images (\n" +
@@ -21,7 +20,7 @@ public class SQLiteQueries {
             "\tstyle_name VARCHAR(32) NOT NULL,\t\n" +
             "\tvector_value VARCHAR(4294967296)\n" +
             ");";
-    public final static String INSERT_USER="INSERT INTO users(user_name,password_hash) VALUES(?,?)";
+    public final static String INSERT_USER="INSERT INTO users(id_user,user_name) VALUES(?,?)";
     public final static String GET_USER_NAMES="SELECT user_name FROM users";
     public final static String GET_USER="SELECT id_user, user_name, password_hash FROM users WHERE user_name= ?";
     public final static String INSERT_IMAGE = "INSERT INTO user_images(image_name,id_user,image_date,is_downloaded) VALUES(?,?,?,?)";
