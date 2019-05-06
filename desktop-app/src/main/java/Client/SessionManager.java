@@ -53,6 +53,7 @@ public class SessionManager extends Thread {
                     continue;
                 }
                 command=commandsToServer.take();
+                System.out.println(command);
                 dos.writeUTF(command);
             }
             dos.writeUTF(CLOSE_CONNECTION);

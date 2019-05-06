@@ -49,11 +49,11 @@ public class ClientHandler extends Thread{
 
                 received = dis.readUTF();
 
-                //TODO delete logs
-                System.out.println(received);
-
                 Scanner commandScanner= new Scanner(received);
                 command=commandScanner.next();
+
+                //TODO delete logs
+
                 switch (command) {
                     case CLOSE_CONNECTION:
                         isRunning=false;
