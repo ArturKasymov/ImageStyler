@@ -2,13 +2,20 @@ package Model.Repositories.Generation.BaseGeneration.DarkNet;
 
 import Model.Repositories.Generation.core.BaseGenerationRepo;
 import javafx.scene.image.Image;
+import org.deeplearning4j.nn.api.Layer;
 import org.deeplearning4j.nn.conf.WorkspaceMode;
+import org.deeplearning4j.nn.conf.dropout.Dropout;
 import org.deeplearning4j.nn.graph.ComputationGraph;
+import org.deeplearning4j.nn.layers.AbstractLayer;
+import org.deeplearning4j.nn.workspace.LayerWorkspaceMgr;
 import org.deeplearning4j.zoo.PretrainedType;
 import org.deeplearning4j.zoo.ZooModel;
 import org.deeplearning4j.zoo.model.Darknet19;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.indexing.NDArrayIndex;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class DarkNetGenerator extends BaseGenerationRepo {
     public DarkNetGenerator(Image contentImage, Image styleImage) {
@@ -19,10 +26,10 @@ public class DarkNetGenerator extends BaseGenerationRepo {
     protected ComputationGraph loadModel(boolean logIt) throws IOException {
         ZooModel zooModel = Darknet19.builder().workspaceMode(WorkspaceMode.NONE).build();
         zooModel.setInputShape(new int[][] {{3, 224, 224}});
-        ComputationGraph squeezeNet = (ComputationGraph) zooModel.initPretrained(PretrainedType.IMAGENET);
-        squeezeNet.initGradientsView();
-        if (logIt) log.info(squeezeNet.summary());
-        return squeezeNet;
+        ComputationGraph darkNet = (ComputationGraph) zooModel.initPretrained(PretrainedType.IMAGENET);
+        darkNet.initGradientsView();
+        if (logIt) log.info(darkNet.summary());
+        return darkNet;
     }
 
     @Override
@@ -44,5 +51,20 @@ public class DarkNetGenerator extends BaseGenerationRepo {
         BETA2 = DarkNetHyperParameters.BETA2;
         EPSILON = DarkNetHyperParameters.EPSILON;
         NOISE = DarkNetHyperParameters.NOISE;
+    }
+
+    @Override
+    protected INDArray backPropagate(ComputationGraph graph, INDArray dLdA, int startIndex, HashMap<String, INDArray> masks) {
+        for (int i = startIndex; i > 0; i--) {
+            Layer layer = graph.getLayer(ALL_LAYERS[i]);
+            if (layer!=null && (layer.type()==Layer.Type.CONVOLUTIONAL||layer.type()==Layer.Type.SUBSAMPLING)) {
+                ((Dropout) ((AbstractLayer) layer).layerConf().getIDropout()).setMask(masks.get(ALL_LAYERS[i]));
+            }
+        }
+        for (int i = startIndex; i > 0; i--) {
+            Layer layer = graph.getLayer(ALL_LAYERS[i]);
+            dLdA = layer.backpropGradient(dLdA, LayerWorkspaceMgr.noWorkspaces()).getSecond();
+        }
+        return dLdA;
     }
 }

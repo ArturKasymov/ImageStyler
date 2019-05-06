@@ -6,6 +6,7 @@ import Model.Database.Entity.UserImage;
 import Model.Database.provider.SQLiteLocalDataProvider;
 import Model.Repositories.Crypto.cryptoRepo;
 import Model.Repositories.Generation.BaseGeneration.DarkNet.DarkNetGenerator;
+import Model.Repositories.Generation.BaseGeneration.SqueezeNet.SqueezeNetGenerator;
 import Model.Repositories.Generation.BaseGeneration.VGG16.VGG16Generator;
 import Model.Repositories.Generation.core.Generator;
 import Model.Repositories.Generation.core.GenerationException;
@@ -133,8 +134,8 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
 
     @Override
     public Image generate(Image contentImage, Image styleImage) throws GenerationException {
-        Generator generator = new VGG16Generator(contentImage, styleImage);
-        //Generator generator = new SqueezeNetGenerator(contentImage, styleImage);
+        //Generator generator = new VGG16Generator(contentImage, styleImage);
+        Generator generator = new SqueezeNetGenerator(contentImage, styleImage);
         //Generator generator = new DarkNetGenerator(contentImage, styleImage);
         return generator.generate();
     }
@@ -167,7 +168,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     public void startSessionManager(String serverIP, int serverPort){
-        sessionManager.setSocketConfig(serverIP,serverPort);
-        sessionManager.start();
+        //sessionManager.setSocketConfig(serverIP,serverPort);
+        //sessionManager.start();
     }
 }
