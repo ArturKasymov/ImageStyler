@@ -1,7 +1,8 @@
 package model;
 
+import model.database.entity.User;
 import model.database.provider.PostgreSQLDataProvider;
-import model.repositories.cryptoRepo;
+import model.repositories.CryptoRepo;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -37,7 +38,7 @@ public class Interactor implements ClientInteractor {
         System.out.println(userName+" "+password);
 
         try {
-            return dataProvider.insertUser(userName, cryptoRepo.getSaltedHash(password));
+            return dataProvider.insertUser(userName, CryptoRepo.getSaltedHash(password));
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (InvalidKeySpecException e) {
@@ -55,5 +56,10 @@ public class Interactor implements ClientInteractor {
                 e.printStackTrace();
         }
         return 0;
+    }
+
+    @Override
+    public User getUser(String username) {
+        return dataProvider.getUser(username);
     }
 }

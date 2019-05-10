@@ -82,7 +82,6 @@ public class SQLiteLocalDataProvider {
             pstmt.setString(1,userName);
             ResultSet rs = pstmt.executeQuery();
             if(rs.isClosed()) return null;
-
             return new User(rs.getInt("id_user"),
                     rs.getString("user_name")
             );

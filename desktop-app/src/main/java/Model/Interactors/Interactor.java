@@ -48,20 +48,14 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public boolean checkLoginData(CharSequence login, CharSequence password) {
+    public void login(CharSequence login, CharSequence password) {
         try {
             String userLogin = login.toString();
             String userPassword = password.toString();
-            User storedUser = dataProvider.getUser(userLogin);
-            if(storedUser==null) return false;
-            //ToDo rewrite Server check
-            //boolean result = cryptoRepo.checkPassword(userPassword, storedUser.getPasswordHash());
-            boolean result=true;
-
-            return result;
+            sessionManager.login(userLogin,userPassword);
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+
         }
     }
 

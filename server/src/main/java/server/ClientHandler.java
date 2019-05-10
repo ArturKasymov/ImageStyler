@@ -3,6 +3,8 @@ package server;
 import model.ClientInteractor;
 import model.Interactor;
 import model.database.entity.Session;
+import model.database.entity.User;
+import model.repositories.CryptoRepo;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -69,29 +71,33 @@ public class ClientHandler extends Thread{
 
     private void parseClientInput(String input){
         Scanner sc= new Scanner(input);
+        String command=sc.next();
 
-/*
         switch (command) {
-            case CLOSE_CONNECTION:
-
-            case REGISTER_USER:
-                try {
-                    int userID=interactor.insertUser(commandScanner.next(),commandScanner.next());
-                    Date currentDate= new Date();
-                    int sessionID=interactor.insertSession(userID,currentDate);
-                    this.currentSession=new Session(sessionID,userID,currentDate);
-                    System.out.println(String.format("%s %d %d %s",REGISTER_USER_SUCCESS, sessionID,userID,currentDate));
-
-                    dos.writeUTF(String.format("%s %d %d %s",REGISTER_USER_SUCCESS, sessionID,userID,currentDate.getTime()));
-                } catch (SQLException e){
-                    e.printStackTrace();
-                    dos.writeUTF(REGISTER_USER_EXCEPTION);
+            case LOGIN:
+                String username=sc.next();
+                String password=sc.next();
+                User storedUser=interactor.getUser(username);
+                if(storedUser==null||!CryptoRepo.checkPassword(password,storedUser.getPassword_hash())){
+                    synchronized (dos){
+                        try {
+                            dos.writeUTF(LOGIN+" "+FAIL);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                else{
+                    synchronized (dos){
+                        try {
+                            dos.writeUTF(LOGIN+" "+SUCCESS+" "+storedUser.getId_user()+" "+storedUser.getUser_name());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
                 break;
-            default:
-                dos.writeUTF("Invalid input");
-                break;
         }
-        */
+
     }
 }

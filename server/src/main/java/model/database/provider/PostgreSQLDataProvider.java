@@ -1,5 +1,7 @@
 package model.database.provider;
 
+import model.database.entity.User;
+
 import java.sql.*;
 import java.util.Date;
 
@@ -64,5 +66,18 @@ public class PostgreSQLDataProvider {
         return 0;
     }
 
+    public User getUser(String username){
+        PreparedStatement pstmt = null;
+        try {
+            pstmt = connection.prepareStatement(GET_USER_HASH);
 
+            pstmt.setString(1,username);
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.isClosed()) return null;
+            return new User(rs.getInt(1),rs.getString(2),rs.getString(3));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

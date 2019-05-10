@@ -23,4 +23,5 @@ public class PostgreSQLQueries {
             "VALUES (?,?) RETURNING id_user;";
     public static final String INSERT_SESSION="INSERT INTO sessions(id_user,isActive,last_update) " +
             "VALUES (?,?,?) RETURNING id_session;";
+    public static final String GET_USER_HASH="SELECT * FROM users WHERE user_name=?;";
 }

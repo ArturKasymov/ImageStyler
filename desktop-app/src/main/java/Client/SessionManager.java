@@ -136,6 +136,15 @@ public class SessionManager extends Thread {
         return false;
     }
 
+    public void login(String username, String password) {
+        synchronized (outputStream){
+            try {
+                outputStream.writeUTF(LOGIN+" "+username+" "+password);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public void stopConnection(){
         this.runningStatus=false;

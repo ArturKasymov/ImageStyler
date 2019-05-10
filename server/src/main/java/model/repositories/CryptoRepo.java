@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
-public class cryptoRepo {
+public class CryptoRepo {
     private static int iterations = 2000;
     private static int saltLen = 32;
     private static int desiredKeyLen = 256;
@@ -22,12 +22,18 @@ public class cryptoRepo {
        // return password;
     }
 
-    public static boolean checkPassword(String password, String stored) throws NoSuchAlgorithmException, InvalidKeySpecException{
+    public static boolean checkPassword(String password, String stored){
         String[] salt_hash = stored.split("\\$");
         if (salt_hash.length != 2) {
             throw new IllegalStateException("Wrong form. Should be 'salt$hash'.");
         }
-        String hashedInput = hash(password, Base64.decodeBase64(salt_hash[0]));
+        String hashedInput;
+        try {
+            hashedInput = hash(password, Base64.decodeBase64(salt_hash[0]));
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            e.printStackTrace();
+            return false;
+        }
         return hashedInput.equals(salt_hash[1]);
     }
 
