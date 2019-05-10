@@ -73,13 +73,13 @@ public class ClientHandler extends Thread{
         Scanner sc= new Scanner(input);
         String command=sc.next();
 
+        String username;
+        String password;
+
         switch (command) {
             case LOGIN:
-                String username=sc.next();
-                String password=sc.next();
-
-                // TODO delete logs
-                System.out.println(username+" "+password);
+                username=sc.next();
+                password=sc.next();
 
                 User storedUser=interactor.getUser(username);
                 if(storedUser==null||!CryptoRepo.checkPassword(password,storedUser.getPassword_hash())){
@@ -98,6 +98,30 @@ public class ClientHandler extends Thread{
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                    }
+                }
+                break;
+            case REGISTER:
+                username=sc.next();
+                password=sc.next();
+                try {
+                    int userID=interactor.insertUser(username,password);
+                    synchronized (dos){
+                        try {
+                            dos.writeUTF(REGISTER+" "+SUCCESS+" "+userID+" "+username);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                synchronized (dos){
+                    try {
+                        dos.writeUTF(REGISTER+" "+FAIL);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
                 break;

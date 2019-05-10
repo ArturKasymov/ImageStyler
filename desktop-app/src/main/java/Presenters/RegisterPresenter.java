@@ -2,9 +2,10 @@ package Presenters;
 
 import Model.Interactors.Interactor;
 import Model.Interactors.RegisterInteractor;
+import Presenters.Callbacks.RegisterCallback;
 import Views.Interfaces.RegisterView;
 
-public class RegisterPresenter{
+public class RegisterPresenter implements RegisterCallback {
 
     private RegisterView view;
     private RegisterInteractor interactor;
@@ -15,11 +16,21 @@ public class RegisterPresenter{
     }
 
     public void register(CharSequence login, CharSequence password){
-        if (interactor.insertUser(login, password)) {
-            view.goToMain();
-        } else {
-            view.showAlert();
-        }
+        interactor.registerUser(login, password);
+    }
+
+    public void showAlert(){
+        view.showAlert();
+    }
+
+    @Override
+    public void goToMain() {
+        interactor.checkUserDirectory();
+        view.goToMain();
+    }
+
+    public void initCallback(){
+        interactor.initRegisterCallback(this);
     }
 
     public void unsubscribe(){

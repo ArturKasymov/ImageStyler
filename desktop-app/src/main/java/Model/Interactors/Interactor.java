@@ -10,6 +10,7 @@ import Model.Repositories.Generation.BaseGeneration.VGG16.VGG16Generator;
 import Model.Repositories.Generation.core.Generator;
 import Model.Repositories.Generation.core.GenerationException;
 import Presenters.Callbacks.LoginCallback;
+import Presenters.Callbacks.RegisterCallback;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
@@ -49,14 +50,12 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
 
     @Override
     public void login(CharSequence login, CharSequence password) {
-        try {
-            String userLogin = login.toString();
-            String userPassword = password.toString();
-            sessionManager.login(userLogin,userPassword);
-        } catch (Exception e) {
-            e.printStackTrace();
+        sessionManager.login(login.toString(),password.toString());
+    }
 
-        }
+    @Override
+    public void registerUser(CharSequence username, CharSequence password) {
+        sessionManager.register(username.toString(),password.toString());
     }
 
     @Override
@@ -79,12 +78,6 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public boolean checkUserExists(CharSequence login) {
-        String userLogin = login.toString();
-        return usersName.contains(userLogin);
-    }
-
-    @Override
     public void checkUserData() {
         checkUserDirectory();
         //ToDO compareWithServer
@@ -96,21 +89,14 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
         sessionManager.initLoginCallback(loginCallback);
     }
 
-    private void checkUserDirectory(){
-        File dir = new File(sessionManager.getCurrentUserPath());
-        if (!dir.exists()) dir.mkdirs();
+    @Override
+    public void initRegisterCallback(RegisterCallback callback) {
+        sessionManager.initRegisterCallback(callback);
     }
 
-    @Override
-    public boolean insertUser(CharSequence login, CharSequence password) {
-        try {
-            if(!sessionManager.insertUser(login.toString(),password.toString()))return false;
-            checkUserDirectory();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
+    public void checkUserDirectory(){
+        File dir = new File(sessionManager.getCurrentUserPath());
+        if (!dir.exists()) dir.mkdirs();
     }
 
     @Override

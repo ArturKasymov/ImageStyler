@@ -106,40 +106,35 @@ public class SessionManager extends Thread {
                 break;
             case REGISTER:
                 status=sc.next();
-
-
-
-
+                switch (status){
+                    case FAIL:
+                        registerCallback.showAlert();
+                        break;
+                    case SUCCESS:
+                        int userID=sc.nextInt();
+                        String userName=sc.next();
+                        currentUser=new User(userID,userName);
+                        registerCallback.goToMain();
+                        break;
+                }
+                break;
         }
-    }
-
-
-    public boolean insertUser(String login, String password){
-        /*try {
-            System.out.println(String.format("%s %s %s",REGISTER_USER,login,password));
-            commandsToServer.put(String.format("%s %s %s",REGISTER_USER,login,password));
-            System.out.println("command in Queue");
-            String result=commandsResults.take();
-            if(result.equals(REGISTER_USER_EXCEPTION))return false;
-            System.out.println(result);
-            Scanner resultScanner=new Scanner(result);
-            resultScanner.next();
-            int sessionID=resultScanner.nextInt();
-            int userID=resultScanner.nextInt();
-            //long lastUpdate=resultScanner.nextLong();
-            //Date date= new Date(lastUpdate);
-            return true;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-*/
-        return false;
     }
 
     public void login(String username, String password) {
         synchronized (outputStream){
             try {
                 outputStream.writeUTF(LOGIN+" "+username+" "+password);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void register(String username, String password){
+        synchronized (outputStream){
+            try {
+                outputStream.writeUTF(REGISTER+" "+username+" "+password);
             } catch (IOException e) {
                 e.printStackTrace();
             }

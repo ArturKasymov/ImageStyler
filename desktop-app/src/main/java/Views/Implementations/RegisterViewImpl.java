@@ -70,6 +70,7 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
 
     @FXML
     public void initialize() {
+        presenter.initCallback();
         registerButton.setDisable(true);
 
         loginField.textProperty().addListener(new ChangeListener<String>() {
