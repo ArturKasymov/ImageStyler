@@ -73,6 +73,7 @@ public class PostgreSQLDataProvider {
 
             pstmt.setString(1,username);
             ResultSet rs = pstmt.executeQuery();
+            rs.next();
             if(rs.isClosed()) return null;
             return new User(rs.getInt(1),rs.getString(2),rs.getString(3));
         } catch (SQLException e) {
