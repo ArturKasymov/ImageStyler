@@ -9,6 +9,7 @@ import Model.Repositories.Generation.BaseGeneration.SqueezeNet.SqueezeNetGenerat
 import Model.Repositories.Generation.BaseGeneration.VGG16.VGG16Generator;
 import Model.Repositories.Generation.core.Generator;
 import Model.Repositories.Generation.core.GenerationException;
+import Presenters.Callbacks.LoginCallback;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
@@ -56,7 +57,6 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
             //ToDo rewrite Server check
             //boolean result = cryptoRepo.checkPassword(userPassword, storedUser.getPasswordHash());
             boolean result=true;
-            if(result) sessionManager.startSession(new Random().nextLong(),storedUser);
 
             return result;
         } catch (Exception e) {
@@ -95,6 +95,11 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
         checkUserDirectory();
         //ToDO compareWithServer
         dataProvider.insertImages(sessionManager.checkCurrentUserImages());
+    }
+
+    @Override
+    public void initLoginCallback(LoginCallback loginCallback) {
+        sessionManager.initLoginCallback(loginCallback);
     }
 
     private void checkUserDirectory(){
@@ -146,7 +151,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
 
     @Override
     public void logout() {
-        sessionManager.finishSession();
+        sessionManager.logout();
     }
 
     @Override
@@ -166,7 +171,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     public void startSessionManager(String serverIP, int serverPort){
-        //sessionManager.setSocketConfig(serverIP,serverPort);
-        //sessionManager.start();
+        sessionManager.setSocketConfig(serverIP,serverPort);
+        sessionManager.start();
     }
 }

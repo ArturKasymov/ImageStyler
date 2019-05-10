@@ -1,5 +1,7 @@
 package Model.Database.Entity;
 
+import static Utils.Constants.APP_ROOT_DIRECTORY;
+
 public class User {
     private int id;
     private String userName;
@@ -8,10 +10,13 @@ public class User {
         this.userName=userName;
     }
 
-    public int getId() {
+    public int getUserID() {
         return id;
     }
     public String getUserName() {
         return userName;
+    }
+    public String getCurrentUserPath(){
+        return APP_ROOT_DIRECTORY+"\\."+id;
     }
 }

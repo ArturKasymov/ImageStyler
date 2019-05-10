@@ -4,7 +4,7 @@ import Model.Interactors.Interactor;
 import Model.Interactors.RegisterInteractor;
 import Views.Interfaces.RegisterView;
 
-public class RegisterPresenter {
+public class RegisterPresenter{
 
     private RegisterView view;
     private RegisterInteractor interactor;

@@ -1,29 +1,54 @@
 package Client;
 
-import Model.Database.Entity.Session;
 import Model.Database.Entity.User;
 import Model.Database.Entity.UserImage;
+import Presenters.Callbacks.GeneratorCallback;
+import Presenters.Callbacks.LoginCallback;
+import Presenters.Callbacks.MainCallback;
+import Presenters.Callbacks.RegisterCallback;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import static Utils.ServerCommand.*;
 
 public class SessionManager extends Thread {
-    private Session currentSession;
+    private User currentUser;
     private boolean runningStatus;
     private Socket socket;
 
     private String serverIP;
     private int serverPort;
 
-    //TODO rewrite
+    private DataOutputStream outputStream;
+
+    //CallBacks
+    private LoginCallback loginCallback;
+    private GeneratorCallback generatorCallback;
+    private MainCallback mainCallback;
+    private RegisterCallback registerCallback;
+
+
+    public void initLoginCallback(LoginCallback callback){
+        loginCallback=callback;
+    }
+    public void initGeneratorCallback(GeneratorCallback callback){
+        generatorCallback=callback;
+    }
+    public void initMainCallback(MainCallback callback){
+        mainCallback=callback;
+    }
+    public void initRegisterCallback(RegisterCallback callback){
+        registerCallback=callback;
+    }
+
+
+                                               //TODO rewrite
     private ArrayBlockingQueue<String> commandsToServer;
     private ArrayBlockingQueue<String> commandsResults;
 
@@ -42,33 +67,55 @@ public class SessionManager extends Thread {
         try {
             socket=new Socket(serverIP,serverPort);
             DataInputStream dis = new DataInputStream(socket.getInputStream());
-            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+            outputStream=new DataOutputStream(socket.getOutputStream());
+            String inputData;
+
             //TODO delete logs
             System.out.println("server connect");
-            String result;
-            String command;
+
             while(isContinue()){
-                result=dis.readUTF();
-                System.out.println(result);
-                if(!result.equals(WAITING_COMMANDS)){
-                    commandsResults.put(result);
-                    continue;
-                }
-                command=commandsToServer.take();
-                System.out.println(command);
-                if(command.equals(CLOSE_CONNECTION))break;
-                dos.writeUTF(command);
+                inputData=dis.readUTF();
+                System.out.println(inputData);
+                if(inputData.equals(CLOSE_CONNECTION))break;
+                parseServerInput(inputData);
             }
-            dos.writeUTF(CLOSE_CONNECTION);
             socket.close();
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public synchronized boolean insertUser(String login, String password){
+    private void parseServerInput(String input){
+        Scanner sc = new Scanner(input);
+        String command=sc.next();
+        String status;
+        switch (command){
+            case LOGIN:
+                status=sc.next();
+                switch (status){
+                    case FAIL:
+                        loginCallback.showWrongDataAlert();
+                        break;
+                    case SUCCESS:
+                        int userID=sc.nextInt();
+                        String userName=sc.next();
+                        currentUser=new User(userID,userName);
+                        loginCallback.goToMain();
+                        break;
+                }
+                break;
+            case REGISTER:
+                status=sc.next();
 
-        try {
+
+
+
+        }
+    }
+
+
+    public boolean insertUser(String login, String password){
+        /*try {
             System.out.println(String.format("%s %s %s",REGISTER_USER,login,password));
             commandsToServer.put(String.format("%s %s %s",REGISTER_USER,login,password));
             System.out.println("command in Queue");
@@ -85,18 +132,20 @@ public class SessionManager extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+*/
         return false;
     }
 
 
     public void stopConnection(){
-        try {
-            commandsToServer.put(CLOSE_CONNECTION);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         this.runningStatus=false;
+        synchronized (outputStream){
+            try {
+                outputStream.writeUTF(CLOSE_CONNECTION);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void setSocketConfig(String serverIP, int serverPort){
@@ -105,11 +154,11 @@ public class SessionManager extends Thread {
     }
 
     public String getCurrentUserName(){
-        return currentSession.getUserName();
+        return currentUser.getUserName();
     }
 
     public int getCurrentUserId(){
-        return currentSession.getUserId();
+        return currentUser.getUserID();
     }
 
     public ArrayList<UserImage> checkCurrentUserImages() {
@@ -118,14 +167,11 @@ public class SessionManager extends Thread {
     }
 
     public String getCurrentUserPath(){
-        return currentSession.getCurrentUserPath();
+        return currentUser.getCurrentUserPath();
     }
 
-    public void startSession(long sessionId, User user){
-        this.currentSession=new Session(sessionId,user);
-    }
 
-    public void finishSession(){
-        this.currentSession=null;
+    public void logout() {
+        currentUser=null;
     }
 }

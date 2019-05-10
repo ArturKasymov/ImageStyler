@@ -31,12 +31,9 @@ public class ClientHandler extends Thread{
         this.dos=dos;
     }
 
-
-
     @Override
     public void run() {
-        String received;
-        String command;
+        String inputData;
         boolean isRunning=true;
 
         // TODO delete logs
@@ -45,42 +42,18 @@ public class ClientHandler extends Thread{
         while (isRunning)
         {
             try {
-                dos.writeUTF(WAITING_COMMANDS);
-
-                received = dis.readUTF();
-
-                Scanner commandScanner= new Scanner(received);
-                command=commandScanner.next();
-
-                //TODO delete logs
-
-                switch (command) {
-                    case CLOSE_CONNECTION:
+                inputData = dis.readUTF();
+                if(inputData.equals(CLOSE_CONNECTION)){
+                    synchronized (dos){
+                        dos.writeUTF(CLOSE_CONNECTION);
                         isRunning=false;
-                        break;
-                    case REGISTER_USER:
-                        try {
-                            int userID=interactor.insertUser(commandScanner.next(),commandScanner.next());
-                            Date currentDate= new Date();
-                            int sessionID=interactor.insertSession(userID,currentDate);
-                            this.currentSession=new Session(sessionID,userID,currentDate);
-                            System.out.println(String.format("%s %d %d %s",REGISTER_USER_SUCCESS, sessionID,userID,currentDate));
-
-                            dos.writeUTF(String.format("%s %d %d %s",REGISTER_USER_SUCCESS, sessionID,userID,currentDate.getTime()));
-                        } catch (SQLException e){
-                            e.printStackTrace();
-                            dos.writeUTF(REGISTER_USER_EXCEPTION);
-                        }
-                        break;
-                    default:
-                        dos.writeUTF("Invalid input");
-                        break;
+                    }
                 }
+                else parseClientInput(inputData);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
         try
         {
 
@@ -92,5 +65,33 @@ public class ClientHandler extends Thread{
         }catch(IOException e){
             e.printStackTrace();
         }
+    }
+
+    private void parseClientInput(String input){
+        Scanner sc= new Scanner(input);
+
+/*
+        switch (command) {
+            case CLOSE_CONNECTION:
+
+            case REGISTER_USER:
+                try {
+                    int userID=interactor.insertUser(commandScanner.next(),commandScanner.next());
+                    Date currentDate= new Date();
+                    int sessionID=interactor.insertSession(userID,currentDate);
+                    this.currentSession=new Session(sessionID,userID,currentDate);
+                    System.out.println(String.format("%s %d %d %s",REGISTER_USER_SUCCESS, sessionID,userID,currentDate));
+
+                    dos.writeUTF(String.format("%s %d %d %s",REGISTER_USER_SUCCESS, sessionID,userID,currentDate.getTime()));
+                } catch (SQLException e){
+                    e.printStackTrace();
+                    dos.writeUTF(REGISTER_USER_EXCEPTION);
+                }
+                break;
+            default:
+                dos.writeUTF("Invalid input");
+                break;
+        }
+        */
     }
 }

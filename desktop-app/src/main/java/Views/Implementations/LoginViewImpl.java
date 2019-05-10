@@ -64,9 +64,10 @@ public class LoginViewImpl extends BaseView implements LoginView {
 
     @FXML
     public void initialize() {
+        presenter.initCallback();
+
         warning.setVisible(false);
         loginButton.setDisable(true);
-
         loginField.textProperty().addListener(new ChangeListener<String>() {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 buttonToggle();
