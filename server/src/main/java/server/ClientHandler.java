@@ -77,6 +77,10 @@ public class ClientHandler extends Thread{
             case LOGIN:
                 String username=sc.next();
                 String password=sc.next();
+
+                // TODO delete logs
+                System.out.println(username+" "+password);
+
                 User storedUser=interactor.getUser(username);
                 if(storedUser==null||!CryptoRepo.checkPassword(password,storedUser.getPassword_hash())){
                     synchronized (dos){
