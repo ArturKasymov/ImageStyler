@@ -1,6 +1,5 @@
 package Model.Repositories.Generation.BaseGeneration.VGG16;
 
-import org.deeplearning4j.zoo.ZooModel;
 import org.nd4j.linalg.dataset.api.preprocessor.VGG16ImagePreProcessor;
 
 
@@ -15,7 +14,7 @@ public class VGG16HyperParameters {
     public static final double ALPHA = 0.025;
     public static final double BETA = 5.0;
 
-    public static final int ITERATIONS = 1000;
+    public static final int ITERATIONS = 25;
 
     public static final String[] ALL_LAYERS = new String[]{
             "input_1",
