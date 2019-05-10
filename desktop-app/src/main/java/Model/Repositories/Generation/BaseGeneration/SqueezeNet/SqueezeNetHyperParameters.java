@@ -6,7 +6,7 @@ import org.nd4j.linalg.dataset.api.preprocessor.VGG16ImagePreProcessor;
 import org.nd4j.linalg.factory.Nd4j;
 
 public class SqueezeNetHyperParameters {
-    public static final double LEARNING_RATE = 3;
+    public static final double LEARNING_RATE = 5.0;
     public static final double BETA1 = 0.8;
     public static final double BETA2 = 0.999;
     public static final double EPSILON = 0.00000008;
@@ -15,7 +15,7 @@ public class SqueezeNetHyperParameters {
     public static final double ALPHA = 0.025;
     public static final double BETA = 5.0;
 
-    public static final int ITERATIONS = 400;
+    public static final int ITERATIONS = 100;
 
     public static final String[] ALL_LAYERS = new String[]{
             "input_5",
@@ -87,18 +87,18 @@ public class SqueezeNetHyperParameters {
             "loss"
     };
     public static final String[] STYLE_LAYERS = new String[]{
-            "relu1,21.0",
-            "fire2_relu_squeeze1x1,21.0",
-            "fire3_relu_squeeze1x1,5.0",
-            "fire4_relu_squeeze1x1,5.0",
+            "relu1,10.0",
+            "fire3_concat,15.0",
+            "fire5_concat,20.0",
+            "fire6_concat,20.0"
     };
-    public static final String CONTENT_LAYER_NAME = "fire3_relu_squeeze1x1";
+    public static final String CONTENT_LAYER_NAME = "fire2_concat";
 
     public static final int HEIGHT = 227;
     public static final int WIDTH = 227;
 
-    public static final DataNormalization IMAGE_PREPROCESSOR = new NormalizerStandardize(Nd4j.create(
-            new double[] {0.485, 0.456, 0.406}), Nd4j.create(new double[] {0.229, 0.224, 0.225}));
+    //public static final DataNormalization IMAGE_PREPROCESSOR = new NormalizerStandardize(Nd4j.create(
+    //        new double[] {0.485, 0.456, 0.406}), Nd4j.create(new double[] {0.229, 0.224, 0.225}));
 
-    //public static final DataNormalization IMAGE_PREPROCESSOR = new VGG16ImagePreProcessor();
+    public static final DataNormalization IMAGE_PREPROCESSOR = new VGG16ImagePreProcessor();
 }

@@ -1,6 +1,8 @@
 package Model.Repositories.Generation.BaseGeneration.SqueezeNet;
 
 import Model.Repositories.Generation.core.BaseGenerationRepo;
+import Model.Repositories.Generation.core.GenerationException;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import org.deeplearning4j.nn.api.Layer;
 import org.deeplearning4j.nn.conf.WorkspaceMode;
@@ -15,15 +17,69 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.api.ops.executioner.OpExecutioner;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.NDArrayIndex;
+import org.nd4j.linalg.learning.AdamUpdater;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 
 public class SqueezeNetGenerator extends BaseGenerationRepo {
 
     public SqueezeNetGenerator(Image contentImage, Image styleImage) {
         super(contentImage, styleImage);
         Nd4j.getExecutioner().setProfilingMode(OpExecutioner.ProfilingMode.DISABLED);
+    }
+
+    @Override
+    public Image generate() throws GenerationException {
+        try {
+            ComputationGraph Graph = loadModel(false);
+            INDArray generatedImage = initGeneratedImage();
+            Map<String, INDArray> contentActivation = Graph.feedForward(contentImage, true);
+            Map<String, INDArray> styleActivation = Graph.feedForward(styleImage, true);
+            HashMap<String, INDArray> styleActivationGram = initStyleGramMap(styleActivation);
+            AdamUpdater optim = createAdamUpdater();
+            for (int i = 0; i < ITERATIONS; i++) {
+                if (i % 5 == 0) {
+                    log.info("iteration " + i);
+                    /*if ( i%25 == 0) {
+                        INDArray genImage = generatedImage.dup();
+                        BufferedImage output = SwingFXUtils.fromFXImage(fromMatrix(genImage), null);
+                        URL resource = getClass().getResource(".");
+                        File file = new File(resource.getPath() + "/iteration" + i + ".png");
+                        ImageIO.write(output, "png", file);
+                    }*/
+                }
+                Map<String, INDArray> forwardActivation = Graph.feedForward(new INDArray[] { generatedImage }, true, false);
+                HashMap<String, INDArray> dropoutMasks = saveDropoutMasks(Graph);
+                INDArray styleGrad = backPropStyles(Graph, styleActivationGram, forwardActivation, dropoutMasks);
+                INDArray contentGrad = backPropContent(Graph, contentActivation, forwardActivation, dropoutMasks);
+                INDArray totalGrad = contentGrad.muli(ALPHA).addi(styleGrad.muli(BETA));
+                if (i % 5 == 0) {
+                    double totalLoss = contentLoss(ALPHA, contentActivation.get(CONTENT_LAYER_NAME), forwardActivation.get(CONTENT_LAYER_NAME)) +
+                            styleLoss(styleActivationGram, forwardActivation);
+                    System.out.println("Loss: " + totalLoss);
+                    INDArray gradients = contentGrad.dup();
+                    BufferedImage output = SwingFXUtils.fromFXImage(fromMatrix(gradients), null);
+                    URL resource = getClass().getResource(".");
+                    File file = new File(resource.getPath() + "/iteration" + i + ".png");
+                    ImageIO.write(output, "png", file);
+                }
+                optim.applyUpdater(totalGrad, i, 0);
+                generatedImage.subi(totalGrad);
+            }
+
+            return fromMatrix(generatedImage);
+
+            //return fromMatrix(mirrored(contentImage));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new GenerationException();
+        }
     }
 
     @Override

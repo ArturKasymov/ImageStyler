@@ -5,18 +5,14 @@ import javafx.scene.image.Image;
 import net.coobird.thumbnailator.Thumbnails;
 import org.datavec.image.loader.ImageLoader;
 import org.deeplearning4j.nn.api.Layer;
-import org.deeplearning4j.nn.conf.CacheMode;
 import org.deeplearning4j.nn.conf.dropout.Dropout;
 import org.deeplearning4j.nn.graph.ComputationGraph;
-import org.deeplearning4j.nn.graph.vertex.GraphVertex;
 import org.deeplearning4j.nn.layers.AbstractLayer;
 import org.deeplearning4j.nn.workspace.LayerWorkspaceMgr;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.preprocessor.DataNormalization;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.BooleanIndexing;
-import org.nd4j.linalg.indexing.INDArrayIndex;
-import org.nd4j.linalg.indexing.NDArrayIndex;
 import org.nd4j.linalg.indexing.conditions.Conditions;
 import org.nd4j.linalg.indexing.functions.Value;
 import org.nd4j.linalg.learning.AdamUpdater;
@@ -24,11 +20,12 @@ import org.nd4j.linalg.learning.config.Adam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -87,7 +84,9 @@ public abstract class BaseGenerationRepo implements Generator {
 
     public Image generate() throws GenerationException {
         try {
-
+            /*int tillIndexContent = layerIndex(CONTENT_LAYER_NAME);
+            int tillIndexStyle = layerIndex(STYLE_LAYERS[STYLE_LAYERS.length-1]);
+            int tillIndex = Math.max(tillIndexContent, tillIndexStyle);*/
             ComputationGraph Graph = loadModel(false);
             INDArray generatedImage = initGeneratedImage();
             Map<String, INDArray> contentActivation = Graph.feedForward(contentImage, true);
@@ -99,7 +98,15 @@ public abstract class BaseGenerationRepo implements Generator {
             HashMap<String, INDArray> styleActivationGram = initStyleGramMap(styleActivation);
             AdamUpdater optim = createAdamUpdater();
             for (int i = 0; i < ITERATIONS; i++) {
-                if (i % 5 == 0) log.info("iteration " + i);
+                if (i % 5 == 0) {
+                    log.info("iteration " + i);
+                    if ( i%25 == 0) {
+                        BufferedImage output = SwingFXUtils.fromFXImage(fromMatrix(generatedImage), null);
+                        URL resource = getClass().getResource(".");
+                        File file = new File(resource.getPath() + "/iteration" + i + ".png");
+                        ImageIO.write(output, "png", file);
+                    }
+                }
                 Map<String, INDArray> forwardActivation = Graph.feedForward(new INDArray[] { generatedImage }, true, false);
                 HashMap<String, INDArray> dropoutMasks = saveDropoutMasks(Graph);
                 INDArray styleGrad = backPropStyles(Graph, styleActivationGram, forwardActivation, dropoutMasks);
@@ -107,8 +114,11 @@ public abstract class BaseGenerationRepo implements Generator {
                 INDArray totalGrad = contentGrad.muli(ALPHA).addi(styleGrad.muli(BETA));
                 optim.applyUpdater(totalGrad, i, 0);
                 generatedImage.subi(totalGrad);
-                // TODO: log total loss
-
+                if (i % 5 == 0) {
+                    double totalLoss = contentLoss(ALPHA, contentActivation.get(CONTENT_LAYER_NAME), forwardActivation.get(CONTENT_LAYER_NAME)) +
+                            styleLoss(styleActivationGram, forwardActivation);
+                    System.out.println("Loss: " + totalLoss);
+                }
             }
 
             return fromMatrix(generatedImage);
@@ -179,6 +189,21 @@ public abstract class BaseGenerationRepo implements Generator {
         return SwingFXUtils.toFXImage(image, null);
     }
 
+    protected double contentLoss(double contentWeight, INDArray contentActivation, INDArray forwardActivation) {
+        return forwardActivation.squaredDistance(contentActivation) * contentWeight;
+    }
+
+    protected double styleLoss(HashMap<String, INDArray> styleActivationGram, Map<String, INDArray> forwardActivation) {
+        double loss = 0.0;
+        for (String s : STYLE_LAYERS) {
+            String[] spl = s.split(",");
+            INDArray styleGram = styleActivationGram.get(spl[0]);
+            INDArray forwardGram = gramMatrix(forwardActivation.get(spl[0]), true);
+            loss += forwardGram.squaredDistance(styleGram) * Double.parseDouble(spl[1]);
+        }
+        return loss * BETA;
+    }
+
     protected INDArray gramMatrix(INDArray activation, boolean normalize) {
         INDArray flat = flatten(activation);
         if (normalize) {
@@ -209,7 +234,7 @@ public abstract class BaseGenerationRepo implements Generator {
             String[] spl = s.split(",");
             String styleLayerName = spl[0];
             INDArray activation = styleActivation.get(styleLayerName);
-            gramMap.put(styleLayerName, gramMatrix(activation, false));
+            gramMap.put(styleLayerName, gramMatrix(activation, true));
         }
         return gramMap;
     }
@@ -237,7 +262,7 @@ public abstract class BaseGenerationRepo implements Generator {
         double styleWeight = 1 / (N * N * M * M);
 
         // G^l
-        INDArray contentGram = gramMatrix(targetFeatures, false);
+        INDArray contentGram = gramMatrix(targetFeatures, true);
 
         // G^l - A^l
         INDArray diff = contentGram.sub(gramFeatures);
@@ -265,7 +290,7 @@ public abstract class BaseGenerationRepo implements Generator {
         double C = targetFeatures.shape()[0];
         double W = targetFeatures.shape()[1];
         double H = targetFeatures.shape()[2];
-
+        //System.out.println(Arrays.toString(targetFeatures.shape()));
         double contentWeight = 1.0 / (2 * C * H * W);
         INDArray derivative = targetFeatures.sub(contentFeatures);
         return flatten(derivative.muli(contentWeight).muli(checkPositive(targetFeatures)));
