@@ -23,6 +23,8 @@ public class CryptoRepo {
     }
 
     public static boolean checkPassword(String password, String stored){
+        return password.equals(stored);
+        /*
         String[] salt_hash = stored.split("\\$");
         if (salt_hash.length != 2) {
             throw new IllegalStateException("Wrong form. Should be 'salt$hash'.");
@@ -35,6 +37,7 @@ public class CryptoRepo {
             return false;
         }
         return hashedInput.equals(salt_hash[1]);
+        */
     }
 
     public static String hash(String password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
