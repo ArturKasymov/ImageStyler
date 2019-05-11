@@ -102,7 +102,7 @@ public class ClientHandler extends Thread{
                             e.printStackTrace();
                         }
                     }
-                    serverManager.userOffline(currentUserID, this);
+                    serverManager.userOnline(currentUserID, this);
                 }
                 break;
             case REGISTER:
@@ -117,7 +117,7 @@ public class ClientHandler extends Thread{
                             e.printStackTrace();
                         }
                     }
-                    serverManager.userOffline(currentUserID,this);
+                    serverManager.userOnline(currentUserID,this);
                     break;
                 } catch (SQLException e) {
                     e.printStackTrace();
