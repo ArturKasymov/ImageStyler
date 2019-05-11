@@ -11,15 +11,14 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
 public class CryptoRepo {
-    private static int iterations = 2000;
-    private static int saltLen = 32;
-    private static int desiredKeyLen = 256;
+    private static final int iterations = 500;
+    private static final int  saltLen = 32;
+    private static final int desiredKeyLen = 256;
 
     public static String getSaltedHash(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        /*TODO fix hash*/
+        System.out.println("start hash");
         byte[] salt = SecureRandom.getInstance("SHA1PRNG").generateSeed(saltLen);
         return Base64.encodeBase64String(salt) + "$" + hash(password, salt);//*/
-       // return password;
     }
 
     public static boolean checkPassword(String password, String stored){
