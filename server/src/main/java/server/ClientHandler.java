@@ -21,16 +21,19 @@ public class ClientHandler extends Thread{
 
     private final Socket currentSocket;
     private final ClientInteractor interactor=Interactor.getInstance();
+    private final ServerManager serverManager;
 
     private final DataInputStream dis;
     private final DataOutputStream dos;
 
-    private Session currentSession;
+    private int currentUserID;
 
-    public ClientHandler(Socket currentSocket, DataInputStream dis, DataOutputStream dos){
+    public ClientHandler(ServerManager serverManager,Socket currentSocket, DataInputStream dis, DataOutputStream dos){
+        this.serverManager=serverManager;
         this.currentSocket=currentSocket;
         this.dis=dis;
         this.dos=dos;
+        this.currentUserID=-1;
     }
 
     @Override
@@ -56,12 +59,11 @@ public class ClientHandler extends Thread{
                 e.printStackTrace();
             }
         }
-        try
-        {
-
+        try {
             this.dis.close();
             this.dos.close();
             this.currentSocket.close();
+            if(currentUserID!=-1)serverManager.userOffline(currentUserID,this);
             // TODO delete logs
             System.out.println("client connection closed");
         }catch(IOException e){
@@ -92,30 +94,34 @@ public class ClientHandler extends Thread{
                     }
                 }
                 else{
+                    currentUserID=storedUser.getId_user();
                     synchronized (dos){
                         try {
-                            dos.writeUTF(LOGIN+" "+SUCCESS+" "+storedUser.getId_user()+" "+storedUser.getUser_name());
+                            dos.writeUTF(LOGIN+" "+SUCCESS+" "+currentUserID+" "+storedUser.getUser_name());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
+                    serverManager.userOffline(currentUserID, this);
                 }
                 break;
             case REGISTER:
                 username=sc.next();
                 password=sc.next();
                 try {
-                    int userID=interactor.insertUser(username,password);
+                    currentUserID=interactor.insertUser(username,password);
                     synchronized (dos){
                         try {
-                            dos.writeUTF(REGISTER+" "+SUCCESS+" "+userID+" "+username);
+                            dos.writeUTF(REGISTER+" "+SUCCESS+" "+currentUserID+" "+username);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        break;
                     }
+                    serverManager.userOffline(currentUserID,this);
+                    break;
                 } catch (SQLException e) {
                     e.printStackTrace();
+                    currentUserID=-1;
                 }
                 synchronized (dos){
                     try {
@@ -124,6 +130,10 @@ public class ClientHandler extends Thread{
                         e.printStackTrace();
                     }
                 }
+                break;
+            case LOGOUT:
+                serverManager.userOffline(currentUserID,this);
+                currentUserID=-1;
                 break;
         }
 

@@ -3,6 +3,7 @@ package app;
 import Model.Interactors.Interactor;
 import Views.core.BaseView;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -68,8 +69,7 @@ public class AppManager extends Application {
     }
 
     private void setView(Parent view) {
-        stage.getScene().setRoot(view);
-
+        Platform.runLater(() -> stage.getScene().setRoot(view));
     }
 
     public void changeViewTo(BaseView targetView){

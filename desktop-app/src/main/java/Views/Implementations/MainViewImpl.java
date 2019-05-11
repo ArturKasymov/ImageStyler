@@ -7,12 +7,8 @@ import Views.Interfaces.GeneratorView;
 import Views.Interfaces.MainView;
 import Views.core.BaseView;
 import Views.core.ViewByID;
-import app.AppManager;
 import javafx.animation.Transition;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -28,7 +24,6 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class MainViewImpl extends BaseView implements MainView {
@@ -102,45 +97,21 @@ public class MainViewImpl extends BaseView implements MainView {
 
     @FXML
     public void initialize() {
+        presenter.initCallback();
+
         changeImage(resultImage, "/TestImages/img1.png");
         imagesListView.setView(this);
-        oldPasswordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                maybeChange(event);
-            }
-        });
-        newPasswordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                maybeChange(event);
-            }
-        });
-        onceMoreNewPasswordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                maybeChange(event);
-            }
-        });
+        oldPasswordField.setOnKeyPressed(event -> maybeChange(event));
 
-        oldPasswordField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                buttonToggle();
-            }
-        });
-        newPasswordField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                buttonToggle();
-            }
-        });
-        onceMoreNewPasswordField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                buttonToggle();
-            }
-        });
+        newPasswordField.setOnKeyPressed(event -> maybeChange(event));
+
+        onceMoreNewPasswordField.setOnKeyPressed(event -> maybeChange(event));
+
+        oldPasswordField.textProperty().addListener((observable, oldValue, newValue) -> buttonToggle());
+
+        newPasswordField.textProperty().addListener((observable, oldValue, newValue) -> buttonToggle());
+
+        onceMoreNewPasswordField.textProperty().addListener((observable, oldValue, newValue) -> buttonToggle());
 
         changePasswordButton.setDisable(true);
     }

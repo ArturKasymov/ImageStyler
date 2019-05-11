@@ -47,15 +47,8 @@ public class SessionManager extends Thread {
         registerCallback=callback;
     }
 
-
-                                               //TODO rewrite
-    private ArrayBlockingQueue<String> commandsToServer;
-    private ArrayBlockingQueue<String> commandsResults;
-
     public SessionManager(){
         this.runningStatus=true;
-        commandsToServer=new ArrayBlockingQueue<>(3);
-        commandsResults=new ArrayBlockingQueue<>(3);
     }
 
     private boolean isContinue(){
@@ -68,6 +61,7 @@ public class SessionManager extends Thread {
             socket=new Socket(serverIP,serverPort);
             DataInputStream dis = new DataInputStream(socket.getInputStream());
             outputStream=new DataOutputStream(socket.getOutputStream());
+
             String inputData;
 
             //TODO delete logs
@@ -79,9 +73,15 @@ public class SessionManager extends Thread {
                 if(inputData.equals(CLOSE_CONNECTION))break;
                 parseServerInput(inputData);
             }
-            socket.close();
         } catch (IOException e) {
+            //TODO go to offline
             e.printStackTrace();
+        } finally {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -130,7 +130,16 @@ public class SessionManager extends Thread {
             }
         }
     }
-
+    public void logout() {
+        synchronized (outputStream){
+            try {
+                outputStream.writeUTF(LOGOUT);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        currentUser=null;
+    }
     public void register(String username, String password){
         synchronized (outputStream){
             try {
@@ -172,10 +181,5 @@ public class SessionManager extends Thread {
 
     public String getCurrentUserPath(){
         return currentUser.getCurrentUserPath();
-    }
-
-
-    public void logout() {
-        currentUser=null;
     }
 }

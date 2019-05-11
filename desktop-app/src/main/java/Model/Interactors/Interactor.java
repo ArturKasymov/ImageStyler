@@ -10,6 +10,7 @@ import Model.Repositories.Generation.BaseGeneration.VGG16.VGG16Generator;
 import Model.Repositories.Generation.core.Generator;
 import Model.Repositories.Generation.core.GenerationException;
 import Presenters.Callbacks.LoginCallback;
+import Presenters.Callbacks.MainCallback;
 import Presenters.Callbacks.RegisterCallback;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
@@ -92,6 +93,11 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     @Override
     public void initRegisterCallback(RegisterCallback callback) {
         sessionManager.initRegisterCallback(callback);
+    }
+
+    @Override
+    public void initMainCallback(MainCallback callback) {
+        sessionManager.initMainCallback(callback);
     }
 
     public void checkUserDirectory(){

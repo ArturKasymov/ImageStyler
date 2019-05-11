@@ -3,11 +3,12 @@ package Presenters;
 import Model.Database.Entity.UserImage;
 import Model.Interactors.Interactor;
 import Model.Interactors.MainInteractor;
+import Presenters.Callbacks.MainCallback;
 import Views.Implementations.MainViewImpl;
 
 import java.util.ArrayList;
 
-public class MainPresenter {
+public class MainPresenter implements MainCallback {
     private MainViewImpl view;
     private MainInteractor interactor;
 
@@ -40,5 +41,9 @@ public class MainPresenter {
 
     public void deleteImage(UserImage deletedImage) {
         interactor.deleteImage(deletedImage);
+    }
+
+    public void initCallback(){
+        interactor.initMainCallback(this);
     }
 }

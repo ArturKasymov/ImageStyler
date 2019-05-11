@@ -51,6 +51,7 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
     public void goToMain(){
         //presenter.unsubscribe();
         changeViewTo(new MainViewImpl());
+        registerButton.setDisable(false);
     }
 
     private void buttonToggle() {
@@ -73,48 +74,17 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
         presenter.initCallback();
         registerButton.setDisable(true);
 
-        loginField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                buttonToggle();
-            }
-        });
+        loginField.textProperty().addListener((observable, oldValue, newValue) -> buttonToggle());
 
-        passwordField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                buttonToggle();
-            }
-        });
+        passwordField.textProperty().addListener((observable, oldValue, newValue) -> buttonToggle());
 
-        onceMorePasswordField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                buttonToggle();
-            }
-        });
+        onceMorePasswordField.textProperty().addListener((observable, oldValue, newValue) -> buttonToggle());
 
-        loginField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                maybeLogin(event);
-            }
-        });
+        loginField.setOnKeyPressed(event -> maybeLogin(event));
 
-        passwordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                maybeLogin(event);
-            }
-        });
+        passwordField.setOnKeyPressed(event -> maybeLogin(event));
 
-        onceMorePasswordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                maybeLogin(event);
-            }
-        });
-
+        onceMorePasswordField.setOnKeyPressed(event -> maybeLogin(event));
     }
 
     @FXML
@@ -125,6 +95,7 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
     @Override
     public void showAlert() {
         //TODO show Alert
+        registerButton.setDisable(false);
         System.out.println("Alert show");
         //throw new RuntimeException();
     }

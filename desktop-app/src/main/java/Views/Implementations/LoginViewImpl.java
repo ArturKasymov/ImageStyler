@@ -71,29 +71,13 @@ public class LoginViewImpl extends BaseView implements LoginView {
 
         loginButton.setDisable(true);
 
-        loginField.textProperty().addListener(new ChangeListener<String>() {
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                buttonToggle();
-            }
-        });
+        loginField.textProperty().addListener((observable, oldValue, newValue) -> buttonToggle());
 
-        passwordField.textProperty().addListener(new ChangeListener<String>() {
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                buttonToggle();
-            }
-        });
+        passwordField.textProperty().addListener((observable, oldValue, newValue) -> buttonToggle());
 
-        loginField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            public void handle(KeyEvent event) {
-                maybeLogin(event);
-            }
-        });
+        loginField.setOnKeyPressed(event -> maybeLogin(event));
 
-        passwordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            public void handle(KeyEvent event) {
-                maybeLogin(event);
-            }
-        });
+        passwordField.setOnKeyPressed(event -> maybeLogin(event));
 
     }
 
@@ -130,6 +114,8 @@ public class LoginViewImpl extends BaseView implements LoginView {
         changeViewTo(new MainViewImpl());
         loginField.clear();
         passwordField.clear();
+        loginButton.setDisable(false);
+        registerButton.setDisable(false);
     }
 
 }
