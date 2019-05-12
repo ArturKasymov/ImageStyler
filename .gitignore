@@ -1,5 +1,8 @@
 # Created by http://www.gitignore.io
 
+### NN debugging ###
+test/
+
 ### Java ###
 *.class
 

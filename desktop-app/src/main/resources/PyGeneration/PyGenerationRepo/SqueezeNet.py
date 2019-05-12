@@ -74,7 +74,7 @@ class SqueezeNet:
         self.LEARNING_RATE = 3.0
         self.DECAY_LR = 0.1
         self.DECAY_LR_AT = 180
-        self.ITERATIONS = 400
+        self.ITERATIONS = 10
         self.CONTENT_WEIGHT = 5e-2
         self.STYLE_WEIGHTS = [20000, 500, 12, 1]
         self.TV_WEIGHT = 5e-2
