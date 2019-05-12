@@ -3,6 +3,8 @@ package server;
 import model.ClientInteractor;
 import model.Interactor;
 import model.database.entity.Session;
+import model.database.entity.User;
+import model.repositories.CryptoRepo;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -19,24 +21,24 @@ public class ClientHandler extends Thread{
 
     private final Socket currentSocket;
     private final ClientInteractor interactor=Interactor.getInstance();
+    private final ServerManager serverManager;
 
     private final DataInputStream dis;
     private final DataOutputStream dos;
 
-    private Session currentSession;
+    private int currentUserID;
 
-    public ClientHandler(Socket currentSocket, DataInputStream dis, DataOutputStream dos){
+    public ClientHandler(ServerManager serverManager,Socket currentSocket, DataInputStream dis, DataOutputStream dos){
+        this.serverManager=serverManager;
         this.currentSocket=currentSocket;
         this.dis=dis;
         this.dos=dos;
+        this.currentUserID=-1;
     }
-
-
 
     @Override
     public void run() {
-        String received;
-        String command;
+        String inputData;
         boolean isRunning=true;
 
         // TODO delete logs
@@ -45,52 +47,95 @@ public class ClientHandler extends Thread{
         while (isRunning)
         {
             try {
-                dos.writeUTF(WAITING_COMMANDS);
-
-                received = dis.readUTF();
-
-                Scanner commandScanner= new Scanner(received);
-                command=commandScanner.next();
-
-                //TODO delete logs
-
-                switch (command) {
-                    case CLOSE_CONNECTION:
+                inputData = dis.readUTF();
+                if(inputData.equals(CLOSE_CONNECTION)){
+                    synchronized (dos){
+                        dos.writeUTF(CLOSE_CONNECTION);
                         isRunning=false;
-                        break;
-                    case REGISTER_USER:
-                        try {
-                            int userID=interactor.insertUser(commandScanner.next(),commandScanner.next());
-                            Date currentDate= new Date();
-                            int sessionID=interactor.insertSession(userID,currentDate);
-                            this.currentSession=new Session(sessionID,userID,currentDate);
-                            System.out.println(String.format("%s %d %d %s",REGISTER_USER_SUCCESS, sessionID,userID,currentDate));
-
-                            dos.writeUTF(String.format("%s %d %d %s",REGISTER_USER_SUCCESS, sessionID,userID,currentDate.getTime()));
-                        } catch (SQLException e){
-                            e.printStackTrace();
-                            dos.writeUTF(REGISTER_USER_EXCEPTION);
-                        }
-                        break;
-                    default:
-                        dos.writeUTF("Invalid input");
-                        break;
+                    }
                 }
+                else parseClientInput(inputData);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
-        try
-        {
-
+        try {
             this.dis.close();
             this.dos.close();
             this.currentSocket.close();
+            if(currentUserID!=-1)serverManager.userOffline(currentUserID,this);
             // TODO delete logs
             System.out.println("client connection closed");
         }catch(IOException e){
             e.printStackTrace();
         }
+    }
+
+    private void parseClientInput(String input){
+        Scanner sc= new Scanner(input);
+        String command=sc.next();
+
+        String username;
+        String password;
+
+        switch (command) {
+            case LOGIN:
+                username=sc.next();
+                password=sc.next();
+
+                User storedUser=interactor.getUser(username);
+                if(storedUser==null||!CryptoRepo.checkPassword(password,storedUser.getPassword_hash())){
+                    synchronized (dos){
+                        try {
+                            dos.writeUTF(LOGIN+" "+FAIL);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                else{
+                    currentUserID=storedUser.getId_user();
+                    synchronized (dos){
+                        try {
+                            dos.writeUTF(LOGIN+" "+SUCCESS+" "+currentUserID+" "+storedUser.getUser_name());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    serverManager.userOnline(currentUserID, this);
+                }
+                break;
+            case REGISTER:
+                username=sc.next();
+                password=sc.next();
+                try {
+                    currentUserID=interactor.insertUser(username,password);
+                    synchronized (dos){
+                        try {
+                            dos.writeUTF(REGISTER+" "+SUCCESS+" "+currentUserID+" "+username);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    serverManager.userOnline(currentUserID,this);
+                    break;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    currentUserID=-1;
+                }
+                synchronized (dos){
+                    try {
+                        dos.writeUTF(REGISTER+" "+FAIL);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case LOGOUT:
+                serverManager.userOffline(currentUserID,this);
+                currentUserID=-1;
+                break;
+        }
+
     }
 }

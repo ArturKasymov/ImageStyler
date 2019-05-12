@@ -1,6 +1,5 @@
 package Views.core;
 
-
 import javafx.scene.Parent;
 import app.AppManager;
 

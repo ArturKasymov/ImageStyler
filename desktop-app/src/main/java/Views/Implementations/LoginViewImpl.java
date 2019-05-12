@@ -22,10 +22,8 @@ import Views.core.ViewByID;
 public class LoginViewImpl extends BaseView implements LoginView {
 
     private LoginPresenter presenter;
-    private MainInteractor interactor;
     public LoginViewImpl() {
         this.presenter = new LoginPresenter(this);
-        this.interactor= Interactor.getInstance();
     }
 
     @Override
@@ -43,6 +41,9 @@ public class LoginViewImpl extends BaseView implements LoginView {
     private Button loginButton;
 
     @FXML
+    private Button registerButton;
+
+    @FXML
     private Label warning;
 
     private boolean filledIn() {
@@ -50,46 +51,33 @@ public class LoginViewImpl extends BaseView implements LoginView {
     }
 
     private void buttonToggle() {
-        if (filledIn()) loginButton.setDisable(false);
-        else loginButton.setDisable(true);
+        loginButton.setDisable(!filledIn());
     }
 
     private void maybeLogin(KeyEvent event) {
         if (event==null || (event.getCode().getName().equals("Enter") && filledIn())) {
+            loginButton.setDisable(true);
+            registerButton.setDisable(true);
             presenter.login(loginField.getCharacters(), passwordField.getCharacters());
-            loginField.clear();
-            passwordField.clear();
         }
+
     }
 
     @FXML
     public void initialize() {
+        presenter.initCallback();
+
         warning.setVisible(false);
+
         loginButton.setDisable(true);
 
-        loginField.textProperty().addListener(new ChangeListener<String>() {
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                buttonToggle();
-            }
-        });
+        loginField.textProperty().addListener((observable, oldValue, newValue) -> buttonToggle());
 
-        passwordField.textProperty().addListener(new ChangeListener<String>() {
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                buttonToggle();
-            }
-        });
+        passwordField.textProperty().addListener((observable, oldValue, newValue) -> buttonToggle());
 
-        loginField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            public void handle(KeyEvent event) {
-                maybeLogin(event);
-            }
-        });
+        loginField.setOnKeyPressed(event -> maybeLogin(event));
 
-        passwordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            public void handle(KeyEvent event) {
-                maybeLogin(event);
-            }
-        });
+        passwordField.setOnKeyPressed(event -> maybeLogin(event));
 
     }
 
@@ -105,6 +93,10 @@ public class LoginViewImpl extends BaseView implements LoginView {
 
     public void showWrongDataAlert() {
         warning.setVisible(true);
+
+        loginButton.setDisable(false);
+        registerButton.setDisable(false);
+
         loginField.requestFocus();
     }
 
@@ -120,6 +112,10 @@ public class LoginViewImpl extends BaseView implements LoginView {
         //presenter.unsubscribe();
         hideWrongDataAlert();
         changeViewTo(new MainViewImpl());
+        loginField.clear();
+        passwordField.clear();
+        loginButton.setDisable(false);
+        registerButton.setDisable(false);
     }
 
 }

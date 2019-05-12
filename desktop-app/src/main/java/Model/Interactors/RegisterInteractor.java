@@ -1,6 +1,9 @@
 package Model.Interactors;
 
+import Presenters.Callbacks.RegisterCallback;
+
 public interface RegisterInteractor {
-    boolean checkUserExists(CharSequence username);
-    boolean insertUser(CharSequence username, CharSequence password);
+    void registerUser(CharSequence username, CharSequence password);
+    void initRegisterCallback(RegisterCallback callback);
+    void checkUserDirectory();
 }

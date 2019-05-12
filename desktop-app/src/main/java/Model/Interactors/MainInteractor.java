@@ -1,6 +1,7 @@
 package Model.Interactors;
 
 import Model.Database.Entity.UserImage;
+import Presenters.Callbacks.MainCallback;
 
 import java.util.ArrayList;
 
@@ -11,4 +12,5 @@ public interface MainInteractor {
     void logout();
     ArrayList<UserImage> getCurrentUserImagesList();
     void deleteImage(UserImage deletedImage);
+    void initMainCallback(MainCallback callback);
 }

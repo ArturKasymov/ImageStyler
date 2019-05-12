@@ -9,6 +9,9 @@ import Model.Repositories.Generation.BaseGeneration.SqueezeNet.SqueezeNetGenerat
 import Model.Repositories.Generation.BaseGeneration.VGG16.VGG16Generator;
 import Model.Repositories.Generation.core.Generator;
 import Model.Repositories.Generation.core.GenerationException;
+import Presenters.Callbacks.LoginCallback;
+import Presenters.Callbacks.MainCallback;
+import Presenters.Callbacks.RegisterCallback;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
@@ -47,22 +50,13 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public boolean checkLoginData(CharSequence login, CharSequence password) {
-        try {
-            String userLogin = login.toString();
-            String userPassword = password.toString();
-            User storedUser = dataProvider.getUser(userLogin);
-            if(storedUser==null) return false;
-            //ToDo rewrite Server check
-            //boolean result = cryptoRepo.checkPassword(userPassword, storedUser.getPasswordHash());
-            boolean result=true;
-            if(result) sessionManager.startSession(new Random().nextLong(),storedUser);
+    public void login(CharSequence login, CharSequence password) {
+        sessionManager.login(login.toString(),password.toString());
+    }
 
-            return result;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+    @Override
+    public void registerUser(CharSequence username, CharSequence password) {
+        sessionManager.register(username.toString(),password.toString());
     }
 
     @Override
@@ -85,33 +79,30 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public boolean checkUserExists(CharSequence login) {
-        String userLogin = login.toString();
-        return usersName.contains(userLogin);
-    }
-
-    @Override
     public void checkUserData() {
         checkUserDirectory();
         //ToDO compareWithServer
         dataProvider.insertImages(sessionManager.checkCurrentUserImages());
     }
 
-    private void checkUserDirectory(){
-        File dir = new File(sessionManager.getCurrentUserPath());
-        if (!dir.exists()) dir.mkdirs();
+    @Override
+    public void initLoginCallback(LoginCallback loginCallback) {
+        sessionManager.initLoginCallback(loginCallback);
     }
 
     @Override
-    public boolean insertUser(CharSequence login, CharSequence password) {
-        try {
-            if(!sessionManager.insertUser(login.toString(),password.toString()))return false;
-            checkUserDirectory();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
+    public void initRegisterCallback(RegisterCallback callback) {
+        sessionManager.initRegisterCallback(callback);
+    }
+
+    @Override
+    public void initMainCallback(MainCallback callback) {
+        sessionManager.initMainCallback(callback);
+    }
+
+    public void checkUserDirectory(){
+        File dir = new File(sessionManager.getCurrentUserPath());
+        if (!dir.exists()) dir.mkdirs();
     }
 
     @Override
@@ -146,7 +137,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
 
     @Override
     public void logout() {
-        sessionManager.finishSession();
+        sessionManager.logout();
     }
 
     @Override
@@ -166,7 +157,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     public void startSessionManager(String serverIP, int serverPort){
-        //sessionManager.setSocketConfig(serverIP,serverPort);
-        //sessionManager.start();
+        sessionManager.setSocketConfig(serverIP,serverPort);
+        sessionManager.start();
     }
 }
