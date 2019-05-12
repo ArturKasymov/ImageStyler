@@ -15,16 +15,16 @@ public class CryptoRepo {
     private static final int desiredKeyLen = 256;
 
     public static String getSaltedHash(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        //TODO fix hash
-        //byte[] salt =  SecureRandom.getInstance("SHA1PRNG").generateSeed(saltLen);
-        //System.out.println(salt);
-        return password;
-        //return Base64.encodeBase64String(salt) + "$" + hash(password, salt);//*/
+	SecureRandom nativeRandom = SecureRandom.getInstance("NativePRNGNonBlocking");
+	byte[] seed = nativeRandom.generateSeed(55);
+	SecureRandom sha1Random = SecureRandom.getInstance("SHA1PRNG");
+	sha1Random.setSeed(seed);
+        byte[] salt = new byte[saltLen];
+	sha1Random.nextBytes(salt);
+        return Base64.encodeBase64String(salt) + "$" + hash(password, salt);//*/
     }
 
-    public static boolean checkPassword(String password, String stored){
-        return password.equals(stored);
-        /*
+    public static boolean checkPassword(String password, String stored) {
         String[] salt_hash = stored.split("\\$");
         if (salt_hash.length != 2) {
             throw new IllegalStateException("Wrong form. Should be 'salt$hash'.");
@@ -37,7 +37,7 @@ public class CryptoRepo {
             return false;
         }
         return hashedInput.equals(salt_hash[1]);
-        */
+       
     }
 
     public static String hash(String password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
