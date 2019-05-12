@@ -1,8 +1,9 @@
 import torch
 import torchvision
 import matplotlib.pyplot as plt
+import numpy as np
 
-from PyGenerationRepo.utils import Utils
+from utils import Utils
 
 
 class SqueezeNet:
@@ -14,7 +15,10 @@ class SqueezeNet:
             param.requires_grad = False
         self.init_hyper_params()
 
-    def generate(self, content_img, style_img, init_random=False):
+    def generate(self, content_img, style_img, content_size=192, style_size=512, init_random=False):
+        self.CONTENT_SIZE = content_size
+        self.STYLE_SIZE = style_size
+
         content_img = Utils.preprocess(content_img, size=self.CONTENT_SIZE)
         style_img = Utils.preprocess(style_img, size=self.STYLE_SIZE)
 
@@ -63,9 +67,10 @@ class SqueezeNet:
                 optimizer = torch.optim.Adam([img], lr=self.DECAY_LR)
             optimizer.step()
 
-            if t%50==0:
+            if t%50==0 and self.verbose:
                 self.show_image(img, t)
         self.show_image(img, t)
+        self.generated_image = np.array(Utils.deprocess(img.data.cpu()))
 
 
     def init_hyper_params(self):
@@ -74,15 +79,17 @@ class SqueezeNet:
         self.LEARNING_RATE = 3.0
         self.DECAY_LR = 0.1
         self.DECAY_LR_AT = 180
-        self.ITERATIONS = 10
-        self.CONTENT_WEIGHT = 5e-2
-        self.STYLE_WEIGHTS = [20000, 500, 12, 1]
-        self.TV_WEIGHT = 5e-2
-        self.CONTENT_SIZE = 192
-        self.STYLE_SIZE = 512
+        self.ITERATIONS = 400
+        self.CONTENT_WEIGHT = 6e-2
+        self.STYLE_WEIGHTS = [300000, 1000, 15, 3]
+        self.TV_WEIGHT = 2.5e-2
+        self.verbose = True
 
     def show_image(self, img, iteration):
         print('Iteration {}'.format(iteration))
         plt.axis('off')
         plt.imshow(Utils.deprocess(img.data.cpu()))
         plt.show()
+
+    def get_image(self):
+        return self.generated_image
