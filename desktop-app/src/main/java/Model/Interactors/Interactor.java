@@ -7,6 +7,7 @@ import Model.Database.provider.SQLiteLocalDataProvider;
 import Model.Repositories.Generation.BaseGeneration.DarkNet.DarkNetGenerator;
 import Model.Repositories.Generation.BaseGeneration.SqueezeNet.SqueezeNetGenerator;
 import Model.Repositories.Generation.BaseGeneration.VGG16.VGG16Generator;
+import Model.Repositories.Generation.PythonGeneration.PySqueezeNet;
 import Model.Repositories.Generation.core.Generator;
 import Model.Repositories.Generation.core.GenerationException;
 import Presenters.Callbacks.LoginCallback;
@@ -124,8 +125,9 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     @Override
     public Image generate(Image contentImage, Image styleImage) throws GenerationException {
         //Generator generator = new VGG16Generator(contentImage, styleImage);
-        Generator generator = new SqueezeNetGenerator(contentImage, styleImage);
+        //Generator generator = new SqueezeNetGenerator(contentImage, styleImage);
         //Generator generator = new DarkNetGenerator(contentImage, styleImage);
+        Generator generator = new PySqueezeNet(contentImage, styleImage);
         return generator.generate();
     }
 
