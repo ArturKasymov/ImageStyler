@@ -20,7 +20,7 @@ public class PostgreSQLQueries {
 
     public static final String GET_USER_HASH="SELECT * FROM users WHERE user_name=?;";
 
-    public static final String INSERT_IMAGE="INSERT INTO user_images(image_name,id_user,image_date,image_status)" +
+    public static final String INSERT_IMAGE="INSERT INTO user_images(image_name,id_user,image_date,image_status) " +
             "VALUES(?,?,?,?) RETURNING id_image;";
 
 }

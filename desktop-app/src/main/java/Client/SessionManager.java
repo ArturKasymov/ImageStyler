@@ -152,7 +152,7 @@ public class SessionManager extends Thread {
                             dis.read(imageSizeArray);
                             int size = ByteBuffer.wrap(imageSizeArray).asIntBuffer().get();
                             byte[] imageArray = new byte[size];
-                            dis.read(imageArray);
+                            dis.readFully(imageArray,0,size);
                             BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageArray));
                             executor.execute(()->generatorCallback.saveGeneratedImage(imageID,image));
                         } catch (Exception e){

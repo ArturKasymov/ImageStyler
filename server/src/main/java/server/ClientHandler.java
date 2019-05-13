@@ -152,7 +152,7 @@ public class ClientHandler extends Thread{
                     byte[] imageArray = new byte[size];
                     dis.readFully(imageArray, 0, size);
 
-                    System.out.println(imageArray);
+                    //System.out.println(imageArray);
 
                     BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageArray));
 
