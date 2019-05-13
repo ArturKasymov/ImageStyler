@@ -15,7 +15,6 @@ def main():
         shape = sys.stdin.readline()
         height = int(shape.split()[0])
         width = int(shape.split()[1])
-        '''
         content_img = PIL.Image.new( 'RGB', (width, height), "black")
         content_pixels = content_img.load()
         for i in range(height):
@@ -35,11 +34,11 @@ def main():
                 style_pixels[j,i] = ((rgbint >> 16) & 255, (rgbint >> 8) & 255, rgbint & 255)
         style_size = width
         squeezenet.generate(content_img, style_img, 224, 224)
-        gen_img = squeezenet.get_image()'''
+        gen_img = squeezenet.get_image()
         print(height, width)
-        '''for i in range(gen_img.shape[0]):
+        for i in range(gen_img.shape[0]):
             for j in range(gen_img.shape[1]):
-                print("%d %d %d" % (gen_img[i, j, 0], gen_img[i, j, 1], gen_img[i, j, 2]))'''
+                print("%d %d %d" % (gen_img[i, j, 0], gen_img[i, j, 1], gen_img[i, j, 2]))
 
 
 if __name__ == '__main__':

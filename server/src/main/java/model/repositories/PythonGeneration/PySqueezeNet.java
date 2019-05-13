@@ -16,7 +16,7 @@ public class PySqueezeNet {
     public static BufferedImage generate(BufferedImage contentImage, BufferedImage styleImage){
         URL url = Main.class.getResource("/PyGenerationRepo/Main.py");
         try {
-            ProcessBuilder pb = new ProcessBuilder("python3", url.toString().substring(6));
+            ProcessBuilder pb = new ProcessBuilder("python3", url.toString().substring(5));
             Process p = pb.start();
             // PASS INPUT IMAGES
             BufferedWriter inputImagesStream = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()));
@@ -27,13 +27,12 @@ public class PySqueezeNet {
             int[] contPixelsBytes = ((DataBufferInt) contentImage.getRaster().getDataBuffer()).getData();
             inputImagesStream.write(contHeight + " " + contWidth);
             inputImagesStream.newLine();
-            inputImagesStream.flush();
             //inputImagesStream.write("\n");
-            /*for (int j = 0; j < contHeight; j++) {
+            for (int j = 0; j < contHeight; j++) {
                 for (int i = 0; i < contWidth; i++) {
                     System.out.println(contPixelsBytes[i+j*contWidth]);
                     inputImagesStream.write(String.valueOf(contPixelsBytes[i+j*contWidth]));
-                    inputImagesStream.write("\n");
+                    inputImagesStream.newLine();
                 }
             }
             // STYLE IMAGE
@@ -42,21 +41,18 @@ public class PySqueezeNet {
             int[] stylePixelsBytes = ((DataBufferInt) styleImage.getRaster().getDataBuffer()).getData();
             inputImagesStream.write(styleHeight + " " + styleWidth);
             System.out.println("Style shape - (" + styleHeight + ", " + styleWidth + ")");
-            inputImagesStream.write("\n");
+            inputImagesStream.newLine();
             for (int j = 0; j < styleHeight; j++) {
                 for (int i = 0; i < styleWidth; i++) {
                     inputImagesStream.write(String.valueOf(stylePixelsBytes[i+j*styleWidth]));
-                    inputImagesStream.write("\n");
+                    inputImagesStream.newLine();
                 }
-            }*/
-            //inputImagesStream.close();
+            }
+            inputImagesStream.close();
             // GET GENERATED IMAGE
             InputStream generatedImageStream = p.getInputStream();
             Scanner imgSc = new Scanner(generatedImageStream);
-            while (!imgSc.hasNext());
-            System.out.println(imgSc.nextLine());
-            generatedImageStream.close();
-            /*BufferedImage img;
+            BufferedImage img;
             while (true) {
                 while (!imgSc.hasNext());
                 String line = imgSc.nextLine();
@@ -80,7 +76,7 @@ public class PySqueezeNet {
                 }
             }
             p.destroy();
-            return img;*/
+            return img;
         } catch (Exception e) {
             e.printStackTrace();
         }
