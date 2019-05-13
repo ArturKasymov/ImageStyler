@@ -6,16 +6,12 @@ import app.Main;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
 import java.io.*;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 public class PySqueezeNet implements Generator {
 

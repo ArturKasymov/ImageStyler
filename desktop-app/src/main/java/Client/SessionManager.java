@@ -67,9 +67,9 @@ public class SessionManager extends Thread {
     @Override
     public void run() {
         try {
-            socket=new Socket(serverIP,serverPort);
+            socket = new Socket(serverIP,serverPort);
             dis = new DataInputStream(socket.getInputStream());
-            outputStream=new DataOutputStream(socket.getOutputStream());
+            outputStream = new DataOutputStream(socket.getOutputStream());
 
             String inputData;
 
