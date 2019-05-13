@@ -161,8 +161,6 @@ public class ClientHandler extends Thread{
 
                     serverManager.asyncTask(()->{
                         BufferedImage img = RGBConverterRepo.toBufferedImageOfType(image, 1);
-                        System.out.println(img.getType());
-                        System.out.println(img.getHeight());
                         BufferedImage generatedImage = interactor.generateImage(img, styleID /*TODO handle arg*/, serverManager);
                         for(ClientHandler temp : serverManager.getUserSessions(currentUserID)){
                             temp.insertImageData(imageID, generatedImage);
