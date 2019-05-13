@@ -1,7 +1,5 @@
 package model.repositories.PythonGeneration;
 
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.Image;
 import server.Main;
 
 import java.awt.*;

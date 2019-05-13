@@ -4,7 +4,6 @@ import model.database.entity.User;
 import model.database.provider.PostgreSQLDataProvider;
 import model.repositories.CryptoRepo;
 import model.repositories.PythonGeneration.PySqueezeNet;
-import server.ClientHandler;
 import server.ServerManager;
 
 import java.awt.image.BufferedImage;
