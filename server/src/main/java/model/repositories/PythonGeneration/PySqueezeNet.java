@@ -16,7 +16,7 @@ public class PySqueezeNet {
     public static BufferedImage generate(BufferedImage contentImage, BufferedImage styleImage){
         URL url = Main.class.getResource("/PyGenerationRepo/Main.py");
         try {
-            ProcessBuilder pb = new ProcessBuilder("python", url.toString().substring(6));
+            ProcessBuilder pb = new ProcessBuilder("python3", url.toString().substring(6));
             Process p = pb.start();
             // PASS INPUT IMAGES
             BufferedWriter inputImagesStream = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()));

@@ -62,7 +62,7 @@ public class Interactor implements ClientInteractor {
 
     @Override
     public BufferedImage generateImage(BufferedImage contentImage, int styleID/*TODO handle arg*/, ServerManager serverManager) {
-        BufferedImage styleImage=serverManager.styleImages[styleID];
+        BufferedImage styleImage = serverManager.styleImages[styleID];
         return PySqueezeNet.generate(contentImage, styleImage);
     }
 

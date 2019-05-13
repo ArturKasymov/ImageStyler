@@ -30,9 +30,7 @@ public class UserImage {
         return imageID;
     }
     public String getImageUrl() {
-        // TODO: TEMP
-        //return APP_ROOT_DIRECTORY+"\\."+userID+"\\."+imageID+".png";
-        return AppManager.class.getResource("/TestImages/."+imageName+".png").toString().substring(6);
+        return APP_ROOT_DIRECTORY+"\\."+userID+"\\."+imageID+".png";
     }
 
     public boolean getIsDownloaded(){

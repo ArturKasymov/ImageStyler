@@ -155,7 +155,8 @@ public class ClientHandler extends Thread{
                     //System.out.println(imageArray);
 
                     BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageArray));
-
+                    System.out.println(image.getType());
+                    System.out.println(image.getHeight());
                     int imageID = interactor.insertImage(imageName, currentUserID, imageDate);
 
                     serverManager.asyncTask(()->{
