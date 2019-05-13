@@ -7,11 +7,11 @@ public class PostgreSQLQueries {
             "password_hash varchar(256) not null\n" +
             ");";
 
-    public static final String CHECK_IMAGES=" CREATE TABLE IF NOT EXISTS user_images(\n" +
+    public static final String CHECK_IMAGES=" CREATE TABLE IF NOT EXISTS user_images (\n" +
             "id_image serial PRIMARY KEY,\n" +
             "image_name VARCHAR(32) NOT NULL,\n" +
             "id_user INTEGER REFERENCES users,\n" +
-            "image_date TIMESTAMP DEFAULT NOW()\n"+
+            "image_date TIMESTAMP DEFAULT NOW(),\n"+
             "image_status boolean NOT NULL\n"+
             ");";
 
