@@ -47,6 +47,8 @@ public class ClientHandler extends Thread{
         {
             try {
                 inputData = dis.readUTF();
+                System.out.println(inputData);
+
                 if(inputData.equals(CLOSE_CONNECTION)){
                     synchronized (dos){
                         dos.writeUTF(CLOSE_CONNECTION);
@@ -139,7 +141,9 @@ public class ClientHandler extends Thread{
             case INSERT_IMAGE:
                 String imangeName=sc.next();
                 long imageDate=new Date().getTime();
+
                 int styleID=sc.nextInt();
+
                 try {
                     byte[] imageSizeArray = new byte[4];
                     dis.read(imageSizeArray);

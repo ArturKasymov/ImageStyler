@@ -108,7 +108,7 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
         styleImages[2] = getImage("/TestImages/rain_princess.jpg");
         styleImages[3] = getImage("/TestImages/udnie.jpg");
         styleImages[4] = getImage("/TestImages/starry_night_sq.jpg");
-        styleImages[5] = getImage("/TestImages/tubingen_sq.jpg");
+        styleImages[5] = getImage("/TestImages/tubingen.png");
     }
 
     private void setOnImageClick(final ImageView imgView) {
