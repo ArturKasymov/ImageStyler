@@ -49,7 +49,7 @@ public class PySqueezeNet {
                     inputImagesStream.write("\n");
                 }
             }*/
-            inputImagesStream.close();
+            //inputImagesStream.close();
             // GET GENERATED IMAGE
             InputStream generatedImageStream = p.getInputStream();
             Scanner imgSc = new Scanner(generatedImageStream);
