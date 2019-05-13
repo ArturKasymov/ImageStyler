@@ -4,6 +4,7 @@ import model.ClientInteractor;
 import model.Interactor;
 import model.database.entity.User;
 import model.repositories.CryptoRepo;
+import model.repositories.RGBConverterRepo;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -19,7 +20,7 @@ import static util.ServerCommand.*;
 public class ClientHandler extends Thread{
 
     private final Socket currentSocket;
-    private final ClientInteractor interactor=Interactor.getInstance();
+    private final ClientInteractor interactor = Interactor.getInstance();
     private final ServerManager serverManager;
 
     private final DataInputStream dis;
@@ -155,12 +156,14 @@ public class ClientHandler extends Thread{
                     //System.out.println(imageArray);
 
                     BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageArray));
-                    System.out.println(image.getType());
-                    System.out.println(image.getHeight());
+
                     int imageID = interactor.insertImage(imageName, currentUserID, imageDate);
 
                     serverManager.asyncTask(()->{
-                        BufferedImage generatedImage=interactor.generateImage(image, styleID /*TODO handle arg*/, serverManager);
+                        BufferedImage img = RGBConverterRepo.toBufferedImageOfType(image, 1);
+                        System.out.println(img.getType());
+                        System.out.println(img.getHeight());
+                        BufferedImage generatedImage = interactor.generateImage(img, styleID /*TODO handle arg*/, serverManager);
                         for(ClientHandler temp : serverManager.getUserSessions(currentUserID)){
                             temp.insertImageData(imageID, generatedImage);
                         }

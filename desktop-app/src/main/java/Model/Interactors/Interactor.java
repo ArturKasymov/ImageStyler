@@ -130,8 +130,8 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         BufferedImage bufferedImage = SwingFXUtils.fromFXImage(contentImage, null);
         try {
-            ImageIO.write(bufferedImage, "jpg", byteArrayOutputStream);
-            System.out.println(byteArrayOutputStream.toString());
+            // TODO png<->jpg
+            ImageIO.write(bufferedImage, "PNG", byteArrayOutputStream);
         } catch (IOException e) {
             //TODO Handle exception
             e.printStackTrace();
