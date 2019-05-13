@@ -13,6 +13,7 @@ import Model.Repositories.Generation.core.GenerationException;
 import Presenters.Callbacks.LoginCallback;
 import Presenters.Callbacks.MainCallback;
 import Presenters.Callbacks.RegisterCallback;
+import Utils.Constants;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
@@ -123,11 +124,20 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public Image generate(Image contentImage, Image styleImage) throws GenerationException {
-        //Generator generator = new VGG16Generator(contentImage, styleImage);
-        //Generator generator = new SqueezeNetGenerator(contentImage, styleImage);
-        //Generator generator = new DarkNetGenerator(contentImage, styleImage);
-        Generator generator = new PySqueezeNet(contentImage, styleImage);
+    public Image generate(Image contentImage, Image styleImage, Constants.NEURAL_NET net) throws GenerationException {
+        Generator generator;
+        switch (net) {
+            case SQUEEZENET:
+                System.out.println("Using SqueezeNet");
+                generator = new PySqueezeNet(contentImage, styleImage);
+                break;
+            case VGG16:
+                System.out.println("Using VGG16");
+                generator = new VGG16Generator(contentImage, styleImage);
+                break;
+            default:
+                generator = new PySqueezeNet(contentImage, styleImage);
+        }
         return generator.generate();
     }
 

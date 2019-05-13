@@ -2,6 +2,7 @@ package Views.Implementations;
 
 import Model.Database.Entity.UserImage;
 import Presenters.MainPresenter;
+import Utils.Constants;
 import Utils.controls.ImagesListView;
 import Views.Interfaces.GeneratorView;
 import Views.Interfaces.MainView;
@@ -37,6 +38,8 @@ public class MainViewImpl extends BaseView implements MainView {
 
     @FXML
     private GridPane base;
+
+    private Parent generatorView = null;
 
     @FXML
     private ToolBar toolbar;
@@ -89,6 +92,11 @@ public class MainViewImpl extends BaseView implements MainView {
     @FXML
     private Button deleteImageButton;
 
+    @FXML
+    private ComboBox<String> neuralNetChoice;
+
+    private Constants.NEURAL_NET defaultNeuralNet = Constants.NEURAL_NET.SQUEEZENET;
+
     private UserImage currentImage;
 
     private Transition rightPaneTransitionFullMode;
@@ -98,8 +106,9 @@ public class MainViewImpl extends BaseView implements MainView {
     @FXML
     public void initialize() {
         presenter.initCallback();
+        deleteImageButton.setDisable(true);
 
-        changeImage(resultImage, "/TestImages/img1.png");
+        changeImage(resultImage, "/TestImages/.10.png");
         imagesListView.setView(this);
         oldPasswordField.setOnKeyPressed(event -> maybeChange(event));
 
@@ -114,12 +123,17 @@ public class MainViewImpl extends BaseView implements MainView {
         onceMoreNewPasswordField.textProperty().addListener((observable, oldValue, newValue) -> buttonToggle());
 
         changePasswordButton.setDisable(true);
+
+        neuralNetChoice.valueProperty().addListener((observable, oldValue, newValue) -> {
+            changeDefaultNeuralNet(newValue);
+        });
     }
 
     @Override
     public void initViewData() {
         presenter.initUserData();
-        imagesListView.initList();
+        // TODO: TEMP
+        //imagesListView.initList();
     }
 
     @FXML
@@ -201,13 +215,15 @@ public class MainViewImpl extends BaseView implements MainView {
     protected void onGoToGenerate() throws IOException{
         if (goToGenerateButton.getText().equals("+")) {
             try {
-                FXMLLoader loader = new FXMLLoader(getAppManager().getClass()
-                        .getResource("/Layouts/GeneratorView.fxml"));
-                Parent generatorView = loader.load();
-                GeneratorView ctrl = loader.getController();
-                ctrl.setViewsToggler(this);
-                BaseView genCtrl = loader.getController();
-                genCtrl.setAppManager(getAppManager());
+                if (generatorView==null) {
+                    FXMLLoader loader = new FXMLLoader(getAppManager().getClass()
+                            .getResource("/Layouts/GeneratorView.fxml"));
+                    generatorView = loader.load();
+                    GeneratorView ctrl = loader.getController();
+                    ctrl.setViewsToggler(this);
+                    BaseView genCtrl = loader.getController();
+                    genCtrl.setAppManager(getAppManager());
+                }
                 contentBox.getChildren().setAll(generatorView);
                 goToGenerateButton.textProperty().setValue("-");
                 fullButton.setDisable(true);
@@ -319,6 +335,23 @@ public class MainViewImpl extends BaseView implements MainView {
 
     private boolean passwordsMatch() {
         return newPasswordField.getCharacters().toString().equals(onceMoreNewPasswordField.getCharacters().toString());
+    }
+
+    private void changeDefaultNeuralNet(String newValue) {
+        switch (newValue.charAt(0)) {
+            case 'V':
+                defaultNeuralNet = Constants.NEURAL_NET.VGG16;
+                break;
+            case 'S':
+                defaultNeuralNet = Constants.NEURAL_NET.SQUEEZENET;
+                break;
+            default:
+                break;
+        }
+    }
+
+    public Constants.NEURAL_NET getDefaultNeuralNet() {
+        return defaultNeuralNet;
     }
 
 }

@@ -26,7 +26,7 @@ public class AppManager extends Application {
     private Stage stage;
 
     private Parent LoginView, RegisterView, MainView;
-    private BaseView[] controllers=new BaseView[3];
+    private BaseView[] controllers = new BaseView[3];
     private Interactor interactor;
 
     private ScheduledExecutorService executor;
@@ -44,7 +44,7 @@ public class AppManager extends Application {
         checkAppRootDir();
         interactor=Interactor.getInstance();
         interactor.startSessionManager(DEFAULT_SERVER_IP,DEFAULT_SERVER_PORT);
-        loadND4Jdata(true);
+        loadND4Jdata(false);
     }
 
     private void initStage(){

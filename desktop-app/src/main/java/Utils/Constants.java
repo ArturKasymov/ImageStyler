@@ -18,4 +18,9 @@ public class Constants {
         DATE_ASC,
         DATE_DESC
     }
+
+    public enum NEURAL_NET {
+        SQUEEZENET,
+        VGG16
+    }
 }
