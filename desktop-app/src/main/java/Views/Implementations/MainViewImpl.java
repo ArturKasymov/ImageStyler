@@ -253,6 +253,7 @@ public class MainViewImpl extends BaseView implements MainView {
             deleteImageButton.setDisable(true);
         } else {
             String path = newUserImage.getImageUrl();
+
             this.currentImage = newUserImage;
             changeImage(resultImage, path);
             photoName.setText(newUserImage.getImageName());
@@ -261,8 +262,7 @@ public class MainViewImpl extends BaseView implements MainView {
 
     private void changeImage(ImageView imgView, String path) {
         File img= new File(path);
-        //File img = new File(url.getFile());
-
+        if (img==null) return;
         Image image = new Image(img.toURI().toString());
         imgView.setImage(image);
     }

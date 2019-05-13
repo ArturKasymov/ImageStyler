@@ -3,7 +3,11 @@ package model;
 import model.database.entity.User;
 import model.database.provider.PostgreSQLDataProvider;
 import model.repositories.CryptoRepo;
+import model.repositories.PythonGeneration.PySqueezeNet;
+import server.ClientHandler;
+import server.ServerManager;
 
+import java.awt.image.BufferedImage;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.Date;
@@ -56,4 +60,12 @@ public class Interactor implements ClientInteractor {
     public User getUser(String username) {
         return dataProvider.getUser(username);
     }
+
+    @Override
+    public BufferedImage generateImage(BufferedImage contentImage, int styleID/*TODO handle arg*/, ServerManager serverManager) {
+        BufferedImage styleImage=serverManager.styleImages[styleID];
+        return PySqueezeNet.generate(contentImage, styleImage);
+    }
+
+
 }

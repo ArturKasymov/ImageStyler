@@ -6,17 +6,19 @@ import Presenters.Callbacks.GeneratorCallback;
 import Presenters.Callbacks.LoginCallback;
 import Presenters.Callbacks.MainCallback;
 import Presenters.Callbacks.RegisterCallback;
+import Utils.Constants;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 import static Utils.ServerCommand.*;
 
@@ -24,11 +26,14 @@ public class SessionManager extends Thread {
     private User currentUser;
     private boolean runningStatus;
     private Socket socket;
+    private ScheduledExecutorService executor;
+
 
     private String serverIP;
     private int serverPort;
 
     private DataOutputStream outputStream;
+    private DataInputStream dis;
 
     //CallBacks
     private LoginCallback loginCallback;
@@ -52,6 +57,7 @@ public class SessionManager extends Thread {
 
     public SessionManager(){
         this.runningStatus=true;
+        executor = Executors.newSingleThreadScheduledExecutor();
     }
 
     private boolean isContinue(){
@@ -62,7 +68,7 @@ public class SessionManager extends Thread {
     public void run() {
         try {
             socket=new Socket(serverIP,serverPort);
-            DataInputStream dis = new DataInputStream(socket.getInputStream());
+            dis = new DataInputStream(socket.getInputStream());
             outputStream=new DataOutputStream(socket.getOutputStream());
 
             String inputData;
@@ -121,6 +127,41 @@ public class SessionManager extends Thread {
                         break;
                 }
                 break;
+            case INSERT_IMAGE:
+                status=sc.next();
+                switch (status){
+                    case FAIL:
+                        break;
+                    case SUCCESS:
+                        int imageID= sc.nextInt();
+                        String imageName=sc.next();
+                        long imageDate=sc.nextLong();
+                        generatorCallback.insertGeneratedImage(imageID,imageName,new Date(imageDate));
+                        break;
+                }
+                break;
+            case INSERT_IMAGE_DATA:
+                status=sc.next();
+                switch (status){
+                    case FAIL:
+                        break;
+                    case SUCCESS:
+                        int imageID= sc.nextInt();
+                        try {
+                            byte[] imageSizeArray = new byte[4];
+                            dis.read(imageSizeArray);
+                            int size = ByteBuffer.wrap(imageSizeArray).asIntBuffer().get();
+                            byte[] imageArray = new byte[size];
+                            dis.read(imageArray);
+                            BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageArray));
+                            executor.execute(()->generatorCallback.saveGeneratedImage(imageID,image));
+                        } catch (Exception e){
+                            e.printStackTrace();
+                            //TODO handle
+                        }
+                        break;
+                }
+                break;
         }
     }
 
@@ -153,10 +194,10 @@ public class SessionManager extends Thread {
         }
     }
 
-    public void generateImage(ByteArrayOutputStream userImage, String style, String imageName, Date imageDate){
+    public void generateImage(ByteArrayOutputStream userImage, int styleID, String imageName, Constants.NEURAL_NET net){
         synchronized (outputStream){
             try {
-                outputStream.writeUTF(INSERT_IMAGE+" "+imageName+" "+imageDate.getTime()+" "+style);
+                outputStream.writeUTF(INSERT_IMAGE+" "+imageName+" "+styleID);
 
                 byte[] userImageSize = ByteBuffer.allocate(4).putInt(userImage.size()).array();
                 outputStream.write(userImageSize);
@@ -200,4 +241,5 @@ public class SessionManager extends Thread {
     public String getCurrentUserPath(){
         return currentUser.getCurrentUserPath();
     }
+
 }
