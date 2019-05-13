@@ -2,16 +2,16 @@ package server;
 
 import model.ClientInteractor;
 import model.Interactor;
-import model.database.entity.Session;
 import model.database.entity.User;
 import model.repositories.CryptoRepo;
+import model.repositories.RGBConverterRepo;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.sql.SQLException;
-import java.text.Format;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -20,7 +20,7 @@ import static util.ServerCommand.*;
 public class ClientHandler extends Thread{
 
     private final Socket currentSocket;
-    private final ClientInteractor interactor=Interactor.getInstance();
+    private final ClientInteractor interactor = Interactor.getInstance();
     private final ServerManager serverManager;
 
     private final DataInputStream dis;
@@ -48,6 +48,8 @@ public class ClientHandler extends Thread{
         {
             try {
                 inputData = dis.readUTF();
+                System.out.println(inputData);
+
                 if(inputData.equals(CLOSE_CONNECTION)){
                     synchronized (dos){
                         dos.writeUTF(CLOSE_CONNECTION);
@@ -72,8 +74,8 @@ public class ClientHandler extends Thread{
     }
 
     private void parseClientInput(String input){
-        Scanner sc= new Scanner(input);
-        String command=sc.next();
+        Scanner sc = new Scanner(input);
+        String command = sc.next();
 
         String username;
         String password;
@@ -95,6 +97,7 @@ public class ClientHandler extends Thread{
                 }
                 else{
                     currentUserID=storedUser.getId_user();
+                    //TODO check user dir
                     synchronized (dos){
                         try {
                             dos.writeUTF(LOGIN+" "+SUCCESS+" "+currentUserID+" "+storedUser.getUser_name());
@@ -135,7 +138,75 @@ public class ClientHandler extends Thread{
                 serverManager.userOffline(currentUserID,this);
                 currentUserID=-1;
                 break;
+
+            case INSERT_IMAGE:
+                String imageName=sc.next();
+                long imageDate=new Date().getTime();
+
+                int styleID=sc.nextInt();
+
+                try {
+                    byte[] imageSizeArray = new byte[4];
+                    dis.read(imageSizeArray);
+                    int size = ByteBuffer.wrap(imageSizeArray).asIntBuffer().get();
+
+                    byte[] imageArray = new byte[size];
+                    dis.readFully(imageArray, 0, size);
+
+                    //System.out.println(imageArray);
+
+                    BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageArray));
+
+                    int imageID = interactor.insertImage(imageName, currentUserID, imageDate);
+
+                    serverManager.asyncTask(()->{
+                        BufferedImage img = RGBConverterRepo.toBufferedImageOfType(image, 1);
+                        System.out.println(img.getType());
+                        System.out.println(img.getHeight());
+                        BufferedImage generatedImage = interactor.generateImage(img, styleID /*TODO handle arg*/, serverManager);
+                        for(ClientHandler temp : serverManager.getUserSessions(currentUserID)){
+                            temp.insertImageData(imageID, generatedImage);
+                        }
+                    });
+
+                    for(ClientHandler temp : serverManager.getUserSessions(currentUserID)){
+                        temp.insertUserImage(imageID, imageName, imageDate);
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
         }
 
+    }
+
+    private void insertUserImage(int imageID, String imageName,long imageDate){
+        synchronized (dos) {
+            try {
+                dos.writeUTF(INSERT_IMAGE + " " + SUCCESS + " " + imageID + " " + imageName + " " + imageDate);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void insertImageData(int imageID, BufferedImage bufferedImage){
+
+        synchronized (dos) {
+            try {
+                dos.writeUTF(INSERT_IMAGE_DATA + " " + SUCCESS + " " + imageID);
+
+                ByteArrayOutputStream generatedImage = new ByteArrayOutputStream();
+                ImageIO.write(bufferedImage, "png", generatedImage);
+
+                byte[] userImageSize = ByteBuffer.allocate(4).putInt(generatedImage.size()).array();
+                dos.write(userImageSize);
+                dos.write(generatedImage.toByteArray());
+                dos.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

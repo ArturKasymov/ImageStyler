@@ -10,4 +10,5 @@ public class Constants {
 
     public static final String SERVER_ROOT_DIRECTORY=System.getProperty("user.home")+"/.ImageStyler";
 
+    public static final int NUM_STYLE_IMAGES = 6;
 }

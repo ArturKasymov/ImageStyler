@@ -3,12 +3,15 @@ package model;
 import model.database.entity.User;
 import model.database.provider.PostgreSQLDataProvider;
 import model.repositories.CryptoRepo;
+import model.repositories.RGBConverterRepo;
+import model.repositories.PythonGeneration.PySqueezeNet;
+import server.ServerManager;
 
+import java.awt.image.BufferedImage;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.sql.Date;
 import java.sql.SQLException;
-import java.util.Date;
-
 
 public class Interactor implements ClientInteractor {
 
@@ -49,17 +52,20 @@ public class Interactor implements ClientInteractor {
     }
 
     @Override
-    public int insertSession(int userID, Date lastUpdate) {
-        try {
-            return dataProvider.insertSession(userID, lastUpdate);
-        } catch (Exception e) {
-                e.printStackTrace();
-        }
-        return 0;
+    public int insertImage(String imageName, int userID, long imageDate) {
+        return dataProvider.insertImage(imageName,userID,new Date(imageDate),false);
     }
 
     @Override
     public User getUser(String username) {
         return dataProvider.getUser(username);
     }
+
+    @Override
+    public BufferedImage generateImage(BufferedImage contentImage, int styleID/*TODO handle arg*/, ServerManager serverManager) {
+        BufferedImage styleImage = RGBConverterRepo.toBufferedImageOfType(serverManager.styleImages[styleID], 1);
+        return PySqueezeNet.generate(contentImage, styleImage);
+    }
+
+
 }

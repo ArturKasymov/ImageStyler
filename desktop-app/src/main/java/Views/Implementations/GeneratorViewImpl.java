@@ -30,6 +30,7 @@ import static Utils.Constants.NUM_STYLE_IMAGES;
 public class GeneratorViewImpl extends BaseView implements GeneratorView {
     private Image styleImages[] = new Image[NUM_STYLE_IMAGES];
     private int styleImageIndex = 0;
+
     private GeneratorPresenter presenter;
     private MainView toggler;
     public GeneratorViewImpl() {
@@ -60,6 +61,7 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
 
     @FXML
     public void initialize() {
+        presenter.initCallback();
         Image image = styleImages[5];
 
         contentImage.setImage(image);
@@ -72,7 +74,8 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
 
     @FXML
     public void onGenerate(ActionEvent e) {
-        getAppManager().asyncTask(()->presenter.generate(contentImage.getImage(), styleImage.getImage(), toggler.getDefaultNeuralNet()));
+        getAppManager().asyncTask(()->presenter.generate(contentImage.getImage(), styleImageIndex,
+                photoName.getCharacters().toString(),toggler.getDefaultNeuralNet()));
     }
 
     @FXML
@@ -105,7 +108,7 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
         styleImages[2] = getImage("/TestImages/rain_princess.jpg");
         styleImages[3] = getImage("/TestImages/udnie.jpg");
         styleImages[4] = getImage("/TestImages/starry_night_sq.jpg");
-        styleImages[5] = getImage("/TestImages/tubingen_sq.jpg");
+        styleImages[5] = getImage("/TestImages/tubingen.png");
     }
 
     private void setOnImageClick(final ImageView imgView) {
@@ -128,14 +131,14 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
 
     private void setOnSaveButtonClick() {
         saveButton.setOnMouseClicked(event -> {
-            if (photoName.getCharacters().length()>0) {
-                //presenter.saveGeneratedImage(generatedImage.getImage(), photoName.getCharacters().toString(), new Date());
+            /*if (photoName.getCharacters().length()>0) {
+                //presenter.insertGeneratedImage(generatedImage.getImage(), photoName.getCharacters().toString(), new Date());
                 getAppManager().asyncTask(()->{
-                    presenter.saveGeneratedImage(generatedImage.getImage(), photoName.getCharacters().toString(), new Date());
+                    presenter.insertGeneratedImage(generatedImage.getImage(), photoName.getCharacters().toString(), new Date());
                 });
             } else {
                 showNoPhotoNameAlert();
-            }
+            }*/
         });
     }
 

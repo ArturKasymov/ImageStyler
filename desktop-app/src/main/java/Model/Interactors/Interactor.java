@@ -1,15 +1,9 @@
 package Model.Interactors;
 
 import Client.SessionManager;
-import Model.Database.Entity.User;
 import Model.Database.Entity.UserImage;
-import Model.Database.provider.SQLiteLocalDataProvider;
-import Model.Repositories.Generation.BaseGeneration.DarkNet.DarkNetGenerator;
-import Model.Repositories.Generation.BaseGeneration.SqueezeNet.SqueezeNetGenerator;
-import Model.Repositories.Generation.BaseGeneration.VGG16.VGG16Generator;
-import Model.Repositories.Generation.PythonGeneration.PySqueezeNet;
-import Model.Repositories.Generation.core.Generator;
-import Model.Repositories.Generation.core.GenerationException;
+import Model.Database.provider.SQLiteLocalDataProvider;;
+import Presenters.Callbacks.GeneratorCallback;
 import Presenters.Callbacks.LoginCallback;
 import Presenters.Callbacks.MainCallback;
 import Presenters.Callbacks.RegisterCallback;
@@ -19,14 +13,11 @@ import javafx.scene.image.Image;
 
 
 import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import static Utils.Constants.APP_ROOT_DIRECTORY;
 import static Utils.Constants.LOCAL_DATABASE_NAME;
@@ -102,43 +93,50 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
         sessionManager.initMainCallback(callback);
     }
 
+    @Override
+    public void initGeneratorCallback(GeneratorCallback callback) {
+        sessionManager.initGeneratorCallback(callback);
+    }
+
     public void checkUserDirectory(){
         File dir = new File(sessionManager.getCurrentUserPath());
         if (!dir.exists()) dir.mkdirs();
     }
 
     @Override
-    public UserImage insertUserImage(Image image, String name, Date date) {
-        int imageID=dataProvider.insertUserImage(name, sessionManager.getCurrentUserId(),date,true);
+    public UserImage insertUserImage(int userID, String name, Date date) {
+        int imageID=dataProvider.insertUserImage(name, sessionManager.getCurrentUserId(),date,false);
+        return new UserImage(imageID,name,sessionManager.getCurrentUserId(),date,false);
+    }
+
+    @Override
+    public void saveUserImage(int imageID,BufferedImage image){
+        //TODO update status isDownloaded true
+
         File imageFile = new File(sessionManager.getCurrentUserPath()+"\\."+imageID+".png");
         OutputStream out=null;
         try {
             out = new FileOutputStream(imageFile);
-            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", out);
+            ImageIO.write(image, "png", out);
         }
         catch (IOException e)
         {
             e.printStackTrace();
         }
-        return new UserImage(imageID,name,sessionManager.getCurrentUserId(),date,true);
     }
 
     @Override
-    public Image generate(Image contentImage, Image styleImage, Constants.NEURAL_NET net) throws GenerationException {
-        Generator generator;
-        switch (net) {
-            case SQUEEZENET:
-                System.out.println("Using SqueezeNet");
-                generator = new PySqueezeNet(contentImage, styleImage);
-                break;
-            case VGG16:
-                System.out.println("Using VGG16");
-                generator = new VGG16Generator(contentImage, styleImage);
-                break;
-            default:
-                generator = new PySqueezeNet(contentImage, styleImage);
+    public void generate(Image contentImage, int styleImageID, String imageName ,Constants.NEURAL_NET net) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        BufferedImage bufferedImage = SwingFXUtils.fromFXImage(contentImage, null);
+        try {
+            // TODO png<->jpg
+            ImageIO.write(bufferedImage, "PNG", byteArrayOutputStream);
+        } catch (IOException e) {
+            //TODO Handle exception
+            e.printStackTrace();
         }
-        return generator.generate();
+        sessionManager.generateImage(byteArrayOutputStream, styleImageID, imageName, net);
     }
 
 
