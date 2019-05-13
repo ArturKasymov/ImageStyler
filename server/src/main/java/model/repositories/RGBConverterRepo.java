@@ -12,7 +12,7 @@ public class RGBConverterRepo {
         if (original.getType() == type) {
             return original;
         }
-        BufferedImage image = new BufferedImage(original.getHeight(), original.getWidth(), type);
+        BufferedImage image = new BufferedImage(original.getWidth(), original.getHeight(), type);
         Graphics2D g = image.createGraphics();
         try {
             g.setComposite(AlphaComposite.Src);
