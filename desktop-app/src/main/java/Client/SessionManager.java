@@ -141,16 +141,17 @@ public class SessionManager extends Thread {
                 }
                 break;
             case INSERT_IMAGE_DATA:
-                status=sc.next();
+                status = sc.next();
                 switch (status){
                     case FAIL:
                         break;
                     case SUCCESS:
-                        int imageID= sc.nextInt();
+                        int imageID = sc.nextInt();
                         try {
                             byte[] imageSizeArray = new byte[4];
                             dis.read(imageSizeArray);
                             int size = ByteBuffer.wrap(imageSizeArray).asIntBuffer().get();
+                            System.out.println(size);
                             byte[] imageArray = new byte[size];
                             dis.readFully(imageArray,0,size);
                             BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageArray));

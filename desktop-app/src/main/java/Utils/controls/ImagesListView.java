@@ -11,6 +11,7 @@ import javafx.animation.Transition;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Orientation;
@@ -49,11 +50,11 @@ public class ImagesListView extends VBox {
         try {
             attachView("/ImagesListView.fxml", this, this);
             // TODO: TEMP
-            userImages.add(new UserImage(101, "10", 1, new Date(), true));
-            userImages.add(new UserImage(102, "15", 1, new Date(), true));
-            userImages.add(new UserImage(103, "16", 1, new Date(), true));
-            userImages.add(new UserImage(104, "17", 1, new Date(), true));
-            userImages.add(new UserImage(105, "18", 1, new Date(), true));
+            userImages.add(new UserImage(10, "10", 1, new Date(), true));
+            userImages.add(new UserImage(15, "15", 1, new Date(), true));
+            userImages.add(new UserImage(16, "16", 1, new Date(), true));
+            userImages.add(new UserImage(17, "17", 1, new Date(), true));
+            userImages.add(new UserImage(18, "18", 1, new Date(), true));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -195,7 +196,9 @@ public class ImagesListView extends VBox {
         imagesSearch.setFocusTraversable(false);
         sortBy.setFocusTraversable(false);
         imagesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue!=null) view.setResultImage(newValue);
+            if (newValue!=null) {
+                view.setResultImage(newValue);
+            }
         });
 
         imagesSearch.setOnKeyReleased(event -> {
