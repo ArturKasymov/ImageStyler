@@ -3,7 +3,6 @@ package model.database.provider;
 import model.database.entity.User;
 
 import java.sql.*;
-import java.util.Date;
 
 import static util.PostgreSQLQueries.*;
 
@@ -13,7 +12,6 @@ public class PostgreSQLDataProvider {
 
     public PostgreSQLDataProvider( String dbname, String username,  String password, String IP ,int port) {
         try {
-		//Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(String.format("jdbc:postgresql:%s:%d/%s",IP,port,dbname),username,password);
         } catch (Exception e) {
             e.printStackTrace();
@@ -24,8 +22,7 @@ public class PostgreSQLDataProvider {
         try {
             Statement stmt=connection.createStatement();
             stmt.execute(CHECK_USERS);
-            stmt.execute(CHECK_SESSIONS);
-            stmt.execute(CHECK_FOTOS);
+            stmt.execute(CHECK_IMAGES);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,24 +45,6 @@ public class PostgreSQLDataProvider {
             return rs.getInt(1);
     }
 
-    public int insertSession(int userID, Date lastUpdate){
-        try {
-            PreparedStatement pstmt = connection.prepareStatement(INSERT_SESSION);
-            pstmt.setInt(1,userID);
-            pstmt.setBoolean(2,true);
-            pstmt.setDate(3,new java.sql.Date(lastUpdate.getTime()));
-            pstmt.execute();
-
-            ResultSet rs= pstmt.getResultSet();
-            rs.next();
-            return rs.getInt(1);
-
-        } catch (SQLException  e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
     public User getUser(String username){
         PreparedStatement pstmt = null;
         try {
@@ -80,5 +59,24 @@ public class PostgreSQLDataProvider {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public int insertImage(String imageName, int userID, Date imageDate, boolean imageStatus){
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(INSERT_IMAGE);
+            pstmt.setString(1,imageName);
+            pstmt.setInt(2,userID);
+            pstmt.setDate(3,imageDate);
+            pstmt.setBoolean(4,imageStatus);
+
+            pstmt.execute();
+
+            ResultSet rs =  pstmt.getResultSet();
+            rs.next();
+            return rs.getInt(1);
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }

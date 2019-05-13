@@ -6,22 +6,21 @@ public class PostgreSQLQueries {
             "user_name varchar(32) not null unique,\n" +
             "password_hash varchar(256) not null\n" +
             ");";
-    public static final String CHECK_SESSIONS="create table IF NOT EXISTS sessions (\n" +
-            "id_session serial primary key,\n" +
-            "id_user integer references users,\n" +
-            "isActive boolean,\n" +
-            "last_update TIMESTAMP\n"+
-            ");";
-    public static final String CHECK_FOTOS=" CREATE TABLE IF NOT EXISTS user_images(\n" +
+
+    public static final String CHECK_IMAGES=" CREATE TABLE IF NOT EXISTS user_images(\n" +
             "id_image serial PRIMARY KEY,\n" +
             "image_name VARCHAR(32) NOT NULL,\n" +
             "id_user INTEGER REFERENCES users,\n" +
             "image_date TIMESTAMP DEFAULT NOW()\n"+
+            "image_status boolean NOT NULL\n"+
             ");";
 
     public static final String INSERT_USER="INSERT INTO users(user_name,password_hash) " +
             "VALUES (?,?) RETURNING id_user;";
-    public static final String INSERT_SESSION="INSERT INTO sessions(id_user,isActive,last_update) " +
-            "VALUES (?,?,?) RETURNING id_session;";
+
     public static final String GET_USER_HASH="SELECT * FROM users WHERE user_name=?;";
+
+    public static final String INSERT_IMAGE="INSERT INTO user_images(image_name,id_user,image_date,image_status)" +
+            "VALUES(?,?,?,?) RETURNING id_image;";
+
 }

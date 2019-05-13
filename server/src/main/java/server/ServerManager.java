@@ -37,6 +37,12 @@ public class ServerManager {
         }
     }
 
+    public List<ClientHandler> getUserSessions(int UserID){
+        synchronized (activeUsers){
+            return activeUsers.get(UserID);
+        }
+    }
+
     public void init(){
         checkServerRootDir();
         interactor.checkDataBase();

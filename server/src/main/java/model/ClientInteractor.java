@@ -7,6 +7,7 @@ import java.util.Date;
 
 public interface ClientInteractor {
     int insertUser(String userName, String password) throws SQLException;
-    int insertSession(int userID, Date lastUpdate);
+    int insertImage(String imageName, int userID, long imageDate);
+
     User getUser(String username);
 }

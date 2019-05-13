@@ -7,11 +7,14 @@ import Presenters.Callbacks.LoginCallback;
 import Presenters.Callbacks.MainCallback;
 import Presenters.Callbacks.RegisterCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -144,6 +147,21 @@ public class SessionManager extends Thread {
         synchronized (outputStream){
             try {
                 outputStream.writeUTF(REGISTER+" "+username+" "+password);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void generateImage(ByteArrayOutputStream userImage, String style, String imageName, Date imageDate){
+        synchronized (outputStream){
+            try {
+                outputStream.writeUTF(INSERT_IMAGE+" "+imageName+" "+imageDate.getTime()+" "+style);
+
+                byte[] userImageSize = ByteBuffer.allocate(4).putInt(userImage.size()).array();
+                outputStream.write(userImageSize);
+                outputStream.write(userImage.toByteArray());
+                outputStream.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }

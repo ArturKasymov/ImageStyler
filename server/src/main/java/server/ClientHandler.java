@@ -2,17 +2,18 @@ package server;
 
 import model.ClientInteractor;
 import model.Interactor;
-import model.database.entity.Session;
 import model.database.entity.User;
 import model.repositories.CryptoRepo;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.sql.SQLException;
-import java.text.Format;
-import java.util.Date;
 import java.util.Scanner;
 
 import static util.ServerCommand.*;
@@ -135,7 +136,41 @@ public class ClientHandler extends Thread{
                 serverManager.userOffline(currentUserID,this);
                 currentUserID=-1;
                 break;
+
+            case INSERT_IMAGE:
+                String imangeName=sc.next();
+                long imageDate=sc.nextLong();
+                //TODO styleID from database
+                String style=sc.next();
+                try {
+                    byte[] imageSizeArray = new byte[4];
+                    dis.read(imageSizeArray);
+                    int size = ByteBuffer.wrap(imageSizeArray).asIntBuffer().get();
+                    byte[] imageArray = new byte[size];
+                    dis.read(imageArray);
+                    BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageArray));
+
+                    int imageID=interactor.insertImage(imangeName,currentUserID,imageDate);
+
+                    //TODO generate Image in asynk
+                    //generate(imageID,currentUserID,style,image)
+
+                    for(ClientHandler temp : serverManager.getUserSessions(currentUserID)){
+                        temp.insertUserImage(imageID,imangeName,imageDate);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
         }
 
+    }
+
+    public void insertUserImage(int imageID, String imageName,long imageDate){
+        try {
+            dos.writeUTF(INSERT_IMAGE+" "+SUCCESS+" "+imageID+" "+imageName+" "+imageDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
