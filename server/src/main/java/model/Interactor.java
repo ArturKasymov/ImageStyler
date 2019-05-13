@@ -3,6 +3,7 @@ package model;
 import model.database.entity.User;
 import model.database.provider.PostgreSQLDataProvider;
 import model.repositories.CryptoRepo;
+import model.repositories.RGBConverterRepo;
 import model.repositories.PythonGeneration.PySqueezeNet;
 import server.ServerManager;
 
@@ -62,7 +63,7 @@ public class Interactor implements ClientInteractor {
 
     @Override
     public BufferedImage generateImage(BufferedImage contentImage, int styleID/*TODO handle arg*/, ServerManager serverManager) {
-        BufferedImage styleImage = serverManager.styleImages[styleID];
+        BufferedImage styleImage = RGBConverterRepo.toBufferedImageOfType(serverManager.styleImages[styleID], 1);
         return PySqueezeNet.generate(contentImage, styleImage);
     }
 
