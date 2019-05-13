@@ -51,10 +51,8 @@ public class PySqueezeNet {
             // GET GENERATED IMAGE
             InputStream generatedImageStream = p.getInputStream();
             Scanner imgSc = new Scanner(generatedImageStream);
-            while (true) {
                 while (!imgSc.hasNext());
                 System.out.println(imgSc.nextLine());
-            }
             /*BufferedImage img;
             while (true) {
                 while (!imgSc.hasNext());
