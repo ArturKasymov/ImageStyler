@@ -37,9 +37,9 @@ def main():
         squeezenet.generate(content_img, style_img, 224, 224)
         gen_img = squeezenet.get_image()'''
         print(height, width)
-        for i in range(gen_img.shape[0]):
+        '''for i in range(gen_img.shape[0]):
             for j in range(gen_img.shape[1]):
-                print("%d %d %d" % (gen_img[i, j, 0], gen_img[i, j, 1], gen_img[i, j, 2]))
+                print("%d %d %d" % (gen_img[i, j, 0], gen_img[i, j, 1], gen_img[i, j, 2]))'''
 
 
 if __name__ == '__main__':

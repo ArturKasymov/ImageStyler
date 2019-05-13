@@ -26,7 +26,7 @@ public class PySqueezeNet {
             System.out.println("Content shape - (" + contHeight + ", " + contWidth + ")");
             int[] contPixelsBytes = ((DataBufferInt) contentImage.getRaster().getDataBuffer()).getData();
             inputImagesStream.write(contHeight + " " + contWidth);
-            inputImagesStream.write("\n");
+            //inputImagesStream.write("\n");
             /*for (int j = 0; j < contHeight; j++) {
                 for (int i = 0; i < contWidth; i++) {
                     System.out.println(contPixelsBytes[i+j*contWidth]);
@@ -53,6 +53,7 @@ public class PySqueezeNet {
             Scanner imgSc = new Scanner(generatedImageStream);
                 while (!imgSc.hasNext());
                 System.out.println(imgSc.nextLine());
+                generatedImageStream.close();
             /*BufferedImage img;
             while (true) {
                 while (!imgSc.hasNext());
