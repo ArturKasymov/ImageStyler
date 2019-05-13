@@ -1,5 +1,7 @@
 package Model.Database.Entity;
 
+import app.AppManager;
+
 import java.util.Date;
 
 import static Utils.Constants.APP_ROOT_DIRECTORY;
@@ -28,7 +30,9 @@ public class UserImage {
         return imageID;
     }
     public String getImageUrl() {
-        return APP_ROOT_DIRECTORY+"\\."+userID+"\\."+imageID+".png";
+        // TODO: TEMP
+        //return APP_ROOT_DIRECTORY+"\\."+userID+"\\."+imageID+".png";
+        return AppManager.class.getResource("/TestImages/."+imageName+".png").toString().substring(6);
     }
 
     public boolean getIsDownloaded(){

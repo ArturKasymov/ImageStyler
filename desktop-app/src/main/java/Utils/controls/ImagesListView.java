@@ -23,6 +23,7 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
+import java.util.Date;
 
 import static Utils.Constants.SORT_BY.*;
 
@@ -47,6 +48,12 @@ public class ImagesListView extends VBox {
     public ImagesListView() {
         try {
             attachView("/ImagesListView.fxml", this, this);
+            // TODO: TEMP
+            userImages.add(new UserImage(101, "10", 1, new Date(), true));
+            userImages.add(new UserImage(102, "15", 1, new Date(), true));
+            userImages.add(new UserImage(103, "16", 1, new Date(), true));
+            userImages.add(new UserImage(104, "17", 1, new Date(), true));
+            userImages.add(new UserImage(105, "18", 1, new Date(), true));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

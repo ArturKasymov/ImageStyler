@@ -39,7 +39,7 @@ class SqueezeNet:
 
         optimizer = torch.optim.Adam([img], lr=self.LEARNING_RATE)
         # test with pyplot
-        f, axarr = plt.subplots(1, 2)
+        '''f, axarr = plt.subplots(1, 2)
         axarr[0].axis('off')
         axarr[1].axis('off')
         axarr[0].set_title('Content Source Img.')
@@ -47,7 +47,7 @@ class SqueezeNet:
         axarr[0].imshow(Utils.deprocess(content_img.cpu()))
         axarr[1].imshow(Utils.deprocess(style_img.cpu()))
         plt.show()
-        plt.figure()
+        plt.figure()'''
 
         for t in range(self.ITERATIONS):
             if t < (self.ITERATIONS / 2):
@@ -69,7 +69,7 @@ class SqueezeNet:
 
             if t%50==0 and self.verbose:
                 self.show_image(img, t)
-        self.show_image(img, t)
+        #self.show_image(img, t)
         self.generated_image = np.array(Utils.deprocess(img.data.cpu()))
 
 
@@ -83,7 +83,7 @@ class SqueezeNet:
         self.CONTENT_WEIGHT = 6e-2
         self.STYLE_WEIGHTS = [300000, 1000, 15, 3]
         self.TV_WEIGHT = 2.5e-2
-        self.verbose = True
+        self.verbose = False
 
     def show_image(self, img, iteration):
         print('Iteration {}'.format(iteration))

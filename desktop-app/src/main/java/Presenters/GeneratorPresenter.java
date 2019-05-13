@@ -3,6 +3,7 @@ package Presenters;
 import Model.Interactors.GeneratorInteractor;
 import Model.Interactors.Interactor;
 import Model.Repositories.Generation.core.GenerationException;
+import Utils.Constants;
 import Views.Implementations.GeneratorViewImpl;
 import javafx.scene.image.Image;
 
@@ -17,9 +18,9 @@ public class GeneratorPresenter {
         this.interactor= Interactor.getInstance();
     }
 
-    public void generate(Image contentImage, Image styleImage) {
+    public void generate(Image contentImage, Image styleImage, Constants.NEURAL_NET net) {
         try {
-            view.setGeneratedImageView(interactor.generate(contentImage, styleImage));
+            view.setGeneratedImageView(interactor.generate(contentImage, styleImage, net));
         } catch (GenerationException e) {
             e.printStackTrace();
         }
