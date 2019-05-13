@@ -148,6 +148,9 @@ public class ClientHandler extends Thread{
                     byte[] imageSizeArray = new byte[4];
                     dis.read(imageSizeArray);
                     int size = ByteBuffer.wrap(imageSizeArray).asIntBuffer().get();
+
+                    System.out.println(size);
+
                     byte[] imageArray = new byte[size];
                     dis.read(imageArray);
 
