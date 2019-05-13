@@ -187,7 +187,7 @@ public class SessionManager extends Thread {
     public void register(String username, String password){
         synchronized (outputStream){
             try {
-                outputStream.writeUTF(REGISTER+" "+username+" "+password);
+                outputStream.writeUTF(REGISTER + " " + username + " " + password);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -197,7 +197,7 @@ public class SessionManager extends Thread {
     public void generateImage(ByteArrayOutputStream userImage, int styleID, String imageName, Constants.NEURAL_NET net){
         synchronized (outputStream){
             try {
-                outputStream.writeUTF(INSERT_IMAGE+" "+imageName+" "+styleID);
+                outputStream.writeUTF(INSERT_IMAGE + " " + imageName + " " + styleID);
 
                 byte[] userImageSize = ByteBuffer.allocate(4).putInt(userImage.size()).array();
                 outputStream.write(userImageSize);

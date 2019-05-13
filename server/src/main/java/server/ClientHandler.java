@@ -73,8 +73,8 @@ public class ClientHandler extends Thread{
     }
 
     private void parseClientInput(String input){
-        Scanner sc= new Scanner(input);
-        String command=sc.next();
+        Scanner sc = new Scanner(input);
+        String command = sc.next();
 
         String username;
         String password;
@@ -139,7 +139,7 @@ public class ClientHandler extends Thread{
                 break;
 
             case INSERT_IMAGE:
-                String imangeName=sc.next();
+                String imageName=sc.next();
                 long imageDate=new Date().getTime();
 
                 int styleID=sc.nextInt();
@@ -149,24 +149,24 @@ public class ClientHandler extends Thread{
                     dis.read(imageSizeArray);
                     int size = ByteBuffer.wrap(imageSizeArray).asIntBuffer().get();
 
-                    System.out.println(size);
-
                     byte[] imageArray = new byte[size];
-                    dis.read(imageArray);
+                    dis.readFully(imageArray, 0, size);
+
+                    System.out.println(imageArray);
 
                     BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageArray));
 
-                    int imageID=interactor.insertImage(imangeName,currentUserID, imageDate);
+                    int imageID = interactor.insertImage(imageName, currentUserID, imageDate);
 
                     serverManager.asyncTask(()->{
-                        BufferedImage generatedImage=interactor.generateImage(image,styleID /*TODO handle arg*/,serverManager);
+                        BufferedImage generatedImage=interactor.generateImage(image, styleID /*TODO handle arg*/, serverManager);
                         for(ClientHandler temp : serverManager.getUserSessions(currentUserID)){
-                            temp.insertImageData(imageID,generatedImage);
+                            temp.insertImageData(imageID, generatedImage);
                         }
                     });
 
                     for(ClientHandler temp : serverManager.getUserSessions(currentUserID)){
-                        temp.insertUserImage(imageID,imangeName,imageDate);
+                        temp.insertUserImage(imageID, imageName, imageDate);
                     }
 
                 } catch (IOException e) {

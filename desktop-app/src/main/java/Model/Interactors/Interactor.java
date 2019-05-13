@@ -128,9 +128,10 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     @Override
     public void generate(Image contentImage, int styleImageID, String imageName ,Constants.NEURAL_NET net) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        BufferedImage bufferedImage= SwingFXUtils.fromFXImage(contentImage, null);
+        BufferedImage bufferedImage = SwingFXUtils.fromFXImage(contentImage, null);
         try {
             ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
+            System.out.println(byteArrayOutputStream.toString());
         } catch (IOException e) {
             //TODO Handle exception
             e.printStackTrace();
