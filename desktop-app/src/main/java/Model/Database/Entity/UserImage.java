@@ -47,4 +47,6 @@ public class UserImage {
 
     public Date getImageDate() { return imageDate; }
 
+    public void setIsDownloaded(boolean isDownloaded) { this.isDownloaded = isDownloaded; }
+
 }

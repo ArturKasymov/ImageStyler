@@ -128,25 +128,25 @@ public class SessionManager extends Thread {
                 }
                 break;
             case INSERT_IMAGE:
-                status=sc.next();
+                status = sc.next();
                 switch (status){
                     case FAIL:
                         break;
                     case SUCCESS:
-                        int imageID= sc.nextInt();
-                        String imageName=sc.next();
-                        long imageDate=sc.nextLong();
-                        generatorCallback.insertGeneratedImage(imageID,imageName,new Date(imageDate));
+                        int imageID = sc.nextInt();
+                        String imageName = sc.next();
+                        long imageDate = sc.nextLong();
+                        generatorCallback.insertGeneratedImage(imageID, imageName, new Date(imageDate));
                         break;
                 }
                 break;
             case INSERT_IMAGE_DATA:
-                status=sc.next();
+                status = sc.next();
                 switch (status){
                     case FAIL:
                         break;
                     case SUCCESS:
-                        int imageID= sc.nextInt();
+                        int imageID = sc.nextInt();
                         try {
                             byte[] imageSizeArray = new byte[4];
                             dis.read(imageSizeArray);
@@ -154,7 +154,7 @@ public class SessionManager extends Thread {
                             byte[] imageArray = new byte[size];
                             dis.readFully(imageArray,0,size);
                             BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageArray));
-                            executor.execute(()->generatorCallback.saveGeneratedImage(imageID,image));
+                            executor.execute(()->generatorCallback.saveGeneratedImage(imageID, image));
                         } catch (Exception e){
                             e.printStackTrace();
                             //TODO handle

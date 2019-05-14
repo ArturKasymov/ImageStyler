@@ -26,6 +26,7 @@ import javafx.util.Duration;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class MainViewImpl extends BaseView implements MainView {
     private MainPresenter presenter;
@@ -229,7 +230,6 @@ public class MainViewImpl extends BaseView implements MainView {
                 fullButton.setDisable(true);
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println(e);
                 throw new IOException("Failed to load GeneratorView.fxml");
             }
         } else {
@@ -253,7 +253,7 @@ public class MainViewImpl extends BaseView implements MainView {
             deleteImageButton.setDisable(true);
         } else {
             String path = newUserImage.getImageUrl();
-
+            System.out.println(path);
             this.currentImage = newUserImage;
             changeImage(resultImage, path);
             photoName.setText(newUserImage.getImageName());
@@ -261,7 +261,7 @@ public class MainViewImpl extends BaseView implements MainView {
     }
 
     private void changeImage(ImageView imgView, String path) {
-        File img= new File(path);
+        File img = new File(path);
         if (img==null) return;
         Image image = new Image(img.toURI().toString());
         imgView.setImage(image);

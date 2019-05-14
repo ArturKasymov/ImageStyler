@@ -37,7 +37,6 @@ public class PySqueezeNet {
             // STYLE IMAGE
             int styleHeight = styleImage.getHeight();
             int styleWidth = styleImage.getWidth();
-	    System.out.println(styleImage.getType());
             int[] stylePixelsBytes = ((DataBufferInt) styleImage.getRaster().getDataBuffer()).getData();
             inputImagesStream.write(styleHeight + " " + styleWidth);
             System.out.println("Style shape - (" + styleHeight + ", " + styleWidth + ")");

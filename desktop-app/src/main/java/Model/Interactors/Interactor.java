@@ -1,6 +1,7 @@
 package Model.Interactors;
 
 import Client.SessionManager;
+import Model.Database.Entity.User;
 import Model.Database.Entity.UserImage;
 import Model.Database.provider.SQLiteLocalDataProvider;;
 import Presenters.Callbacks.GeneratorCallback;
@@ -18,6 +19,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static Utils.Constants.APP_ROOT_DIRECTORY;
 import static Utils.Constants.LOCAL_DATABASE_NAME;
@@ -104,17 +106,18 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public UserImage insertUserImage(int userID, String name, Date date) {
-        int imageID=dataProvider.insertUserImage(name, sessionManager.getCurrentUserId(),date,false);
-        return new UserImage(imageID,name,sessionManager.getCurrentUserId(),date,false);
+    public UserImage insertUserImage(int imageID, String name, Date date) {
+        dataProvider.insertUserImage(imageID, name, sessionManager.getCurrentUserId(), date,false);
+        return new UserImage(imageID, name, sessionManager.getCurrentUserId(), date,false);
     }
 
     @Override
-    public void saveUserImage(int imageID,BufferedImage image){
-        //TODO update status isDownloaded true
-
+    public void saveUserImage(int imageID, BufferedImage image) {
+        Optional<UserImage> img = getCurrentUserImagesList().stream().filter(x->x.getImageID()==imageID).findFirst();
+        img.ifPresent(userImage -> userImage.setIsDownloaded(true));
+        System.out.println(img.get().getIsDownloaded());
         File imageFile = new File(sessionManager.getCurrentUserPath()+"\\."+imageID+".png");
-        OutputStream out=null;
+        OutputStream out = null;
         try {
             out = new FileOutputStream(imageFile);
             ImageIO.write(image, "png", out);
@@ -126,11 +129,11 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public void generate(Image contentImage, int styleImageID, String imageName ,Constants.NEURAL_NET net) {
+    public void generate(Image contentImage, int styleImageID, String imageName, Constants.NEURAL_NET net) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         BufferedImage bufferedImage = SwingFXUtils.fromFXImage(contentImage, null);
         try {
-            // TODO png<->jpg
+            // TODO png<->jpg depending on the bufferedImage.getType()
             ImageIO.write(bufferedImage, "PNG", byteArrayOutputStream);
         } catch (IOException e) {
             //TODO Handle exception

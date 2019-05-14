@@ -2,10 +2,25 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="30.0" prefWidth="150.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-      <Label fx:id="photoName" prefWidth="100.0" styleClass="photoNameLabel" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
-      <Label fx:id="date" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefWidth="70.0" styleClass="dateLabel" textFill="#00000046" AnchorPane.leftAnchor="110.0" AnchorPane.topAnchor="5.0" />
+      <Label fx:id="photoName" prefWidth="85.0" styleClass="photoNameLabel" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
+      <Label fx:id="inProgress" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="40.0" textAlignment="CENTER" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="5.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <textFill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop color="BLACK" />
+                  <Stop color="WHITE" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </textFill></Label>
+        <Label fx:id="date" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefWidth="70.0" styleClass="dateLabel" textFill="#00000046" AnchorPane.leftAnchor="110.0" AnchorPane.topAnchor="5.0" />
     </children>
 </AnchorPane>

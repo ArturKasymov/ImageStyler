@@ -140,9 +140,8 @@ public class ClientHandler extends Thread{
                 break;
 
             case INSERT_IMAGE:
-                String imageName=sc.next();
-                long imageDate=new Date().getTime();
-
+                String imageName = sc.next();
+                long imageDate = new Date().getTime();
                 int styleID=sc.nextInt();
 
                 try {
@@ -152,8 +151,6 @@ public class ClientHandler extends Thread{
 
                     byte[] imageArray = new byte[size];
                     dis.readFully(imageArray, 0, size);
-
-                    //System.out.println(imageArray);
 
                     BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageArray));
 

@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>desktop-app</module>
+        <module>server</module>
     </modules>
 
     <dependencies>

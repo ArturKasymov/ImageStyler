@@ -53,7 +53,8 @@ public class Interactor implements ClientInteractor {
 
     @Override
     public int insertImage(String imageName, int userID, long imageDate) {
-        return dataProvider.insertImage(imageName,userID,new Date(imageDate),false);
+        // TODO: CHANGE IMAGE STATUS AFTER
+        return dataProvider.insertImage(imageName, userID, new Date(imageDate),false);
     }
 
     @Override
