@@ -128,15 +128,15 @@ public class SessionManager extends Thread {
                 }
                 break;
             case INSERT_IMAGE:
-                status=sc.next();
+                status = sc.next();
                 switch (status){
                     case FAIL:
                         break;
                     case SUCCESS:
-                        int imageID= sc.nextInt();
-                        String imageName=sc.next();
-                        long imageDate=sc.nextLong();
-                        generatorCallback.insertGeneratedImage(imageID,imageName,new Date(imageDate));
+                        int imageID = sc.nextInt();
+                        String imageName = sc.next();
+                        long imageDate = sc.nextLong();
+                        generatorCallback.insertGeneratedImage(imageID, imageName, new Date(imageDate));
                         break;
                 }
                 break;
@@ -151,11 +151,10 @@ public class SessionManager extends Thread {
                             byte[] imageSizeArray = new byte[4];
                             dis.read(imageSizeArray);
                             int size = ByteBuffer.wrap(imageSizeArray).asIntBuffer().get();
-                            System.out.println(size);
                             byte[] imageArray = new byte[size];
                             dis.readFully(imageArray,0,size);
                             BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageArray));
-                            executor.execute(()->generatorCallback.saveGeneratedImage(imageID,image));
+                            executor.execute(()->generatorCallback.saveGeneratedImage(imageID, image));
                         } catch (Exception e){
                             e.printStackTrace();
                             //TODO handle

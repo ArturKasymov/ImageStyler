@@ -57,13 +57,14 @@ public class SQLiteLocalDataProvider {
         }
     }
 
-    public int insertUserImage(String imageName, int userID ,Date date, boolean isDownloaded) {
+    public int insertUserImage(int imageID, String imageName, int userID, Date date, boolean isDownloaded) {
         try {
             PreparedStatement pstmt = connection.prepareStatement(INSERT_IMAGE);
-            pstmt.setString(1,imageName);
-            pstmt.setInt(2,userID);
-            pstmt.setDate(3,new java.sql.Date(date.getTime()));
-            pstmt.setBoolean(4,isDownloaded);
+            pstmt.setInt(1, imageID);
+            pstmt.setString(2,imageName);
+            pstmt.setInt(3,userID);
+            pstmt.setDate(4,new java.sql.Date(date.getTime()));
+            pstmt.setBoolean(5,isDownloaded);
             pstmt.executeUpdate();
             return connection.createStatement().executeQuery(GET_LAST_ROW_ID).getInt(1);
         } catch (SQLException e) {

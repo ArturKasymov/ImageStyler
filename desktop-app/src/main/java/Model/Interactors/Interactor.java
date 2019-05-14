@@ -106,13 +106,13 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public UserImage insertUserImage(int userID, String name, Date date) {
-        int imageID=dataProvider.insertUserImage(name, sessionManager.getCurrentUserId(),date,false);
-        return new UserImage(imageID,name,sessionManager.getCurrentUserId(),date,false);
+    public UserImage insertUserImage(int imageID, String name, Date date) {
+        dataProvider.insertUserImage(imageID, name, sessionManager.getCurrentUserId(), date,false);
+        return new UserImage(imageID, name, sessionManager.getCurrentUserId(), date,false);
     }
 
     @Override
-    public void saveUserImage(int imageID,BufferedImage image) {
+    public void saveUserImage(int imageID, BufferedImage image) {
         Optional<UserImage> img = getCurrentUserImagesList().stream().filter(x->x.getImageID()==imageID).findFirst();
         img.ifPresent(userImage -> userImage.setIsDownloaded(true));
         System.out.println(img.get().getIsDownloaded());
@@ -129,7 +129,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public void generate(Image contentImage, int styleImageID, String imageName ,Constants.NEURAL_NET net) {
+    public void generate(Image contentImage, int styleImageID, String imageName, Constants.NEURAL_NET net) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         BufferedImage bufferedImage = SwingFXUtils.fromFXImage(contentImage, null);
         try {
