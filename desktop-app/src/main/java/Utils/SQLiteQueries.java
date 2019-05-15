@@ -27,5 +27,8 @@ public class SQLiteQueries {
     public final static String GET_USER_IMAGES = "SELECT id_image, image_name, id_user, image_date, is_downloaded FROM user_images WHERE id_user=?";
     public final static String GET_LAST_ROW_ID = "SELECT last_insert_rowid();";
     public final static String CHANGE_PASSWORD = "UPDATE users SET password_hash=? WHERE user_name=?";
+
     public final static String DELETE_USER_IMAGE = "DELETE FROM user_images WHERE id_image=?";
+
+    public final static String GET_CACHED_IMAGES_ID="SELECT id_image FROM user_images WHERE id_user=? ORDER BY id_image";
 }

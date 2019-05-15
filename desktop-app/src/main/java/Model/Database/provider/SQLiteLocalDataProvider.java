@@ -128,6 +128,23 @@ public class SQLiteLocalDataProvider {
         return null;
     }
 
+    public ArrayList<Integer> getUserImagesID(int currentUserID){
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(GET_CACHED_IMAGES_ID);
+            pstmt.setInt(1,currentUserID);
+            ResultSet rs = pstmt.executeQuery();
+
+            ArrayList<Integer> userImagesID=new ArrayList<>();
+            while(rs.next()) {
+                userImagesID.add(rs.getInt(1));
+            }
+            return userImagesID;
+        } catch (SQLException  e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public void deleteUserImage(UserImage deletedImage) {
         try {
             PreparedStatement pstmt = connection.prepareStatement(DELETE_USER_IMAGE);

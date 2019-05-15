@@ -76,13 +76,16 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     @Override
     public void checkUserData() {
         checkUserDirectory();
-        //ToDO compareWithServer
-        dataProvider.insertImages(sessionManager.checkCurrentUserImages());
     }
 
     @Override
     public void initLoginCallback(LoginCallback loginCallback) {
         sessionManager.initLoginCallback(loginCallback);
+    }
+
+    @Override
+    public ArrayList<Integer> getUserCacheDImagesID(int userID) {
+        return dataProvider.getUserImagesID(userID);
     }
 
     @Override

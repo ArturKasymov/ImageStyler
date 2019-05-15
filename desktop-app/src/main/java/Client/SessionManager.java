@@ -15,8 +15,8 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Scanner;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -109,6 +109,28 @@ public class SessionManager extends Thread {
                         int userID=sc.nextInt();
                         String userName=sc.next();
                         currentUser=new User(userID,userName);
+
+                        int userImagesCount=sc.nextInt();
+                        if(userImagesCount>0){
+                            ArrayList<Integer> cachedImages=loginCallback.getCachedImagesID(userID);
+                            int currentCheckIndex=0;
+
+                            int imageID;
+                            String imageName;
+                            long imageDate;
+                            for(int i=0;i<userImagesCount;i++) {
+                                imageID = sc.nextInt();
+                                imageName = sc.next();
+                                imageDate = sc.nextLong();
+                                if (currentCheckIndex < cachedImages.size()) {
+                                    if (imageID == cachedImages.get(currentCheckIndex)) {
+                                        currentCheckIndex++;
+                                        continue;
+                                    }
+                                }
+                                insertImageToDatabase(imageID, imageName, new Date(imageDate));
+                            }
+                        }
                         loginCallback.goToMain();
                         break;
                 }
@@ -220,6 +242,10 @@ public class SessionManager extends Thread {
         }
     }
 
+    private void insertImageToDatabase(int imageID, String imageName, Date imageDate){
+        executor.execute(()->generatorCallback.insertGeneratedImage(imageID,imageName,imageDate));
+    }
+
     public void setSocketConfig(String serverIP, int serverPort){
         this.serverIP=serverIP;
         this.serverPort=serverPort;
@@ -233,13 +259,7 @@ public class SessionManager extends Thread {
         return currentUser.getUserID();
     }
 
-    public ArrayList<UserImage> checkCurrentUserImages() {
-        //TODO get Images from server
-        return null;
-    }
-
     public String getCurrentUserPath(){
         return currentUser.getCurrentUserPath();
     }
-
 }

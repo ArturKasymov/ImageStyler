@@ -79,4 +79,25 @@ public class PostgreSQLDataProvider {
         }
         return -1;
     }
+
+    public String getUserImagesListString(int userID) {
+
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(GET_USER_IMAGES);
+            pstmt.setInt(1,userID);
+            ResultSet rs = pstmt.executeQuery();
+            int counter=0;
+            StringBuilder sb=new StringBuilder();
+            while(rs.next()) {
+                counter++;
+                sb.append(" ").append(rs.getInt(1)).append(" ").append(rs.getString(2)).append(" ")
+                        .append(rs.getDate(3).getTime());
+            }
+            sb.insert(0,counter);
+            return sb.toString();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "0";
+    }
 }
