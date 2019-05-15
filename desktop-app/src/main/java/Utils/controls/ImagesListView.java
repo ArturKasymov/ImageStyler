@@ -50,11 +50,11 @@ public class ImagesListView extends VBox {
         try {
             attachView("/ImagesListView.fxml", this, this);
             // TODO: TEMP
-            userImages.add(new UserImage(10, "10", 1, new Date(), true));
-            userImages.add(new UserImage(15, "15", 1, new Date(), true));
-            userImages.add(new UserImage(16, "16", 1, new Date(), true));
-            userImages.add(new UserImage(17, "17", 1, new Date(), true));
-            userImages.add(new UserImage(18, "18", 1, new Date(), true));
+            /*userImages.add(new UserImage(10, "10", 1, new Date(), true,false));
+            userImages.add(new UserImage(15, "15", 1, new Date(), true,false));
+            userImages.add(new UserImage(16, "16", 1, new Date(), true,false));
+            userImages.add(new UserImage(17, "17", 1, new Date(), true,false));
+            userImages.add(new UserImage(18, "18", 1, new Date(), true,false));*/
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -197,7 +197,15 @@ public class ImagesListView extends VBox {
         sortBy.setFocusTraversable(false);
         imagesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue!=null) {
-                view.setResultImage(newValue);
+
+                //TODO handle isWaiting
+                if(!newValue.getIsDownloaded()){
+                    if(!newValue.isWaiting()){
+                        view.getImageFromServer(newValue.getImageID());
+                        newValue.setWaiting(true);
+                        //TODO set WAITING
+                    }
+                }else view.setResultImage(newValue);
             }
         });
 

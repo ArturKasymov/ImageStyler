@@ -57,7 +57,8 @@ public class SQLiteLocalDataProvider {
         }
     }
 
-    public int insertUserImage(int imageID, String imageName, int userID, Date date, boolean isDownloaded) {
+    public void insertUserImage(int imageID, String imageName, int userID, Date date, boolean isDownloaded) {
+        System.out.println(imageID);
         try {
             PreparedStatement pstmt = connection.prepareStatement(INSERT_IMAGE);
             pstmt.setInt(1, imageID);
@@ -66,16 +67,11 @@ public class SQLiteLocalDataProvider {
             pstmt.setDate(4,new java.sql.Date(date.getTime()));
             pstmt.setBoolean(5,isDownloaded);
             pstmt.executeUpdate();
-            return connection.createStatement().executeQuery(GET_LAST_ROW_ID).getInt(1);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return -1;
     }
 
-    public void insertImages(ArrayList<UserImage> images){
-
-    }
 
     public User getUser(String userName){
         try {
@@ -109,6 +105,8 @@ public class SQLiteLocalDataProvider {
 
     public ArrayList<UserImage> getUserImages(int currentUserId) {
         try {
+            System.out.println(currentUserId);
+
             PreparedStatement pstmt = connection.prepareStatement(GET_USER_IMAGES);
             pstmt.setInt(1,currentUserId);
             ResultSet rs = pstmt.executeQuery();
@@ -119,8 +117,9 @@ public class SQLiteLocalDataProvider {
                         rs.getInt("id_user"),
                         rs.getDate("image_date"),
                         rs.getBoolean("is_downloaded")
-                        ));
+                        ,false));
             }
+            System.out.println(userImages.size());
             return userImages;
         } catch (SQLException  e) {
             e.printStackTrace();

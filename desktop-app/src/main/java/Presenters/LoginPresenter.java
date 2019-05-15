@@ -6,6 +6,7 @@ import Presenters.Callbacks.LoginCallback;
 import Views.Implementations.LoginViewImpl;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class LoginPresenter implements LoginCallback{
@@ -41,5 +42,10 @@ public class LoginPresenter implements LoginCallback{
     @Override
     public ArrayList<Integer> getCachedImagesID(int userID) {
         return interactor.getUserCacheDImagesID(userID);
+    }
+
+    @Override
+    public void insertUserImage(int imageID, String name, Date date) {
+        interactor.insertUserImage(imageID,name,date,false);
     }
 }

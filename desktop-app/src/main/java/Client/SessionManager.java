@@ -13,10 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -88,6 +85,7 @@ public class SessionManager extends Thread {
         } finally {
             try {
                 socket.close();
+                executor.shutdown();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -124,11 +122,14 @@ public class SessionManager extends Thread {
                                 imageDate = sc.nextLong();
                                 if (currentCheckIndex < cachedImages.size()) {
                                     if (imageID == cachedImages.get(currentCheckIndex)) {
+
                                         currentCheckIndex++;
                                         continue;
-                                    }
+                                    }//TODO add deleting of cachedImages.get(currentCheckIndex)
                                 }
-                                insertImageToDatabase(imageID, imageName, new Date(imageDate));
+
+                                System.out.println(imageID+"socket");
+                                loginCallback.insertUserImage(imageID,imageName,new Date(imageDate));
                             }
                         }
                         loginCallback.goToMain();
@@ -158,7 +159,7 @@ public class SessionManager extends Thread {
                         int imageID = sc.nextInt();
                         String imageName = sc.next();
                         long imageDate = sc.nextLong();
-                        generatorCallback.insertGeneratedImage(imageID, imageName, new Date(imageDate));
+                        mainCallback.insertGeneratedImage(imageID, imageName, new Date(imageDate));
                         break;
                 }
                 break;
@@ -176,7 +177,7 @@ public class SessionManager extends Thread {
                             byte[] imageArray = new byte[size];
                             dis.readFully(imageArray,0,size);
                             BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageArray));
-                            executor.execute(()->generatorCallback.saveGeneratedImage(imageID, image));
+                            executor.execute(()->mainCallback.saveGeneratedImage(imageID, image));
                         } catch (Exception e){
                             e.printStackTrace();
                             //TODO handle
@@ -188,39 +189,20 @@ public class SessionManager extends Thread {
     }
 
     public void login(String username, String password) {
-        synchronized (outputStream){
-            try {
-                outputStream.writeUTF(LOGIN+" "+username+" "+password);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        sendDataToServer(LOGIN+" "+username+" "+password);
     }
     public void logout() {
-        synchronized (outputStream){
-            try {
-                outputStream.writeUTF(LOGOUT);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        sendDataToServer(LOGOUT);
         currentUser=null;
     }
     public void register(String username, String password){
-        synchronized (outputStream){
-            try {
-                outputStream.writeUTF(REGISTER + " " + username + " " + password);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        sendDataToServer(REGISTER + " " + username + " " + password);
     }
 
     public void generateImage(ByteArrayOutputStream userImage, int styleID, String imageName, Constants.NEURAL_NET net){
         synchronized (outputStream){
             try {
                 outputStream.writeUTF(INSERT_IMAGE + " " + imageName + " " + styleID);
-
                 byte[] userImageSize = ByteBuffer.allocate(4).putInt(userImage.size()).array();
                 outputStream.write(userImageSize);
                 outputStream.write(userImage.toByteArray());
@@ -229,6 +211,10 @@ public class SessionManager extends Thread {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void getImage(int imageID) {
+        sendDataToServer(GET_IMAGE+" "+imageID);
     }
 
     public void stopConnection(){
@@ -240,10 +226,6 @@ public class SessionManager extends Thread {
                 e.printStackTrace();
             }
         }
-    }
-
-    private void insertImageToDatabase(int imageID, String imageName, Date imageDate){
-        executor.execute(()->generatorCallback.insertGeneratedImage(imageID,imageName,imageDate));
     }
 
     public void setSocketConfig(String serverIP, int serverPort){
@@ -261,5 +243,17 @@ public class SessionManager extends Thread {
 
     public String getCurrentUserPath(){
         return currentUser.getCurrentUserPath();
+    }
+
+
+    private void sendDataToServer(String data){
+        //TODO add hashing
+        synchronized (outputStream){
+            try {
+                outputStream.writeUTF(data);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -120,7 +120,17 @@ public class ClientHandler extends Thread{
                 serverManager.userOffline(currentUserID,this);
                 currentUserID=-1;
                 break;
-
+            case GET_IMAGE:
+                int imageId = sc.nextInt();
+                serverManager.asyncTask(
+                        ()-> {
+                            try {
+                                insertImageData(imageId,ImageIO.read(new File(getCurrentUserPath()+"\\."+imageId+".png")));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                break;
             case INSERT_IMAGE:
                 String imageName = sc.next();
                 long imageDate = new Date().getTime();
