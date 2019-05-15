@@ -5,6 +5,9 @@ import Model.Interactors.LoginInteractor;
 import Presenters.Callbacks.LoginCallback;
 import Views.Implementations.LoginViewImpl;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 
 public class LoginPresenter implements LoginCallback{
     private LoginViewImpl view;
@@ -34,5 +37,15 @@ public class LoginPresenter implements LoginCallback{
     public void goToMain(){
         interactor.checkUserData();
         view.goToMain();
+    }
+
+    @Override
+    public ArrayList<Integer> getCachedImagesID(int userID) {
+        return interactor.getUserCacheDImagesID(userID);
+    }
+
+    @Override
+    public void insertUserImage(int imageID, String name, Date date) {
+        interactor.insertUserImage(imageID,name,date,false);
     }
 }

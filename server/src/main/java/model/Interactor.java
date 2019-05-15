@@ -5,9 +5,10 @@ import model.database.provider.PostgreSQLDataProvider;
 import model.repositories.CryptoRepo;
 import model.repositories.RGBConverterRepo;
 import model.repositories.PythonGeneration.PySqueezeNet;
-import server.ServerManager;
+import model.repositories.StyleRepo;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.Date;
@@ -63,10 +64,24 @@ public class Interactor implements ClientInteractor {
     }
 
     @Override
-    public BufferedImage generateImage(BufferedImage contentImage, int styleID/*TODO handle arg*/, ServerManager serverManager) {
-        BufferedImage styleImage = RGBConverterRepo.toBufferedImageOfType(serverManager.styleImages[styleID], 1);
+    public BufferedImage generateImage(BufferedImage contentImage, int styleID) {
+        BufferedImage styleImage = RGBConverterRepo.toBufferedImageOfType(StyleRepo.getStyle(styleID), 1);
         return PySqueezeNet.generate(contentImage, styleImage);
     }
 
+    @Override
+    public void checkUserDir(String userPath) {
+            File dir = new File(userPath);
+            if (!dir.exists()) dir.mkdirs();
+    }
+
+    @Override
+    public String getUserImagesListString(int userID) {
+        return dataProvider.getUserImagesListString(userID);
+    }
+
+    public void initStyles(){
+        StyleRepo.init();
+    }
 
 }

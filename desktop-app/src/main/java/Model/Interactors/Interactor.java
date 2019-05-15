@@ -76,13 +76,16 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     @Override
     public void checkUserData() {
         checkUserDirectory();
-        //ToDO compareWithServer
-        dataProvider.insertImages(sessionManager.checkCurrentUserImages());
     }
 
     @Override
     public void initLoginCallback(LoginCallback loginCallback) {
         sessionManager.initLoginCallback(loginCallback);
+    }
+
+    @Override
+    public ArrayList<Integer> getUserCacheDImagesID(int userID) {
+        return dataProvider.getUserImagesID(userID);
     }
 
     @Override
@@ -106,9 +109,9 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public UserImage insertUserImage(int imageID, String name, Date date) {
+    public UserImage insertUserImage(int imageID, String name, Date date, boolean isWaiting) {
         dataProvider.insertUserImage(imageID, name, sessionManager.getCurrentUserId(), date,false);
-        return new UserImage(imageID, name, sessionManager.getCurrentUserId(), date,false);
+        return new UserImage(imageID, name, sessionManager.getCurrentUserId(), date,false,isWaiting);
     }
 
     @Override
@@ -126,6 +129,11 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
         {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void getImageFromServer(int imageID) {
+        sessionManager.getImage(imageID);
     }
 
     @Override
@@ -155,6 +163,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
 
     @Override
     public ArrayList<UserImage> getCurrentUserImagesList() {
+        System.out.println("getCurrentUserImagesList()");
         return dataProvider.getUserImages(sessionManager.getCurrentUserId());
     }
 

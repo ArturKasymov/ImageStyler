@@ -134,7 +134,7 @@ public class MainViewImpl extends BaseView implements MainView {
     public void initViewData() {
         presenter.initUserData();
         // TODO: TEMP
-        //imagesListView.initList();
+        imagesListView.initList();
     }
 
     @FXML
@@ -295,6 +295,11 @@ public class MainViewImpl extends BaseView implements MainView {
     @Override
     public ArrayList<UserImage> getUserImagesList() {
         return presenter.getUserImagesList();
+    }
+
+    @Override
+    public void getImageFromServer(int imageID) {
+        presenter.getImageFromServer(imageID);
     }
 
     private void buttonToggle() {

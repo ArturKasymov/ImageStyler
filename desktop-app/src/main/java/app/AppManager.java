@@ -138,6 +138,7 @@ public class AppManager extends Application {
     @Override
     public void stop() throws Exception {
         interactor.stopSessionManager();
+        executor.shutdown();
         super.stop();
     }
 }

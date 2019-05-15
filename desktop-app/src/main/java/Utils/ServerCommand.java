@@ -10,6 +10,7 @@ public class ServerCommand {
     public static final String INSERT_IMAGE="INSERT_IMAGE";
     public static final String DELETE_IMAGE="DELETE_IMAGE=";
     public static final String INSERT_IMAGE_DATA="INSERT_IMAGE_DATA";
+    public static final String GET_IMAGE="GET_IMAGE";
 
     public static final String SUCCESS="SUCCESS";
     public static final String FAIL="FAIL";

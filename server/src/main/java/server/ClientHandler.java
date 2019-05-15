@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Scanner;
 
+import static util.Constants.SERVER_ROOT_DIRECTORY;
 import static util.ServerCommand.*;
 
 public class ClientHandler extends Thread{
@@ -36,6 +37,10 @@ public class ClientHandler extends Thread{
         this.currentUserID=-1;
     }
 
+    private String getCurrentUserPath(){
+        return SERVER_ROOT_DIRECTORY+"\\."+currentUserID;
+    }
+
     @Override
     public void run() {
         String inputData;
@@ -44,17 +49,16 @@ public class ClientHandler extends Thread{
         // TODO delete logs
         System.out.println("new client added");
 
+        //TODO add sending init PublicKey to Client
+
         while (isRunning)
         {
             try {
                 inputData = dis.readUTF();
                 System.out.println(inputData);
-
                 if(inputData.equals(CLOSE_CONNECTION)){
-                    synchronized (dos){
-                        dos.writeUTF(CLOSE_CONNECTION);
-                        isRunning=false;
-                    }
+                    sendDataToClient(CLOSE_CONNECTION);
+                    isRunning=false;
                 }
                 else parseClientInput(inputData);
             } catch (IOException e) {
@@ -84,27 +88,16 @@ public class ClientHandler extends Thread{
             case LOGIN:
                 username=sc.next();
                 password=sc.next();
-
                 User storedUser=interactor.getUser(username);
                 if(storedUser==null||!CryptoRepo.checkPassword(password,storedUser.getPassword_hash())){
-                    synchronized (dos){
-                        try {
-                            dos.writeUTF(LOGIN+" "+FAIL);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    sendDataToClient(LOGIN+" "+FAIL);
                 }
                 else{
                     currentUserID=storedUser.getId_user();
-                    //TODO check user dir
-                    synchronized (dos){
-                        try {
-                            dos.writeUTF(LOGIN+" "+SUCCESS+" "+currentUserID+" "+storedUser.getUser_name());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    interactor.checkUserDir(getCurrentUserPath());
+
+                    sendDataToClient(LOGIN+" "+SUCCESS+" "+currentUserID+" "+
+                            storedUser.getUser_name()+" "+interactor.getUserImagesListString(currentUserID));
                     serverManager.userOnline(currentUserID, this);
                 }
                 break;
@@ -113,32 +106,31 @@ public class ClientHandler extends Thread{
                 password=sc.next();
                 try {
                     currentUserID=interactor.insertUser(username,password);
-                    synchronized (dos){
-                        try {
-                            dos.writeUTF(REGISTER+" "+SUCCESS+" "+currentUserID+" "+username);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    sendDataToClient(REGISTER+" "+SUCCESS+" "+currentUserID+" "+username);
+                    interactor.checkUserDir(getCurrentUserPath());
                     serverManager.userOnline(currentUserID,this);
                     break;
                 } catch (SQLException e) {
                     e.printStackTrace();
                     currentUserID=-1;
                 }
-                synchronized (dos){
-                    try {
-                        dos.writeUTF(REGISTER+" "+FAIL);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+                sendDataToClient(REGISTER+" "+FAIL);
                 break;
             case LOGOUT:
                 serverManager.userOffline(currentUserID,this);
                 currentUserID=-1;
                 break;
-
+            case GET_IMAGE:
+                int imageId = sc.nextInt();
+                serverManager.asyncTask(
+                        ()-> {
+                            try {
+                                insertImageData(imageId,ImageIO.read(new File(getCurrentUserPath()+"\\."+imageId+".png")));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                break;
             case INSERT_IMAGE:
                 String imageName = sc.next();
                 long imageDate = new Date().getTime();
@@ -148,17 +140,25 @@ public class ClientHandler extends Thread{
                     byte[] imageSizeArray = new byte[4];
                     dis.read(imageSizeArray);
                     int size = ByteBuffer.wrap(imageSizeArray).asIntBuffer().get();
-
                     byte[] imageArray = new byte[size];
                     dis.readFully(imageArray, 0, size);
-
                     BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageArray));
 
                     int imageID = interactor.insertImage(imageName, currentUserID, imageDate);
 
                     serverManager.asyncTask(()->{
                         BufferedImage img = RGBConverterRepo.toBufferedImageOfType(image, 1);
-                        BufferedImage generatedImage = interactor.generateImage(img, styleID /*TODO handle arg*/, serverManager);
+                        BufferedImage generatedImage = interactor.generateImage(img, styleID);
+
+                        try {
+                            File imageFile = new File(getCurrentUserPath()+"\\."+imageID+".png");
+                            OutputStream out;
+                            out = new FileOutputStream(imageFile);
+                            ImageIO.write(generatedImage, "png", out);
+                        } catch (IOException e) { e.printStackTrace(); }
+
+                        //TODO update ImageStatus
+
                         for(ClientHandler temp : serverManager.getUserSessions(currentUserID)){
                             temp.insertImageData(imageID, generatedImage);
                         }
@@ -173,24 +173,16 @@ public class ClientHandler extends Thread{
                 }
                 break;
         }
-
     }
 
     private void insertUserImage(int imageID, String imageName,long imageDate){
-        synchronized (dos) {
-            try {
-                dos.writeUTF(INSERT_IMAGE + " " + SUCCESS + " " + imageID + " " + imageName + " " + imageDate);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        sendDataToClient(INSERT_IMAGE+" "+SUCCESS+" "+imageID+" "+imageName+" "+imageDate);
     }
 
     private void insertImageData(int imageID, BufferedImage bufferedImage){
-
         synchronized (dos) {
             try {
-                dos.writeUTF(INSERT_IMAGE_DATA + " " + SUCCESS + " " + imageID);
+                dos.writeUTF(INSERT_IMAGE_DATA+" "+SUCCESS+" "+imageID);
 
                 ByteArrayOutputStream generatedImage = new ByteArrayOutputStream();
                 ImageIO.write(bufferedImage, "png", generatedImage);
@@ -199,6 +191,17 @@ public class ClientHandler extends Thread{
                 dos.write(userImageSize);
                 dos.write(generatedImage.toByteArray());
                 dos.flush();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void sendDataToClient(String data){
+        synchronized (dos) {
+            try {
+                dos.writeUTF(data);
             } catch (Exception e) {
                 e.printStackTrace();
             }

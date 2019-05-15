@@ -14,4 +14,6 @@ public interface MainView {
     Constants.NEURAL_NET getDefaultNeuralNet();
 
     ArrayList<UserImage> getUserImagesList();
+
+    void getImageFromServer(int imageID);
 }
