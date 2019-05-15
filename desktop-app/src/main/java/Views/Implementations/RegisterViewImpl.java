@@ -52,6 +52,9 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
         //presenter.unsubscribe();
         changeViewTo(new MainViewImpl());
         registerButton.setDisable(false);
+        loginField.clear();
+        passwordField.clear();
+        onceMorePasswordField.clear();
     }
 
     private void buttonToggle() {
@@ -63,9 +66,6 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
         if (event==null || (event.getCode().getName().equals("Enter") && filledIn() && passwordsMatch())) {
             registerButton.setDisable(false);
             presenter.register(loginField.getCharacters(), passwordField.getCharacters());
-            loginField.clear();
-            passwordField.clear();
-            onceMorePasswordField.clear();
         }
     }
 
@@ -96,6 +96,12 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
     public void showAlert() {
         //TODO show Alert
         registerButton.setDisable(false);
+        loginField.styleProperty().setValue("-fx-border-color: red;");
+        passwordField.styleProperty().setValue("-fx-border-color: red;");
+        onceMorePasswordField.styleProperty().setValue("-fx-border-color: red;");
+        loginField.setOnMouseClicked(event -> loginField.styleProperty().setValue(""));
+        passwordField.setOnMouseClicked(event -> passwordField.styleProperty().setValue(""));
+        onceMorePasswordField.setOnMouseClicked(event -> onceMorePasswordField.styleProperty().setValue(""));
         System.out.println("Alert show");
         //throw new RuntimeException();
     }

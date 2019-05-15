@@ -16,4 +16,5 @@ public interface MainView {
     ArrayList<UserImage> getUserImagesList();
 
     void getImageFromServer(int imageID);
+    void rollBackToMain();
 }

@@ -1,7 +1,5 @@
 package Model.Database.Entity;
 
-import app.AppManager;
-
 import java.util.Date;
 
 import static Utils.Constants.APP_ROOT_DIRECTORY;
@@ -58,6 +56,8 @@ public class UserImage {
 
     public Date getImageDate() { return imageDate; }
 
-    public void setIsDownloaded(boolean isDownloaded) { this.isDownloaded = isDownloaded; }
+    public void setIsDownloaded(boolean isDownloaded) {
+        this.isDownloaded = isDownloaded;
+    }
 
 }

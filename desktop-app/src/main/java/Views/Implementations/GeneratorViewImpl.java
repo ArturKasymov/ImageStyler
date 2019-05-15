@@ -74,8 +74,18 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
 
     @FXML
     public void onGenerate(ActionEvent e) {
-        getAppManager().asyncTask(()->presenter.generate(contentImage.getImage(), styleImageIndex,
-                photoName.getCharacters().toString(),toggler.getDefaultNeuralNet()));
+        String name = photoName.getCharacters().toString();
+        int index = styleImageIndex;
+        Image contImg = contentImage.getImage();
+        getAppManager().asyncTask(()->presenter.generate(contImg, index,
+                name, toggler.getDefaultNeuralNet()));
+
+        photoName.clear();
+        contentImage.setImage(styleImages[5]);
+        styleImage.setImage(styleImages[5]);
+        generatedImage.setImage(styleImages[5]);
+        styleImageIndex = 0;
+        toggler.rollBackToMain();
     }
 
     @FXML

@@ -9,7 +9,7 @@
 <AnchorPane prefHeight="30.0" prefWidth="150.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
     <children>
       <Label fx:id="photoName" prefWidth="85.0" styleClass="photoNameLabel" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
-      <Label fx:id="inProgress" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="40.0" textAlignment="CENTER" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="5.0">
+      <Label fx:id="inProgress" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="40.0" textAlignment="CENTER" AnchorPane.leftAnchor="75.0" AnchorPane.topAnchor="2.0">
          <font>
             <Font size="14.0" />
          </font>

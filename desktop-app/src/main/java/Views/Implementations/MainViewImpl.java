@@ -133,7 +133,6 @@ public class MainViewImpl extends BaseView implements MainView {
     @Override
     public void initViewData() {
         presenter.initUserData();
-        // TODO: TEMP
         imagesListView.initList();
     }
 
@@ -240,6 +239,16 @@ public class MainViewImpl extends BaseView implements MainView {
     }
 
     @Override
+    public void rollBackToMain() {
+        try {
+            onGoToGenerate();
+            imagesListView.requestFocus();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void goToLogin() {
         //presenter.unsubscribe();
         changeViewTo(new LoginViewImpl());
@@ -253,7 +262,7 @@ public class MainViewImpl extends BaseView implements MainView {
             deleteImageButton.setDisable(true);
         } else {
             String path = newUserImage.getImageUrl();
-            System.out.println(path);
+            //System.out.println(path);
             this.currentImage = newUserImage;
             changeImage(resultImage, path);
             photoName.setText(newUserImage.getImageName());
