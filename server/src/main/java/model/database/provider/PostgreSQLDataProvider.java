@@ -80,6 +80,16 @@ public class PostgreSQLDataProvider {
         return -1;
     }
 
+    public void deleteUserImage(int imageID) {
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(DELETE_USER_IMAGE);
+            pstmt.setInt(1, imageID);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public String getUserImagesListString(int userID) {
 
         try {

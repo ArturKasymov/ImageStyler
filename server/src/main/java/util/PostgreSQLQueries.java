@@ -23,5 +23,7 @@ public class PostgreSQLQueries {
     public static final String INSERT_IMAGE="INSERT INTO user_images(image_name,id_user,image_date,image_status) " +
             "VALUES(?,?,?,?) RETURNING id_image;";
 
+    public static final String DELETE_USER_IMAGE = "DELETE FROM user_images WHERE id_image=?;";
+
     public static final String GET_USER_IMAGES="SELECT id_image,image_name,image_date FROM user_images WHERE id_user=? ORDER BY 1;";
 }

@@ -33,14 +33,14 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     private List<String> usersName;
 
     private Interactor(){
-        this.dataProvider=new SQLiteLocalDataProvider(APP_ROOT_DIRECTORY+"\\"+LOCAL_DATABASE_NAME);
+        this.dataProvider = new SQLiteLocalDataProvider(APP_ROOT_DIRECTORY+"\\"+LOCAL_DATABASE_NAME);
         dataProvider.checkTables();
         usersName = dataProvider.getLocalUsersNameList();
-        sessionManager=new SessionManager();
+        sessionManager = new SessionManager();
     }
 
     public static Interactor getInstance(){
-        if(instance==null) instance=new Interactor();
+        if(instance == null) instance = new Interactor();
         return instance;
     }
 
@@ -132,13 +132,24 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
+    public void deleteLocalImage(int imageID) {
+        dataProvider.deleteUserImage(imageID);
+        File file = new File(sessionManager.getCurrentUserPath()+"\\."+imageID+".png");
+        file.delete();
+    }
+
+    @Override
+    public void deleteUserImage(int imageID) {
+        sessionManager.deleteUserImage(imageID);
+    }
+
+    @Override
     public void getImageFromServer(int imageID) {
         sessionManager.getImage(imageID);
     }
 
     @Override
     public void generate(Image contentImage, int styleImageID, String imageName, Constants.NEURAL_NET net) {
-
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         BufferedImage bufferedImage = SwingFXUtils.fromFXImage(contentImage, null);
         try {
@@ -165,13 +176,6 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     @Override
     public ArrayList<UserImage> getCurrentUserImagesList() {
         return dataProvider.getUserImages(sessionManager.getCurrentUserId());
-    }
-
-    @Override
-    public void deleteImage(UserImage deletedImage) {
-        File file = new File(deletedImage.getImageUrl());
-        file.delete();
-        dataProvider.deleteUserImage(deletedImage);
     }
 
     public void stopSessionManager() {

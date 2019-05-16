@@ -150,7 +150,7 @@ public class ClientHandler extends Thread{
                         BufferedImage generatedImage = interactor.generateImage(img, styleID);
 
                         try {
-                            File imageFile = new File(getCurrentUserPath()+"//."+imageID+".png");
+                            File imageFile = new File(getCurrentUserPath()+"/."+imageID+".png");
                             OutputStream out;
                             out = new FileOutputStream(imageFile);
                             ImageIO.write(generatedImage, "png", out);
@@ -171,11 +171,22 @@ public class ClientHandler extends Thread{
                     e.printStackTrace();
                 }
                 break;
+            case DELETE_IMAGE:
+                int imageID = sc.nextInt();
+                interactor.deleteUserImage(imageID, getCurrentUserPath());
+                for (ClientHandler temp : serverManager.getUserSessions(currentUserID)) {
+                    temp.deleteLocalImage(imageID);
+                }
+                break;
         }
     }
 
     private void insertUserImage(int imageID, String imageName,long imageDate){
         sendDataToClient(INSERT_IMAGE+" "+SUCCESS+" "+imageID+" "+imageName+" "+imageDate);
+    }
+
+    private void deleteLocalImage(int imageID) {
+        sendDataToClient(DELETE_IMAGE + " " + imageID);
     }
 
     private void insertImageData(int imageID, BufferedImage bufferedImage){

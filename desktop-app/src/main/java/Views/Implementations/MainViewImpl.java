@@ -114,7 +114,6 @@ public class MainViewImpl extends BaseView implements MainView {
     @FXML
     public void initialize() {
         presenter.initCallback();
-        deleteImageButton.setDisable(true);
 
         changeImage(resultImage, "/TestImages/.10.png");
         imagesListView.setView(this);
@@ -309,9 +308,9 @@ public class MainViewImpl extends BaseView implements MainView {
 
     @FXML
     public void onDeleteImage() {
-        presenter.deleteImage(this.currentImage);
+        presenter.deleteImage(this.currentImage.getImageID());
         boolean empty = imagesListView.notifyList(this.currentImage, false);
-        //if (empty) deleteImageButton.setDisable(true);
+        if (empty) deleteImageButton.setDisable(true);
     }
 
     @Override

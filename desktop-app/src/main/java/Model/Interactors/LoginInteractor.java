@@ -12,4 +12,5 @@ public interface LoginInteractor {
     void initLoginCallback(LoginCallback loginCallback);
     ArrayList<Integer> getUserCacheDImagesID(int userID);
     UserImage insertUserImage(int imageID, String name, Date date, boolean isWaiting);
+    void deleteUserImage(int imageID);
 }

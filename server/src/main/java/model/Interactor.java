@@ -53,6 +53,13 @@ public class Interactor implements ClientInteractor {
     }
 
     @Override
+    public void deleteUserImage(int imageID, String userPath) {
+        dataProvider.deleteUserImage(imageID);
+        File file = new File(userPath + "/." + imageID + ".png");
+        file.delete();
+    }
+
+    @Override
     public int insertImage(String imageName, int userID, long imageDate) {
         // TODO: CHANGE IMAGE STATUS AFTER
         return dataProvider.insertImage(imageName, userID, new Date(imageDate),false);

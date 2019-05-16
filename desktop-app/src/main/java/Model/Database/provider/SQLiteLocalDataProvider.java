@@ -144,10 +144,10 @@ public class SQLiteLocalDataProvider {
         return null;
     }
 
-    public void deleteUserImage(UserImage deletedImage) {
+    public void deleteUserImage(int imageID) {
         try {
             PreparedStatement pstmt = connection.prepareStatement(DELETE_USER_IMAGE);
-            pstmt.setInt(1, deletedImage.getImageID());
+            pstmt.setInt(1, imageID);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

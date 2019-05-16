@@ -43,8 +43,8 @@ public class MainPresenter implements MainCallback {
         return interactor.getCurrentUserImagesList();
     }
 
-    public void deleteImage(UserImage deletedImage) {
-        interactor.deleteImage(deletedImage);
+    public void deleteImage(int imageID) {
+        interactor.deleteUserImage(imageID);
     }
 
     public void initCallback(){

@@ -14,4 +14,5 @@ public interface ClientInteractor {
     BufferedImage generateImage(BufferedImage contentImage, int styleID);
     void checkUserDir(String userPath);
     String getUserImagesListString(int userID);
+    void deleteUserImage(int imageID, String userPath);
 }

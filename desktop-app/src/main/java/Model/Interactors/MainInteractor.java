@@ -13,10 +13,11 @@ public interface MainInteractor {
     void changeUserPassword(CharSequence newPassword);
     void logout();
     ArrayList<UserImage> getCurrentUserImagesList();
-    void deleteImage(UserImage deletedImage);
     void initMainCallback(MainCallback callback);
     UserImage insertUserImage(int imageID, String name, Date date, boolean isWaiting);
     void saveUserImage(int imageID, BufferedImage image);
+    void deleteUserImage(int imageID);
+    void deleteLocalImage(int imageID);
 
     void getImageFromServer(int imageID);
 }

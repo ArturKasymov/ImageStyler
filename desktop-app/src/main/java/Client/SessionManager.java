@@ -189,6 +189,16 @@ public class SessionManager extends Thread {
                         }
                         break;
                 }
+            case DELETE_IMAGE:
+                status = sc.next();
+                switch (status) {
+                    case FAIL:
+                        break;
+                    case SUCCESS:
+                        int imageID = sc.nextInt();
+                        executor.execute(()->mainCallback.deleteImage(imageID));
+                        break;
+                }
                 break;
         }
     }
@@ -216,6 +226,10 @@ public class SessionManager extends Thread {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void deleteUserImage(int imageID) {
+        sendDataToServer(DELETE_IMAGE + " " + imageID);
     }
 
     public void getImage(int imageID) {

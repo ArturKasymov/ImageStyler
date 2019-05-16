@@ -7,4 +7,5 @@ public interface MainCallback {
     void insertGeneratedImage(int imageID, String photoName, Date date);
     void saveGeneratedImage(int imageID, BufferedImage generatedImage);
     void notifyDownload(int imageID);
+    void deleteImage(int imageID);
 }
