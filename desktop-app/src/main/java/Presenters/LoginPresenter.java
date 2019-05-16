@@ -4,6 +4,7 @@ import Model.Interactors.Interactor;
 import Model.Interactors.LoginInteractor;
 import Presenters.Callbacks.LoginCallback;
 import Views.Implementations.LoginViewImpl;
+import javafx.application.Platform;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,7 +33,7 @@ public class LoginPresenter implements LoginCallback{
     }
 
     public void showWrongDataAlert(){
-        view.showWrongDataAlert();
+        Platform.runLater(()->view.showWrongDataAlert());
     }
     public void goToMain(){
         interactor.checkUserData();
