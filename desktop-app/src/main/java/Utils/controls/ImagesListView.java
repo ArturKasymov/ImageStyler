@@ -204,7 +204,7 @@ public class ImagesListView extends VBox {
             if (newValue!=null) {
                 //TODO handle isWaiting
                 if(!newValue.getIsDownloaded()){
-                    view.setInProgress(newValue.getImageName());
+                    view.setInProgress(newValue);
                     if(!newValue.isWaiting()){
                         view.getImageFromServer(newValue.getImageID());
                         newValue.setWaiting(true);

@@ -1,5 +1,6 @@
 package Views.Implementations;
 
+import Model.Database.Entity.User;
 import Model.Database.Entity.UserImage;
 import Presenters.MainPresenter;
 import Utils.Constants;
@@ -8,7 +9,9 @@ import Views.Interfaces.GeneratorView;
 import Views.Interfaces.MainView;
 import Views.core.BaseView;
 import Views.core.ViewByID;
+import app.AppManager;
 import javafx.animation.Transition;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +25,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import org.bytedeco.javacv.FrameFilter;
 
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -273,9 +278,15 @@ public class MainViewImpl extends BaseView implements MainView {
     }
 
     @Override
-    public void setInProgress(String name) {
-        resultImage.setImage(new Image(new File(IN_PROGRESS_IMAGE).toURI().toString()));
-        photoName.setText(name);
+    public void setInProgress(UserImage usrImg) {
+        try {
+            if (currentImage.getImageID()==usrImg.getImageID())
+            resultImage.setImage(SwingFXUtils.toFXImage(ImageIO.read(AppManager.class.getResource(IN_PROGRESS_IMAGE)), null));
+            photoName.setText(usrImg.getImageName());
+        } catch (Exception e) {
+            e.printStackTrace();
+            // TODO HANDLE
+        }
     }
 
     public void notifyDownload(int imageID) {
