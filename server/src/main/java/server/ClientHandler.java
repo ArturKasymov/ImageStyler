@@ -186,7 +186,7 @@ public class ClientHandler extends Thread{
     }
 
     private void deleteLocalImage(int imageID) {
-        sendDataToClient(DELETE_IMAGE + " " + imageID);
+        sendDataToClient(DELETE_IMAGE + " " + SUCCESS + imageID);
     }
 
     private void insertImageData(int imageID, BufferedImage bufferedImage){
