@@ -237,6 +237,7 @@ public class MainViewImpl extends BaseView implements MainView {
             contentBox.getChildren().setAll(imagesListView, rightPane);
             goToGenerateButton.textProperty().setValue("+");
             fullButton.setDisable(false);
+            imagesListView.requestFocus();
         }
     }
 

@@ -31,8 +31,11 @@ public class StyleRepo {
         return null;
     }
     public static BufferedImage getStyle(int styleID){
-        return styleImages[styleID];
-        //TODO handle array outOfBoundException
+        try {
+            return styleImages[styleID];
+        } catch (ArrayIndexOutOfBoundsException ae) {
+            return styleImages[styleID%NUM_STYLE_IMAGES];
+        }
     }
 
 }

@@ -51,12 +51,6 @@ public class ImagesListView extends VBox {
     public ImagesListView() {
         try {
             attachView("/ImagesListView.fxml", this, this);
-            // TODO: TEMP
-            /*userImages.add(new UserImage(10, "10", 1, new Date(), true,false));
-            userImages.add(new UserImage(15, "15", 1, new Date(), true,false));
-            userImages.add(new UserImage(16, "16", 1, new Date(), true,false));
-            userImages.add(new UserImage(17, "17", 1, new Date(), true,false));
-            userImages.add(new UserImage(18, "18", 1, new Date(), true,false));*/
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -205,7 +199,6 @@ public class ImagesListView extends VBox {
         imagesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue!=null) {
                 //TODO handle isWaiting
-                System.out.println(newValue.getImageName() + " " + newValue.getIsDownloaded());
                 if(!newValue.getIsDownloaded()){
                     view.setInProgress(newValue.getImageName());
                     if(!newValue.isWaiting()){
