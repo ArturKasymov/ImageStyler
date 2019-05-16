@@ -125,7 +125,10 @@ public class ImagesListView extends VBox {
 
     public void notifyDownload(int imageID) {
         Optional<UserImage> img = imagesListView.getItems().stream().filter(x -> x.getImageID()==imageID).findFirst();
-        img.ifPresent(image -> image.setIsDownloaded(true));
+        img.ifPresent(image -> {
+            image.setIsDownloaded(true);
+            view.setResultImage(image);
+        });
     }
 
     private void updateImagesList(ObservableList<UserImage> userImages) {

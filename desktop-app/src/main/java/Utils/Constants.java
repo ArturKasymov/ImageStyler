@@ -12,7 +12,7 @@ public class Constants {
     public static final int DEFAULT_SERVER_PORT=7777;
     public static final String DEFAULT_SERVER_IP = "35.197.39.104";
 
-    public static final String IN_PROGRESS_IMAGE = APP_ROOT_DIRECTORY + "/admin/in_progress.jpg";
+    public static final String IN_PROGRESS_IMAGE = "/TestImages/in_progress.jpg";
 
     public enum SORT_BY {
         NAME_ASC,
