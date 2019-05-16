@@ -95,7 +95,6 @@ public class ClientHandler extends Thread{
                 else{
                     currentUserID=storedUser.getId_user();
                     interactor.checkUserDir(getCurrentUserPath());
-
                     sendDataToClient(LOGIN+" "+SUCCESS+" "+currentUserID+" "+
                             storedUser.getUser_name()+" "+interactor.getUserImagesListString(currentUserID));
                     serverManager.userOnline(currentUserID, this);
@@ -125,7 +124,7 @@ public class ClientHandler extends Thread{
                 serverManager.asyncTask(
                         ()-> {
                             try {
-                                insertImageData(imageId,ImageIO.read(new File(getCurrentUserPath()+"\\."+imageId+".png")));
+                                insertImageData(imageId, ImageIO.read(new File(getCurrentUserPath()+"\\."+imageId+".png")));
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

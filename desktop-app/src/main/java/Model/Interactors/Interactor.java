@@ -116,11 +116,8 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
 
     @Override
     public void saveUserImage(int imageID, BufferedImage image) {
-        Optional<UserImage> img = getCurrentUserImagesList().stream().filter(x->x.getImageID()==imageID).findFirst();
-        img.ifPresent(userImage -> userImage.setIsDownloaded(true));
-        System.out.println(img.get().getIsDownloaded());
         File imageFile = new File(sessionManager.getCurrentUserPath()+"\\."+imageID+".png");
-        OutputStream out = null;
+        OutputStream out;
         try {
             out = new FileOutputStream(imageFile);
             ImageIO.write(image, "png", out);
@@ -128,6 +125,9 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
         catch (IOException e)
         {
             e.printStackTrace();
+        } finally {
+            sessionManager.getMainCallback().notifyDownload(imageID);
+            dataProvider.updateUserImageIsDownloaded(imageID);
         }
     }
 
@@ -138,6 +138,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
 
     @Override
     public void generate(Image contentImage, int styleImageID, String imageName, Constants.NEURAL_NET net) {
+
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         BufferedImage bufferedImage = SwingFXUtils.fromFXImage(contentImage, null);
         try {
@@ -163,7 +164,6 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
 
     @Override
     public ArrayList<UserImage> getCurrentUserImagesList() {
-        System.out.println("getCurrentUserImagesList()");
         return dataProvider.getUserImages(sessionManager.getCurrentUserId());
     }
 

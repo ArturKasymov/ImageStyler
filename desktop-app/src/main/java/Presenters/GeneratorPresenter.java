@@ -22,7 +22,7 @@ public class GeneratorPresenter implements GeneratorCallback {
     }
 
     public void generate(Image contentImage, int styleImageID, String imageName, Constants.NEURAL_NET net) {
-            interactor.generate(contentImage, styleImageID, imageName, net);
+        interactor.generate(contentImage, styleImageID, imageName, net);
     }
 
     public void initCallback(){

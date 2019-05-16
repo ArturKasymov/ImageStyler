@@ -30,4 +30,6 @@ public class SQLiteQueries {
     public final static String DELETE_USER_IMAGE = "DELETE FROM user_images WHERE id_image=?";
 
     public final static String GET_CACHED_IMAGES_ID="SELECT id_image FROM user_images WHERE id_user=? ORDER BY id_image";
+
+    public final static String UPDATE_USER_IMAGE_IS_DOWNLOADED = "UPDATE user_images SET is_downloaded=? WHERE id_image=?;";
 }

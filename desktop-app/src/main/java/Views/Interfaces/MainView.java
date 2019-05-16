@@ -9,6 +9,7 @@ public interface MainView {
     void goToLogin();
     void setUsernameLabel(String s);
     void setResultImage(UserImage newUserImage);
+    void setInProgress(String name);
     void notifyList(UserImage savedUserImage);
 
     Constants.NEURAL_NET getDefaultNeuralNet();
@@ -16,4 +17,5 @@ public interface MainView {
     ArrayList<UserImage> getUserImagesList();
 
     void getImageFromServer(int imageID);
+    void rollBackToMain();
 }

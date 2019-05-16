@@ -153,4 +153,15 @@ public class SQLiteLocalDataProvider {
             e.printStackTrace();
         }
     }
+
+    public void updateUserImageIsDownloaded(int imageID) {
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(UPDATE_USER_IMAGE_IS_DOWNLOADED);
+            pstmt.setBoolean(1, true);
+            pstmt.setInt(2, imageID);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

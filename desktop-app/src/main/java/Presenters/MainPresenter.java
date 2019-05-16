@@ -10,6 +10,7 @@ import javafx.application.Platform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Optional;
 
 public class MainPresenter implements MainCallback {
     private MainViewImpl view;
@@ -58,6 +59,11 @@ public class MainPresenter implements MainCallback {
     @Override
     public void saveGeneratedImage(int imageID, BufferedImage generatedImage) {
         interactor.saveUserImage(imageID,generatedImage);
+    }
+
+    @Override
+    public void notifyDownload(int imageID) {
+        view.notifyDownload(imageID);
     }
 
     public void getImageFromServer(int imageID) {

@@ -43,9 +43,6 @@ public class ImageListCell extends ListCell<UserImage> {
         if (elem != null) {
             userImage.setImageName(elem.getImageName());
             photoName.setText(elem.getImageName());
-            //System.out.println(elem.getImageName()+" "+elem.getIsDownloaded());
-            if (elem.getIsDownloaded()&&inProgress.getText().equals("Wait...")) inProgress.setText("");
-            else if (!elem.getIsDownloaded()&&inProgress.getText().equals("")) inProgress.setText("Wait...");
             String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(elem.getImageDate());
             date.setText(formattedDate);
         } else {

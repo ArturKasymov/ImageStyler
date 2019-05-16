@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import static Utils.Constants.IN_PROGRESS_IMAGE;
+
 public class MainViewImpl extends BaseView implements MainView {
     private MainPresenter presenter;
     public MainViewImpl() { this.presenter = new MainPresenter(this); }
@@ -133,7 +135,6 @@ public class MainViewImpl extends BaseView implements MainView {
     @Override
     public void initViewData() {
         presenter.initUserData();
-        // TODO: TEMP
         imagesListView.initList();
     }
 
@@ -240,6 +241,16 @@ public class MainViewImpl extends BaseView implements MainView {
     }
 
     @Override
+    public void rollBackToMain() {
+        try {
+            onGoToGenerate();
+            imagesListView.requestFocus();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void goToLogin() {
         //presenter.unsubscribe();
         changeViewTo(new LoginViewImpl());
@@ -253,11 +264,21 @@ public class MainViewImpl extends BaseView implements MainView {
             deleteImageButton.setDisable(true);
         } else {
             String path = newUserImage.getImageUrl();
-            System.out.println(path);
+            //System.out.println(path);
             this.currentImage = newUserImage;
             changeImage(resultImage, path);
             photoName.setText(newUserImage.getImageName());
         }
+    }
+
+    @Override
+    public void setInProgress(String name) {
+        resultImage.setImage(new Image(new File(IN_PROGRESS_IMAGE).toURI().toString()));
+        photoName.setText(name);
+    }
+
+    public void notifyDownload(int imageID) {
+        imagesListView.notifyDownload(imageID);
     }
 
     private void changeImage(ImageView imgView, String path) {
