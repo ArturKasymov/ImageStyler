@@ -38,7 +38,7 @@ public class ClientHandler extends Thread{
     }
 
     private String getCurrentUserPath(){
-        return SERVER_ROOT_DIRECTORY+"\\."+currentUserID;
+        return SERVER_ROOT_DIRECTORY+"/."+currentUserID;
     }
 
     @Override
@@ -124,7 +124,7 @@ public class ClientHandler extends Thread{
                 serverManager.asyncTask(
                         ()-> {
                             try {
-                                insertImageData(imageId, ImageIO.read(new File(getCurrentUserPath()+"\\."+imageId+".png")));
+                                insertImageData(imageId, ImageIO.read(new File(getCurrentUserPath()+"/."+imageId+".png")));
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -150,7 +150,7 @@ public class ClientHandler extends Thread{
                         BufferedImage generatedImage = interactor.generateImage(img, styleID);
 
                         try {
-                            File imageFile = new File(getCurrentUserPath()+"\\."+imageID+".png");
+                            File imageFile = new File(getCurrentUserPath()+"//."+imageID+".png");
                             OutputStream out;
                             out = new FileOutputStream(imageFile);
                             ImageIO.write(generatedImage, "png", out);
