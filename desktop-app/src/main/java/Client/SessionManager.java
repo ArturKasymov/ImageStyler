@@ -130,7 +130,7 @@ public class SessionManager extends Thread {
 
                                         currentCheckIndex++;
                                         continue;
-                                    }//TODO add deleting of cachedImages.get(currentCheckIndex)
+                                    } else loginCallback.deleteImage(cachedImages.get(currentCheckIndex++));
                                 }
 
                                 System.out.println(imageID+"socket");
@@ -196,7 +196,7 @@ public class SessionManager extends Thread {
                         break;
                     case SUCCESS:
                         int imageID = sc.nextInt();
-                        executor.execute(()->mainCallback.deleteImage(imageID));
+                        executor.execute(()->mainCallback.deleteLocalImage(imageID));
                         break;
                 }
                 break;

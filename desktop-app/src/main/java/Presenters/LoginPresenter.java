@@ -49,4 +49,9 @@ public class LoginPresenter implements LoginCallback{
     public void insertUserImage(int imageID, String name, Date date) {
         interactor.insertUserImage(imageID,name,date,false);
     }
+
+    @Override
+    public void deleteImage(int imageID) {
+        interactor.deleteLocalImage(imageID);
+    }
 }
