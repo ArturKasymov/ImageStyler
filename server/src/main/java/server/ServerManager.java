@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -20,7 +21,7 @@ public class ServerManager {
     private Interactor interactor;
     private final Map<Integer, List<ClientHandler>> activeUsers;
 
-    private ScheduledExecutorService executor;
+    private ExecutorService executor;
 
     public ServerManager(String dbname, String username,String password,String IP, int port){
         interactor = Interactor.createInstance(dbname,username,password,IP,port);
@@ -51,7 +52,8 @@ public class ServerManager {
         checkServerRootDir();
         interactor.initStyles();
         interactor.checkDataBase();
-        executor = Executors.newScheduledThreadPool(5);
+        //TODO: CHECK EFFICIENCY
+        executor = Executors.newFixedThreadPool(5);
     }
 
     private void checkServerRootDir(){
