@@ -132,8 +132,6 @@ public class SessionManager extends Thread {
                                         continue;
                                     } else loginCallback.deleteImage(cachedImages.get(currentCheckIndex++));
                                 }
-
-                                System.out.println(imageID+"socket");
                                 loginCallback.insertUserImage(imageID,imageName,new Date(imageDate));
                             }
                         }
@@ -189,6 +187,7 @@ public class SessionManager extends Thread {
                         }
                         break;
                 }
+                break;
             case DELETE_IMAGE:
                 status = sc.next();
                 switch (status) {

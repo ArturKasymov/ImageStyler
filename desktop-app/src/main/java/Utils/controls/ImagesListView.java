@@ -112,10 +112,13 @@ public class ImagesListView extends VBox {
             updateImagesList(userImages);
             return false;
         } else {
+            int index;
+            for (index = 0; index < userImages.size(); index++)
+                if (userImages.get(index).getImageID()==userImage.getImageID()) break;
             userImages.remove(userImage);
             updateImagesList(userImages);
             if (userImages.size()>0) {
-                view.setResultImage(userImages.get(0));
+                view.setResultImage(userImages.get(--index>-1?index:0));
                 return false;
             } else {
                 view.setResultImage(null);

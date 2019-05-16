@@ -77,9 +77,13 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
         String name = photoName.getCharacters().toString();
         int index = styleImageIndex;
         Image contImg = contentImage.getImage();
-        getAppManager().asyncTask(()->presenter.generate(contImg, index,
-                name, toggler.getDefaultNeuralNet()));
-
+        if (photoName.getCharacters().length()>0) {
+            getAppManager().asyncTask(()->presenter.generate(contImg, index,
+                    name, toggler.getDefaultNeuralNet()));
+        } else {
+            showNoPhotoNameAlert();
+            return;
+        }
         photoName.clear();
         contentImage.setImage(styleImages[5]);
         styleImage.setImage(styleImages[5]);

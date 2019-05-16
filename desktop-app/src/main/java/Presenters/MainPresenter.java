@@ -10,7 +10,6 @@ import javafx.application.Platform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Optional;
 
 public class MainPresenter implements MainCallback {
     private MainViewImpl view;
@@ -28,7 +27,6 @@ public class MainPresenter implements MainCallback {
     public void cleanCache() {}
     public void initUserData(){
         view.setUsernameLabel(interactor.getCurrentUserName());
-
     }
 
     public void changePassword(CharSequence oldPassword, CharSequence newPassword) {
@@ -67,7 +65,7 @@ public class MainPresenter implements MainCallback {
 
     @Override
     public void notifyDownload(int imageID) {
-        view.notifyDownload(imageID);
+        Platform.runLater(()->view.notifyDownload(imageID));
     }
 
     public void getImageFromServer(int imageID) {
