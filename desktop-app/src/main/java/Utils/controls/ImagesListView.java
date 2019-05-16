@@ -124,11 +124,11 @@ public class ImagesListView extends VBox {
         }
     }
 
-    public void notifyDownload(int imageID) {
+    public void notifyDownload(int imageID, int currentImageID) {
         Optional<UserImage> img = imagesListView.getItems().stream().filter(x -> x.getImageID()==imageID).findFirst();
         img.ifPresent(image -> {
             image.setIsDownloaded(true);
-            Platform.runLater(()->view.setResultImage(image));
+            if (imageID==currentImageID) Platform.runLater(()->view.setResultImage(image));
         });
     }
 

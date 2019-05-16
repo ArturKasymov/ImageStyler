@@ -280,7 +280,6 @@ public class MainViewImpl extends BaseView implements MainView {
     @Override
     public void setInProgress(UserImage usrImg) {
         try {
-            if (currentImage.getImageID()==usrImg.getImageID())
             resultImage.setImage(SwingFXUtils.toFXImage(ImageIO.read(AppManager.class.getResource(IN_PROGRESS_IMAGE)), null));
             photoName.setText(usrImg.getImageName());
         } catch (Exception e) {
@@ -290,7 +289,7 @@ public class MainViewImpl extends BaseView implements MainView {
     }
 
     public void notifyDownload(int imageID) {
-        imagesListView.notifyDownload(imageID);
+        imagesListView.notifyDownload(imageID, currentImage.getImageID());
     }
 
     private void changeImage(ImageView imgView, String path) {
