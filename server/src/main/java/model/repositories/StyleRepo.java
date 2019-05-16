@@ -15,11 +15,11 @@ public class StyleRepo {
     static {
         //TODO check
         styleImages[0] = getImage("/TestImages/img1.png");
-        styleImages[1] = getImage("/TestImages/la_muse.jpg");
-        styleImages[2] = getImage("/TestImages/rain_princess.jpg");
-        styleImages[3] = getImage("/TestImages/udnie.jpg");
-        styleImages[4] = getImage("/TestImages/starry_night.jpg");
-        styleImages[5] = getImage("/TestImages/tubingen.jpg");
+        styleImages[1] = getImage("/TestImages/la_muse.png");
+        styleImages[2] = getImage("/TestImages/rain_princess.png");
+        styleImages[3] = getImage("/TestImages/udnie.png");
+        styleImages[4] = getImage("/TestImages/starry_night.png");
+        styleImages[5] = getImage("/TestImages/tubingen.png");
     }
 
     private static BufferedImage getImage(String path) {
@@ -31,8 +31,11 @@ public class StyleRepo {
         return null;
     }
     public static BufferedImage getStyle(int styleID){
-        return styleImages[styleID];
-        //TODO handle array outOfBoundException
+        try {
+            return styleImages[styleID];
+        } catch (ArrayIndexOutOfBoundsException ae) {
+            return styleImages[styleID%NUM_STYLE_IMAGES];
+        }
     }
 
 }

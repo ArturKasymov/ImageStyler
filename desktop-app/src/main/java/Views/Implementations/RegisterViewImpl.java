@@ -94,7 +94,6 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
 
     @Override
     public void showAlert() {
-        //TODO show Alert
         registerButton.setDisable(false);
         loginField.styleProperty().setValue("-fx-border-color: red;");
         passwordField.styleProperty().setValue("-fx-border-color: red;");

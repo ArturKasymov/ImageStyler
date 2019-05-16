@@ -38,8 +38,8 @@ public class Interactor implements ClientInteractor {
 
     @Override
     public int insertUser(String userName, String password) throws SQLException {
-        //TODO delete logs
-        System.out.println(userName+" "+password);
+        //TODO logs here
+        //System.out.println(userName+" "+password);
 
         try {
             return dataProvider.insertUser(userName, CryptoRepo.getSaltedHash(password));
