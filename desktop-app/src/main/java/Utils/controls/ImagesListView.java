@@ -8,6 +8,7 @@ import app.AppManager;
 import com.sun.javafx.scene.control.skin.ListViewSkin;
 import javafx.animation.Animation;
 import javafx.animation.Transition;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -127,7 +128,7 @@ public class ImagesListView extends VBox {
         Optional<UserImage> img = imagesListView.getItems().stream().filter(x -> x.getImageID()==imageID).findFirst();
         img.ifPresent(image -> {
             image.setIsDownloaded(true);
-            view.setResultImage(image);
+            Platform.runLater(()->view.setResultImage(image));
         });
     }
 
