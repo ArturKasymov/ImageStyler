@@ -124,7 +124,7 @@ public class ClientHandler extends Thread{
                 serverManager.asyncTask(
                         ()-> {
                             try {
-                                insertImageData(imageId,ImageIO.read(new File(getCurrentUserPath()+"\\."+imageId+".png")));
+                                insertImageData(imageId, ImageIO.read(new File(getCurrentUserPath()+"\\."+imageId+".png")));
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

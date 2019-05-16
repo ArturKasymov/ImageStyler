@@ -52,6 +52,11 @@ public class SessionManager extends Thread {
         registerCallback=callback;
     }
 
+    // TODO: HANDLE
+    public MainCallback getMainCallback() {
+        return mainCallback;
+    }
+
     public SessionManager(){
         this.runningStatus=true;
         executor = Executors.newSingleThreadScheduledExecutor();

@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import static Utils.Constants.IN_PROGRESS_IMAGE;
+
 public class MainViewImpl extends BaseView implements MainView {
     private MainPresenter presenter;
     public MainViewImpl() { this.presenter = new MainPresenter(this); }
@@ -267,6 +269,16 @@ public class MainViewImpl extends BaseView implements MainView {
             changeImage(resultImage, path);
             photoName.setText(newUserImage.getImageName());
         }
+    }
+
+    @Override
+    public void setInProgress(String name) {
+        resultImage.setImage(new Image(new File(IN_PROGRESS_IMAGE).toURI().toString()));
+        photoName.setText(name);
+    }
+
+    public void notifyDownload(int imageID) {
+        imagesListView.notifyDownload(imageID);
     }
 
     private void changeImage(ImageView imgView, String path) {

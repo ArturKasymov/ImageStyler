@@ -116,8 +116,6 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
 
     @Override
     public void saveUserImage(int imageID, BufferedImage image) {
-        Optional<UserImage> img = getCurrentUserImagesList().stream().filter(x->x.getImageID()==imageID).findFirst();
-        img.ifPresent(userImage -> userImage.setIsDownloaded(true));
         File imageFile = new File(sessionManager.getCurrentUserPath()+"\\."+imageID+".png");
         OutputStream out;
         try {
@@ -128,6 +126,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
         {
             e.printStackTrace();
         } finally {
+            sessionManager.getMainCallback().notifyDownload(imageID);
             dataProvider.updateUserImageIsDownloaded(imageID);
         }
     }
@@ -165,7 +164,6 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
 
     @Override
     public ArrayList<UserImage> getCurrentUserImagesList() {
-        System.out.println("getCurrentUserImagesList()");
         return dataProvider.getUserImages(sessionManager.getCurrentUserId());
     }
 

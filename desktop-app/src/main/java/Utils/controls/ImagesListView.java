@@ -25,9 +25,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Optional;
 
 import static Utils.Constants.SORT_BY.*;
 
+@SuppressWarnings("unchecked")
 public class ImagesListView extends VBox {
     private MainView view;
     @FXML
@@ -127,6 +129,11 @@ public class ImagesListView extends VBox {
         }
     }
 
+    public void notifyDownload(int imageID) {
+        Optional<UserImage> img = imagesListView.getItems().stream().filter(x -> x.getImageID()==imageID).findFirst();
+        img.ifPresent(image -> image.setIsDownloaded(true));
+    }
+
     private void updateImagesList(ObservableList<UserImage> userImages) {
         imagesListView.setCellFactory(x->null);
         imagesListView.setCellFactory(x->new ImageListCell());
@@ -198,15 +205,15 @@ public class ImagesListView extends VBox {
         imagesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue!=null) {
                 //TODO handle isWaiting
-                /**
-                 * if(!newValue.getIsDownloaded()){
+                System.out.println(newValue.getImageName() + " " + newValue.getIsDownloaded());
+                if(!newValue.getIsDownloaded()){
+                    view.setInProgress(newValue.getImageName());
                     if(!newValue.isWaiting()){
                         view.getImageFromServer(newValue.getImageID());
                         newValue.setWaiting(true);
                         //TODO set WAITING
                     }
-                } **/
-                view.setResultImage(newValue);
+                } else view.setResultImage(newValue);
             }
         });
 
