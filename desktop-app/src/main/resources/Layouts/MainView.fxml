@@ -31,7 +31,7 @@
     <RowConstraints minHeight="10.0" prefHeight="360.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <ToolBar fx:id="toolbar" maxHeight="Infinity" maxWidth="Infinity" prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: blue;" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+      <ToolBar fx:id="toolbar" maxHeight="Infinity" maxWidth="Infinity" prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: limegreen;" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
         <items>
             <MenuButton fx:id="settingsButton" mnemonicParsing="false" prefHeight="20.0" prefWidth="80.0" text="Settings">
                <font>

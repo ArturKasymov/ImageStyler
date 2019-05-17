@@ -11,4 +11,5 @@ public interface MainCallback {
     void deleteLocalImage(int imageID);
     void logout(boolean local);
     void showWrongDataAlert();
+    void closeSettingsWindow();
 }

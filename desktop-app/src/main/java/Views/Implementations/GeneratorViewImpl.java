@@ -17,9 +17,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
+import net.coobird.thumbnailator.Thumbnails;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -28,7 +30,7 @@ import java.util.Date;
 import static Utils.Constants.NUM_STYLE_IMAGES;
 
 public class GeneratorViewImpl extends BaseView implements GeneratorView {
-    private Image styleImages[] = new Image[NUM_STYLE_IMAGES];
+    private BufferedImage styleImages[] = new BufferedImage[NUM_STYLE_IMAGES];
     private int styleImageIndex = 0;
 
     private GeneratorPresenter presenter;
@@ -48,28 +50,20 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
     private ImageView styleImage;
 
     @FXML
-    private ImageView generatedImage;
-
-    @FXML
     private Button generateButton;
 
     @FXML
     private TextField photoName;
 
     @FXML
-    private Button saveButton;
-
-    @FXML
     public void initialize() {
         presenter.initCallback();
-        Image image = styleImages[5];
+        BufferedImage image = styleImages[5];
 
-        contentImage.setImage(image);
-        styleImage.setImage(image);
-        generatedImage.setImage(image);
+        setImage(contentImage, image);
+        setImage(styleImage, image);
         setOnImageClick(contentImage);
         //setOnImageClick(styleImage);
-        setOnSaveButtonClick();
     }
 
     @FXML
@@ -85,9 +79,8 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
             return;
         }
         photoName.clear();
-        contentImage.setImage(styleImages[5]);
-        styleImage.setImage(styleImages[5]);
-        generatedImage.setImage(styleImages[5]);
+        setImage(contentImage, styleImages[5]);
+        setImage(styleImage, styleImages[5]);
         styleImageIndex = 0;
         toggler.rollBackToMain();
     }
@@ -96,24 +89,24 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
     public void onShiftLeftStyleImage() {
         styleImageIndex = (styleImageIndex-1) % NUM_STYLE_IMAGES;
         if (styleImageIndex<0) styleImageIndex += NUM_STYLE_IMAGES;
-        styleImage.setImage(styleImages[styleImageIndex]);
+        setImage(styleImage, styleImages[styleImageIndex]);
     }
 
     @FXML
     public void onShiftRightStyleImage(){
         styleImageIndex = (styleImageIndex+1) % NUM_STYLE_IMAGES;
-        styleImage.setImage(styleImages[styleImageIndex]);
+        setImage(styleImage, styleImages[styleImageIndex]);
     }
 
-    public void setGeneratedImageView(Image img) {
-        generatedImage.setImage(img);
-    }
-
-    private Image getImage(String path) {
-        URL url = AppManager.class.getResource(path);
-        File file = new File(url.getFile());
-        Image image = new Image(file.toURI().toString());
-        return image;
+    private BufferedImage getImage(String path) {
+        try {
+            URL url = AppManager.class.getResource(path);
+            File file = new File(url.getFile());
+            return ImageIO.read(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private void loadStyleImages() {
@@ -135,25 +128,15 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
             File file = chooser.showOpenDialog(null);
             try {
                 BufferedImage buffimage = ImageIO.read(file);
-                Image image = SwingFXUtils.toFXImage(buffimage, null);
-                imgView.setImage(image);
+                setImage(imgView, buffimage);
             } catch (IOException e) {
                 System.out.println(e);
             }
         });
     }
 
-    private void setOnSaveButtonClick() {
-        saveButton.setOnMouseClicked(event -> {
-            /*if (photoName.getCharacters().length()>0) {
-                //presenter.insertGeneratedImage(generatedImage.getImage(), photoName.getCharacters().toString(), new Date());
-                getAppManager().asyncTask(()->{
-                    presenter.insertGeneratedImage(generatedImage.getImage(), photoName.getCharacters().toString(), new Date());
-                });
-            } else {
-                showNoPhotoNameAlert();
-            }*/
-        });
+    private void setImage(ImageView imgView, BufferedImage img) {
+        imgView.setImage(SwingFXUtils.toFXImage(img, null));
     }
 
     private void showNoPhotoNameAlert() {

@@ -75,4 +75,7 @@ public class MainPresenter implements MainCallback {
     public void showWrongDataAlert() {
         Platform.runLater(()->view.showChangeAlert());
     }
+
+    @Override
+    public void closeSettingsWindow() { Platform.runLater(()->view.closeSettingsWindow()); }
 }

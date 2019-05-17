@@ -9,14 +9,10 @@ import com.sun.javafx.scene.control.skin.ListViewSkin;
 import javafx.animation.Animation;
 import javafx.animation.Transition;
 import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Orientation;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -25,7 +21,6 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.Optional;
 
 import static Utils.Constants.SORT_BY.*;
@@ -205,7 +200,7 @@ public class ImagesListView extends VBox {
         imagesSearch.setFocusTraversable(false);
         sortBy.setFocusTraversable(false);
         imagesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println(newValue.getImageID());
+            System.out.println(imagesListView);
             if (newValue!=null) {
                 //TODO handle isWaiting
                 if(!newValue.getIsDownloaded()){

@@ -98,10 +98,23 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
         loginField.styleProperty().setValue("-fx-border-color: red;");
         passwordField.styleProperty().setValue("-fx-border-color: red;");
         onceMorePasswordField.styleProperty().setValue("-fx-border-color: red;");
-        loginField.setOnMouseClicked(event -> loginField.styleProperty().setValue(""));
-        passwordField.setOnMouseClicked(event -> passwordField.styleProperty().setValue(""));
-        onceMorePasswordField.setOnMouseClicked(event -> onceMorePasswordField.styleProperty().setValue(""));
+        loginField.setOnMouseClicked(event -> {
+            loginField.styleProperty().setValue("");
+            passwordField.styleProperty().setValue("");
+            onceMorePasswordField.styleProperty().setValue("");
+        });
+        passwordField.setOnMouseClicked(event -> {
+            loginField.styleProperty().setValue("");
+            passwordField.styleProperty().setValue("");
+            onceMorePasswordField.styleProperty().setValue("");
+        });
+        onceMorePasswordField.setOnMouseClicked(event -> {
+            loginField.styleProperty().setValue("");
+            passwordField.styleProperty().setValue("");
+            onceMorePasswordField.styleProperty().setValue("");
+        });
         System.out.println("Alert show");
+        loginField.requestFocus();
         //throw new RuntimeException();
     }
 }

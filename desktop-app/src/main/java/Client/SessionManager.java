@@ -144,7 +144,7 @@ public class SessionManager extends Thread {
                 break;
             case REGISTER:
                 status=sc.next();
-                switch (status){
+                switch (status) {
                     case FAIL:
                         registerCallback.showAlert();
                         break;
@@ -209,7 +209,7 @@ public class SessionManager extends Thread {
                         mainCallback.showWrongDataAlert();
                         break;
                     case SUCCESS:
-                        // TODO: close chPass window
+                        mainCallback.closeSettingsWindow();
                         break;
                 }
                 break;
