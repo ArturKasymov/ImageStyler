@@ -149,10 +149,8 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         BufferedImage bufferedImage = SwingFXUtils.fromFXImage(contentImage, null);
         try {
-            // TODO png<->jpg depending on the bufferedImage.getType()
             ImageIO.write(bufferedImage, "PNG", byteArrayOutputStream);
         } catch (IOException e) {
-            //TODO Handle exception
             e.printStackTrace();
         }
         sessionManager.generateImage(byteArrayOutputStream, styleImageID, imageName, net);

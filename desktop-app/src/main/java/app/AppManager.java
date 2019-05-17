@@ -7,7 +7,9 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner;
 import org.nd4j.linalg.factory.Nd4jBackend;
 import org.nd4j.nativeblas.NativeOpsHolder;
@@ -49,7 +51,7 @@ public class AppManager extends Application {
 
     private void initStage(){
         stage.setTitle(TITLE);
-        stage.setScene(new Scene(LoginView, WIDTH, HEIGHT));
+        stage.setScene(new Scene(LoginView, WIDTH, HEIGHT, Color.TRANSPARENT));
         stage.show();
     }
 

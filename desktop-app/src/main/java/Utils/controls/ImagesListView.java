@@ -200,16 +200,13 @@ public class ImagesListView extends VBox {
         imagesSearch.setFocusTraversable(false);
         sortBy.setFocusTraversable(false);
         imagesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println(imagesListView);
             if (newValue!=null) {
-                //TODO handle isWaiting
                 if(!newValue.getIsDownloaded()){
                     view.setResultImage(newValue);
                     view.setInProgress(newValue);
                     if(!newValue.isWaiting()){
                         view.getImageFromServer(newValue.getImageID());
                         newValue.setWaiting(true);
-                        //TODO set WAITING
                     }
                 } else view.setResultImage(newValue);
             }

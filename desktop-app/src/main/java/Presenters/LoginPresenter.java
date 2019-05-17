@@ -21,7 +21,7 @@ public class LoginPresenter implements LoginCallback{
 
     public void login(CharSequence login, CharSequence password) {
         interactor.login(login, password);
-        //ToDo add animation while getting data from server + make MultiThread
+        //ToDo add animation while getting data from server
     }
 
     public void initCallback(){
