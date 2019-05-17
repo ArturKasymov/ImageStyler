@@ -1,0 +1,57 @@
+.canvas {
+    -fx-font-family: sans-serif;
+    -fx-background: #34495e;
+}
+.form {
+    -fx-width: 400px;
+    -fx-height: 40px;
+    -fx-position: absolute;
+    -fx-top: 50%;
+    -fx-left: 50%;
+    -fx-text-align: center;
+}
+
+.form .text-field {
+    -fx-border: 0;
+    -fx-background: none;
+    -fx-display: block;
+    -fx-margin-top: 20px;
+    -fx-test-align: center;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-border-color: #3498db;
+    -fx-padding: 14px 10px;
+    -fx-width: 400px;
+    -fx-focus-color: none;
+    -fx-color: white;
+    -fx-border-radius: 24px;
+    -fx-transition: 0.25s;
+}
+
+.form .text-field:focused {
+    -fx-border-color: #2ecc71;
+    -fx-text-fill: white;
+}
+
+.form .login-button, .form .register-button {
+    -fx-border: 0;
+    -fx-background: none;
+    -fx-display: block;
+    -fx-margin-top: 20px;
+    -fx-test-align: center;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-border-color: #2ecc71;
+    -fx-padding: 14px 40px;
+    -fx-focus-color: none;
+    -fx-color: white;
+    -fx-text-fill: white;
+    -fx-border-radius: 24px;
+    -fx-transition: 0.25s;
+    -fx-cursor: hand;
+}
+
+.form .register-button:hover, .form .login-button:hover {
+    -fx-background-color: #2ecc71;
+    -fx-background-radius: 24px;
+}

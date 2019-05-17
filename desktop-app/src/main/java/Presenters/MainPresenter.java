@@ -23,7 +23,7 @@ public class MainPresenter implements MainCallback {
 
     public void logout(boolean local) {
         interactor.logout(local);
-        view.goToLogin();
+        Platform.runLater(()->view.goToLogin());
     }
 
     public void cleanCache() {}
