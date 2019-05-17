@@ -1,16 +1,18 @@
 package model.database.provider;
 
 import model.database.entity.User;
+import model.repositories.CryptoRepo;
 
 import java.sql.*;
 
 import static util.PostgreSQLQueries.*;
+import static util.ServerCommand.CHANGE_PASSWORD;
 
 public class PostgreSQLDataProvider {
 
     private Connection connection;
 
-    public PostgreSQLDataProvider( String dbname, String username,  String password, String IP ,int port) {
+    public PostgreSQLDataProvider(String dbname, String username,  String password, String IP ,int port) {
         try {
             connection = DriverManager.getConnection(String.format("jdbc:postgresql:%s:%d/%s",IP,port,dbname),username,password);
         } catch (Exception e) {
@@ -46,9 +48,8 @@ public class PostgreSQLDataProvider {
     }
 
     public User getUser(String username){
-        PreparedStatement pstmt = null;
         try {
-            pstmt = connection.prepareStatement(GET_USER_HASH);
+            PreparedStatement pstmt = connection.prepareStatement(GET_USER_HASH);
 
             pstmt.setString(1,username);
             ResultSet rs = pstmt.executeQuery();
@@ -86,6 +87,31 @@ public class PostgreSQLDataProvider {
             pstmt.setInt(1, imageID);
             pstmt.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean checkPassword(int userID, String password) {
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(GET_USER_HASH_ON_ID);
+            pstmt.setInt(1, userID);
+            ResultSet rs = pstmt.executeQuery();
+            rs.next();
+            if (rs.isClosed()) return false;
+            return CryptoRepo.checkPassword(password, rs.getString(1));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void changePassword(int userID, String password) {
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(CHANGE_USER_PASSWORD);
+            pstmt.setString(1, CryptoRepo.getSaltedHash(password));
+            pstmt.setInt(2, userID);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

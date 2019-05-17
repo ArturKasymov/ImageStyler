@@ -65,12 +65,8 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public void changeUserPassword(CharSequence newPassword) {
-        try {
-            //dataProvider.changePassword(sessionManager.getCurrentUserName(), cryptoRepo.getSaltedHash(newPassword.toString()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void changeUserPassword(CharSequence oldPassword, CharSequence newPassword) {
+        sessionManager.changeUserPassword(oldPassword.toString(), newPassword.toString());
     }
 
     @Override
@@ -169,8 +165,8 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public void logout() {
-        sessionManager.logout();
+    public void logout(boolean local) {
+        sessionManager.logout(local);
     }
 
     @Override

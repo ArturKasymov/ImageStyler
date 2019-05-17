@@ -20,21 +20,20 @@ public class MainPresenter implements MainCallback {
         this.interactor= Interactor.getInstance();
     }
     public void unsubscribe() { this.view = null; }
-    public void logout() {
-        interactor.logout();
+
+    public void logout(boolean local) {
+        interactor.logout(local);
         view.goToLogin();
     }
+
     public void cleanCache() {}
+
     public void initUserData(){
         view.setUsernameLabel(interactor.getCurrentUserName());
     }
 
     public void changePassword(CharSequence oldPassword, CharSequence newPassword) {
-        if (interactor.checkChangePassword(oldPassword)) {
-            interactor.changeUserPassword(newPassword);
-        } else {
-            view.showChangeAlert();
-        }
+        interactor.changeUserPassword(oldPassword, newPassword);
     }
 
     public ArrayList<UserImage> getUserImagesList() {
@@ -70,5 +69,10 @@ public class MainPresenter implements MainCallback {
 
     public void getImageFromServer(int imageID) {
         interactor.getImageFromServer(imageID);
+    }
+
+    @Override
+    public void showWrongDataAlert() {
+        Platform.runLater(()->view.showChangeAlert());
     }
 }

@@ -144,7 +144,7 @@ public class MainViewImpl extends BaseView implements MainView {
 
     @FXML
     protected void onLogOut(ActionEvent e) {
-        presenter.logout();
+        presenter.logout(false);
         imagesListView.cleanList();
     }
 

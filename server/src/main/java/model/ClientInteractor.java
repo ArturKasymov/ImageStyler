@@ -15,4 +15,5 @@ public interface ClientInteractor {
     void checkUserDir(String userPath);
     String getUserImagesListString(int userID);
     void deleteUserImage(int imageID, String userPath);
+    boolean changePassword(int userID, String oldPassword, String newPassword);
 }
