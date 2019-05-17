@@ -140,14 +140,7 @@ public class SessionManager extends Thread {
                 }
                 break;
             case LOGOUT:
-                status = sc.next();
-                switch (status) {
-                    case FAIL:
-                        break;
-                    case SUCCESS:
-                        mainCallback.logout(true);
-                        break;
-                }
+                mainCallback.logout(true);
                 break;
             case REGISTER:
                 status=sc.next();
@@ -216,7 +209,7 @@ public class SessionManager extends Thread {
                         mainCallback.showWrongDataAlert();
                         break;
                     case SUCCESS:
-                        System.out.println("WHAT???");
+                        // TODO: close chPass window
                         break;
                 }
                 break;
