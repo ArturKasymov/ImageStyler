@@ -111,8 +111,9 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public void saveUserImage(int imageID, BufferedImage image) {
-        File imageFile = new File(sessionManager.getCurrentUserPath()+"\\."+imageID+".png");
+    public void saveUserImage(int imageID, int userID,BufferedImage image) {
+        final String path=APP_ROOT_DIRECTORY+"\\."+userID+"\\."+imageID+".png";
+        File imageFile = new File(path);
         OutputStream out;
         try {
             out = new FileOutputStream(imageFile);
@@ -122,7 +123,6 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
         {
             e.printStackTrace();
         } finally {
-            sessionManager.getMainCallback().notifyDownload(imageID);
             dataProvider.updateUserImageIsDownloaded(imageID);
         }
     }

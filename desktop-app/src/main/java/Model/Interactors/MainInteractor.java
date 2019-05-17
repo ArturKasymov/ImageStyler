@@ -15,7 +15,7 @@ public interface MainInteractor {
     ArrayList<UserImage> getCurrentUserImagesList();
     void initMainCallback(MainCallback callback);
     UserImage insertUserImage(int imageID, String name, Date date, boolean isWaiting);
-    void saveUserImage(int imageID, BufferedImage image);
+    void saveUserImage(int imageID, int userID,BufferedImage image);
     void deleteUserImage(int imageID);
     void deleteLocalImage(int imageID);
 

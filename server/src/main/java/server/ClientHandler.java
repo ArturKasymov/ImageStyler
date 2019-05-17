@@ -124,10 +124,11 @@ public class ClientHandler extends Thread{
             case GET_IMAGE:
                 int imageId = sc.nextInt();
                 final String getImagePath=getCurrentUserPath()+"/."+imageId+".png";
+                final int uID=currentUserID;
                 serverManager.asyncTask(
                         ()-> {
                             try {
-                                insertImageData(imageId, ImageIO.read(new File(getImagePath)));
+                                insertImageData(imageId,uID,ImageIO.read(new File(getImagePath)));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -158,26 +159,30 @@ public class ClientHandler extends Thread{
                             ImageIO.write(generatedImage, "png", out);
                         } catch (IOException e) { e.printStackTrace(); }
 
-                        //TODO update ImageStatus
-
-                        for(ClientHandler temp : serverManager.getUserSessions(currentUserID)){
-                            temp.insertImageData(imageID, generatedImage);
+                        try{
+                            if(currentUserID!=-1)
+                                for(ClientHandler temp : serverManager.getUserSessions(currentUserID))
+                                    temp.insertImageData(imageID,currentUserID, generatedImage);
+                        }catch (NullPointerException e){
+                            e.printStackTrace();
                         }
                     });
-
-                    for(ClientHandler temp : serverManager.getUserSessions(currentUserID)){
-                        temp.insertUserImage(imageID, imageName, imageDate);
-                    }
-
-                } catch (IOException e) {
+                        for(ClientHandler temp : serverManager.getUserSessions(currentUserID)){
+                            temp.insertUserImage(imageID, currentUserID , imageName, imageDate);
+                        }
+                } catch (IOException | NullPointerException e) {
                     e.printStackTrace();
                 }
                 break;
             case DELETE_IMAGE:
                 int imageID = sc.nextInt();
                 interactor.deleteUserImage(imageID, getCurrentUserPath());
-                for (ClientHandler temp : serverManager.getUserSessions(currentUserID)) {
-                    temp.deleteLocalImage(imageID);
+                try {
+                    for (ClientHandler temp : serverManager.getUserSessions(currentUserID)) {
+                        temp.deleteLocalImage(imageID,currentUserID);
+                    }
+                } catch (NullPointerException e ){
+                    e.printStackTrace();
                 }
                 break;
             case CHANGE_PASSWORD:
@@ -195,12 +200,12 @@ public class ClientHandler extends Thread{
         }
     }
 
-    private void insertUserImage(int imageID, String imageName,long imageDate){
-        sendDataToClient(INSERT_IMAGE+" "+SUCCESS+" "+imageID+" "+imageName+" "+imageDate);
+    private void insertUserImage(int imageID,int currentUserID ,String imageName,long imageDate){
+        sendDataToClient(INSERT_IMAGE+" "+SUCCESS+" "+imageID+" "+currentUserID+" "+imageName+" "+imageDate);
     }
 
-    private void deleteLocalImage(int imageID) {
-        sendDataToClient(DELETE_IMAGE + " " + SUCCESS + " " + imageID);
+    private void deleteLocalImage(int imageID,int currentUserID) {
+        sendDataToClient(DELETE_IMAGE + " " + SUCCESS + " " + imageID+" "+currentUserID);
     }
 
     public void forceLogOut() {
@@ -209,10 +214,10 @@ public class ClientHandler extends Thread{
         currentUserID = -1;
     }
 
-    private void insertImageData(int imageID, BufferedImage bufferedImage){
+    private void insertImageData(int imageID, int userID, BufferedImage bufferedImage){
         synchronized (dos) {
             try {
-                dos.writeUTF(INSERT_IMAGE_DATA+" "+SUCCESS+" "+imageID);
+                dos.writeUTF(INSERT_IMAGE_DATA+" "+SUCCESS+" "+imageID+" "+userID);
 
                 ByteArrayOutputStream generatedImage = new ByteArrayOutputStream();
                 ImageIO.write(bufferedImage, "png", generatedImage);

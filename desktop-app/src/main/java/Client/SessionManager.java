@@ -163,9 +163,10 @@ public class SessionManager extends Thread {
                         break;
                     case SUCCESS:
                         int imageID = sc.nextInt();
+                        int commandUserID=sc.nextInt();
                         String imageName = sc.next();
                         long imageDate = sc.nextLong();
-                        mainCallback.insertGeneratedImage(imageID, imageName, new Date(imageDate));
+                        if(currentUser.getUserID()==commandUserID)mainCallback.insertGeneratedImage(imageID,imageName, new Date(imageDate));
                         break;
                 }
                 break;
@@ -176,6 +177,7 @@ public class SessionManager extends Thread {
                         break;
                     case SUCCESS:
                         int imageID = sc.nextInt();
+                        int userID= sc.nextInt();
                         try {
                             byte[] imageSizeArray = new byte[4];
                             dis.read(imageSizeArray);
@@ -183,7 +185,7 @@ public class SessionManager extends Thread {
                             byte[] imageArray = new byte[size];
                             dis.readFully(imageArray,0,size);
                             BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageArray));
-                            executor.execute(()->mainCallback.saveGeneratedImage(imageID, image));
+                            if(currentUser.getUserID()==userID)executor.execute(()->mainCallback.saveGeneratedImage(imageID, userID,image));
                         } catch (Exception e){
                             e.printStackTrace();
                             //TODO handle
@@ -198,7 +200,8 @@ public class SessionManager extends Thread {
                         break;
                     case SUCCESS:
                         int imageID = sc.nextInt();
-                        executor.execute(()->mainCallback.deleteLocalImage(imageID));
+                        int userID= sc.nextInt();
+                        executor.execute(()->mainCallback.deleteLocalImage(imageID,userID));
                         break;
                 }
                 break;
