@@ -43,9 +43,7 @@ public class Interactor implements ClientInteractor {
 
         try {
             return dataProvider.insertUser(userName, CryptoRepo.getSaltedHash(password));
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -57,6 +55,15 @@ public class Interactor implements ClientInteractor {
         dataProvider.deleteUserImage(imageID);
         File file = new File(userPath + "/." + imageID + ".png");
         file.delete();
+    }
+
+    @Override
+    public boolean changePassword(int userID, String oldPassword, String newPassword) {
+        if (dataProvider.checkPassword(userID, oldPassword)) {
+            dataProvider.changePassword(userID, newPassword);
+            return true;
+        }
+        return false;
     }
 
     @Override

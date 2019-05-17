@@ -9,4 +9,7 @@ public interface MainCallback {
     void notifyDownload(int imageID);
     void deleteUserImage(int imageID);
     void deleteLocalImage(int imageID);
+    void logout(boolean local);
+    void showWrongDataAlert();
+    void closeSettingsWindow();
 }

@@ -86,11 +86,11 @@ public class ClientHandler extends Thread{
 
         switch (command) {
             case LOGIN:
-                username=sc.next();
-                password=sc.next();
-                User storedUser=interactor.getUser(username);
-                if(storedUser==null||!CryptoRepo.checkPassword(password,storedUser.getPassword_hash())){
-                    sendDataToClient(LOGIN+" "+FAIL);
+                username = sc.next();
+                password = sc.next();
+                User storedUser = interactor.getUser(username);
+                if(storedUser == null || !CryptoRepo.checkPassword(password,storedUser.getPassword_hash())){
+                    sendDataToClient(LOGIN + " " + FAIL);
                 }
                 else{
                     currentUserID=storedUser.getId_user();
@@ -178,6 +178,18 @@ public class ClientHandler extends Thread{
                     temp.deleteLocalImage(imageID);
                 }
                 break;
+            case CHANGE_PASSWORD:
+                String oldPassword = sc.next();
+                String newPassword = sc.next();
+                if (interactor.changePassword(currentUserID, oldPassword, newPassword)) {
+                    for (ClientHandler temp : serverManager.getUserSessions(currentUserID)) {
+                        if (temp!=this) temp.forceLogOut();
+                        else sendDataToClient(CHANGE_PASSWORD + " " + SUCCESS);
+                    }
+                } else {
+                    sendDataToClient(CHANGE_PASSWORD + " " + FAIL);
+                }
+                break;
         }
     }
 
@@ -187,6 +199,12 @@ public class ClientHandler extends Thread{
 
     private void deleteLocalImage(int imageID) {
         sendDataToClient(DELETE_IMAGE + " " + SUCCESS + " " + imageID);
+    }
+
+    public void forceLogOut() {
+        sendDataToClient(LOGOUT);
+        serverManager.userOffline(currentUserID,this);
+        currentUserID = -1;
     }
 
     private void insertImageData(int imageID, BufferedImage bufferedImage){

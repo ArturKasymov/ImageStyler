@@ -139,9 +139,12 @@ public class SessionManager extends Thread {
                         break;
                 }
                 break;
+            case LOGOUT:
+                mainCallback.logout(true);
+                break;
             case REGISTER:
                 status=sc.next();
-                switch (status){
+                switch (status) {
                     case FAIL:
                         registerCallback.showAlert();
                         break;
@@ -199,14 +202,25 @@ public class SessionManager extends Thread {
                         break;
                 }
                 break;
+            case CHANGE_PASSWORD:
+                status = sc.next();
+                switch (status) {
+                    case FAIL:
+                        mainCallback.showWrongDataAlert();
+                        break;
+                    case SUCCESS:
+                        mainCallback.closeSettingsWindow();
+                        break;
+                }
+                break;
         }
     }
 
     public void login(String username, String password) {
         sendDataToServer(LOGIN+" "+username+" "+password);
     }
-    public void logout() {
-        sendDataToServer(LOGOUT);
+    public void logout(boolean local) {
+        if (!local) sendDataToServer(LOGOUT);
         currentUser=null;
     }
     public void register(String username, String password){
@@ -225,6 +239,10 @@ public class SessionManager extends Thread {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void changeUserPassword(String oldPassword, String newPassword) {
+        sendDataToServer(CHANGE_PASSWORD + " " + oldPassword + " " + newPassword);
     }
 
     public void deleteUserImage(int imageID) {

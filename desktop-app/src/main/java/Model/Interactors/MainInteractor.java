@@ -10,8 +10,8 @@ import java.util.Date;
 public interface MainInteractor {
     String getCurrentUserName();
     boolean checkChangePassword(CharSequence oldPassword);
-    void changeUserPassword(CharSequence newPassword);
-    void logout();
+    void changeUserPassword(CharSequence oldPassword, CharSequence newPassword);
+    void logout(boolean local);
     ArrayList<UserImage> getCurrentUserImagesList();
     void initMainCallback(MainCallback callback);
     UserImage insertUserImage(int imageID, String name, Date date, boolean isWaiting);

@@ -19,6 +19,8 @@ public class PostgreSQLQueries {
             "VALUES (?,?) RETURNING id_user;";
 
     public static final String GET_USER_HASH="SELECT * FROM users WHERE user_name=?;";
+    public static final String GET_USER_HASH_ON_ID = "SELECT password_hash FROM users WHERE id_user=?;";
+    public static final String CHANGE_USER_PASSWORD = "UPDATE users SET password_hash=? WHERE id_user=?;";
 
     public static final String INSERT_IMAGE="INSERT INTO user_images(image_name,id_user,image_date,image_status) " +
             "VALUES(?,?,?,?) RETURNING id_image;";

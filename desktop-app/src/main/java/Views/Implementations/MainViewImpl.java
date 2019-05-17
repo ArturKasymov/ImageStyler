@@ -144,7 +144,7 @@ public class MainViewImpl extends BaseView implements MainView {
 
     @FXML
     protected void onLogOut(ActionEvent e) {
-        presenter.logout();
+        presenter.logout(false);
         imagesListView.cleanList();
     }
 
@@ -338,6 +338,11 @@ public class MainViewImpl extends BaseView implements MainView {
         else changePasswordButton.setDisable(true);
     }
 
+    public void closeSettingsWindow() {
+        clearPasswordFields();
+        showSettingsScreen(false);
+    }
+
     private void showSettingsScreen(boolean show) {
         settingsDialog.setVisible(show);
         toolbar.setDisable(show);
@@ -352,16 +357,10 @@ public class MainViewImpl extends BaseView implements MainView {
         onceMoreNewPasswordField.clear();
     }
 
-    public void showChangeAlert() {
-        throw new RuntimeException();
-    }
-
     private void maybeChange(KeyEvent event) {
         if (event==null || (event.getCode().getName().equals("Enter") && filledIn() && passwordsMatch())) {
-            changePasswordButton.setDisable(false);
+            changePasswordButton.setDisable(true);
             presenter.changePassword(oldPasswordField.getCharacters(), newPasswordField.getCharacters());
-            clearPasswordFields();
-            showSettingsScreen(false);
         }
     }
 
@@ -388,6 +387,45 @@ public class MainViewImpl extends BaseView implements MainView {
 
     public Constants.NEURAL_NET getDefaultNeuralNet() {
         return defaultNeuralNet;
+    }
+
+    public void showChangeAlert() {
+        changePasswordButton.setDisable(false);
+        oldPasswordField.styleProperty().setValue("-fx-border-color: red;");
+        newPasswordField.styleProperty().setValue("-fx-border-color: red;");
+        onceMoreNewPasswordField.styleProperty().setValue("-fx-border-color: red;");
+        oldPasswordField.setOnMouseClicked(event -> {
+            oldPasswordField.styleProperty().setValue("");
+            newPasswordField.styleProperty().setValue("");
+            onceMoreNewPasswordField.styleProperty().setValue("");
+        });
+        newPasswordField.setOnMouseClicked(event -> {
+            oldPasswordField.styleProperty().setValue("");
+            newPasswordField.styleProperty().setValue("");
+            onceMoreNewPasswordField.styleProperty().setValue("");
+        });
+        onceMoreNewPasswordField.setOnMouseClicked(event -> {
+            oldPasswordField.styleProperty().setValue("");
+            newPasswordField.styleProperty().setValue("");
+            onceMoreNewPasswordField.styleProperty().setValue("");
+        });
+        oldPasswordField.setOnKeyPressed(event -> {
+            oldPasswordField.styleProperty().setValue("");
+            newPasswordField.styleProperty().setValue("");
+            onceMoreNewPasswordField.styleProperty().setValue("");
+        });
+        newPasswordField.setOnKeyPressed(event -> {
+            oldPasswordField.styleProperty().setValue("");
+            newPasswordField.styleProperty().setValue("");
+            onceMoreNewPasswordField.styleProperty().setValue("");
+        });
+        onceMoreNewPasswordField.setOnKeyPressed(event -> {
+            oldPasswordField.styleProperty().setValue("");
+            newPasswordField.styleProperty().setValue("");
+            onceMoreNewPasswordField.styleProperty().setValue("");
+        });
+        System.out.println("Alert show");
+        oldPasswordField.requestFocus();
     }
 
 }
