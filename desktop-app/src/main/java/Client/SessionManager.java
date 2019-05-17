@@ -20,7 +20,11 @@ import java.util.concurrent.ScheduledExecutorService;
 import static Utils.ServerCommand.*;
 
 public class SessionManager extends Thread {
-    private User currentUser;
+    private final User defaultUser=new User(0,"ghost");
+
+
+    private User currentUser=defaultUser;
+
     private boolean runningStatus;
     private Socket socket;
     private ScheduledExecutorService executor;
@@ -224,7 +228,7 @@ public class SessionManager extends Thread {
     }
     public void logout(boolean local) {
         if (!local) sendDataToServer(LOGOUT);
-        currentUser=null;
+        currentUser=defaultUser;
     }
     public void register(String username, String password){
         sendDataToServer(REGISTER + " " + username + " " + password);

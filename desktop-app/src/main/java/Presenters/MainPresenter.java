@@ -55,7 +55,12 @@ public class MainPresenter implements MainCallback {
 
     @Override
     public void insertGeneratedImage(int imageID,String photoName, Date date) {
-        Platform.runLater(()->view.notifyList(interactor.insertUserImage(imageID,photoName, date,true)));
+        //TODO delete Log
+        if(Platform.isAccessibilityActive()){
+            System.out.println("insertImage");
+            Platform.runLater(()->view.notifyList(interactor.insertUserImage(imageID,photoName, date,true)));
+        }
+
     }
 
     @Override
