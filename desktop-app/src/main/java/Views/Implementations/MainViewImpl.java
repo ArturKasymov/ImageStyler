@@ -25,13 +25,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-import org.bytedeco.javacv.FrameFilter;
 
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Optional;
 
 import static Utils.Constants.IN_PROGRESS_IMAGE;
 
@@ -53,9 +51,6 @@ public class MainViewImpl extends BaseView implements MainView {
     private ToolBar toolbar;
 
     @FXML
-    private MenuButton settingsButton;
-
-    @FXML
     private Button goToGenerateButton;
 
     @FXML
@@ -75,9 +70,6 @@ public class MainViewImpl extends BaseView implements MainView {
 
     @FXML
     private DialogPane settingsDialog;
-
-    @FXML
-    private Button exitSettingsButton;
 
     @FXML
     private PasswordField oldPasswordField;
@@ -146,6 +138,8 @@ public class MainViewImpl extends BaseView implements MainView {
     protected void onLogOut(ActionEvent e) {
         presenter.logout(false);
         imagesListView.cleanList();
+        if (goToGenerateButton.getText().equals("-")) onGoToGenerate();
+        if (fullButton.getText().equalsIgnoreCase("show")) onFull();
     }
 
     @FXML
@@ -218,7 +212,7 @@ public class MainViewImpl extends BaseView implements MainView {
     }
 
     @FXML
-    protected void onGoToGenerate() throws IOException{
+    protected void onGoToGenerate() {
         if (goToGenerateButton.getText().equals("+")) {
             try {
                 if (generatorView==null) {
@@ -235,7 +229,6 @@ public class MainViewImpl extends BaseView implements MainView {
                 fullButton.setDisable(true);
             } catch (IOException e) {
                 e.printStackTrace();
-                throw new IOException("Failed to load GeneratorView.fxml");
             }
         } else {
             contentBox.getChildren().setAll(imagesListView, rightPane);
@@ -247,12 +240,8 @@ public class MainViewImpl extends BaseView implements MainView {
 
     @Override
     public void rollBackToMain() {
-        try {
-            onGoToGenerate();
-            imagesListView.requestFocus();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        onGoToGenerate();
+        imagesListView.requestFocus();
     }
 
     @Override
@@ -283,7 +272,6 @@ public class MainViewImpl extends BaseView implements MainView {
             photoName.setText(usrImg.getImageName());
         } catch (Exception e) {
             e.printStackTrace();
-            // TODO HANDLE
         }
     }
 
