@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.sql.SQLException;
 import java.util.Date;
@@ -63,6 +64,7 @@ public class ClientHandler extends Thread{
                 else parseClientInput(inputData);
             } catch (IOException e) {
                 e.printStackTrace();
+                isRunning=false;
             }
         }
         try {
@@ -121,11 +123,12 @@ public class ClientHandler extends Thread{
                 break;
             case GET_IMAGE:
                 int imageId = sc.nextInt();
+                final String getImagePath=getCurrentUserPath()+"/."+imageId+".png";
                 serverManager.asyncTask(
                         ()-> {
                             try {
-                                insertImageData(imageId, ImageIO.read(new File(getCurrentUserPath()+"/."+imageId+".png")));
-                            } catch (IOException e) {
+                                insertImageData(imageId, ImageIO.read(new File(getImagePath)));
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         });
@@ -144,13 +147,12 @@ public class ClientHandler extends Thread{
                     BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageArray));
 
                     int imageID = interactor.insertImage(imageName, currentUserID, imageDate);
-
+                    final String imagePath=getCurrentUserPath()+"/."+imageID+".png";
                     serverManager.asyncTask(()->{
                         BufferedImage img = RGBConverterRepo.toBufferedImageOfType(image, 1);
                         BufferedImage generatedImage = interactor.generateImage(img, styleID);
-
                         try {
-                            File imageFile = new File(getCurrentUserPath()+"/."+imageID+".png");
+                            File imageFile = new File(imagePath);
                             OutputStream out;
                             out = new FileOutputStream(imageFile);
                             ImageIO.write(generatedImage, "png", out);
