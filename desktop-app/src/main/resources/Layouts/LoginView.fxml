@@ -5,11 +5,10 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox alignment="CENTER" stylesheets="@../stylesheets/loginViewStyle.css"
-      styleClass="canvas" prefHeight="600.00" prefWidth="400.00" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.LoginViewImpl">
+      styleClass="canvas" fx:id="root" prefHeight="600.00" prefWidth="400.00" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.LoginViewImpl">
    <children>
       <VBox alignment="CENTER" styleClass="form" spacing="10.0">
          <children>
@@ -19,8 +18,8 @@
                </VBox.margin>
             </TextField>
             <PasswordField styleClass="text-field" fx:id="passwordField" prefWidth="400.0" maxWidth="400.0" alignment="CENTER" opacity="0.75" promptText="password" />
-            <Button styleClass="login-button" fx:id="loginButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onLogin" opacity="0.75" prefWidth="250.0" text="SIGN IN" textOverrun="CENTER_ELLIPSIS" />
-            <Button fx:id="registerButton" styleClass="register-button" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onMoveToRegister" prefWidth="150.0" text="SIGN UP" textAlignment="CENTER">
+            <Button styleClass="login-button" fx:id="loginButton" focusTraversable="false" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onLogin" opacity="0.75" prefWidth="250.0" text="SIGN IN" textOverrun="CENTER_ELLIPSIS" />
+            <Button fx:id="registerButton" styleClass="register-button" focusTraversable="false" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onMoveToRegister" prefWidth="150.0" text="SIGN UP" textAlignment="CENTER">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>

@@ -2,9 +2,9 @@
 
 <?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -15,8 +15,8 @@
     <children>
         <GridPane>
             <children>
-                <TextField fx:id="imagesSearch" minWidth="110.0" prefWidth="110.0" promptText="Search..." GridPane.columnIndex="0" />
-                <ComboBox fx:id="sortBy" minHeight="25.0" minWidth="90.0" prefHeight="25.0" prefWidth="90.0" promptText="Sort by" styleClass="sorting" GridPane.columnIndex="1">
+                <TextField fx:id="imagesSearch" minHeight="30.0" minWidth="100.0" prefHeight="30.0" prefWidth="100.0" promptText="Search..." styleClass="images-search" GridPane.columnIndex="0" />
+                <ComboBox fx:id="sortBy" minHeight="29.0" minWidth="100.0" prefHeight="29.0" prefWidth="100.0" promptText="Sort by" styleClass="sorting" GridPane.columnIndex="1">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="Name (a-z)" />
@@ -25,17 +25,19 @@
                             <String fx:value="Date (9-0)" />
                         </FXCollections>
                     </items>
+               <GridPane.margin>
+                  <Insets top="-2.0" />
+               </GridPane.margin>
                 </ComboBox>
             </children>
             <columnConstraints>
-                <ColumnConstraints minWidth="110.0" prefWidth="110.0" />
-                <ColumnConstraints minWidth="90.0" prefWidth="90.0" />
+                <ColumnConstraints minWidth="100.0" prefWidth="100.0" />
+                <ColumnConstraints minWidth="100.0" prefWidth="100.0" />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints />
             </rowConstraints>
         </GridPane>
-        <Separator />
         <ListView fx:id="imagesListView" prefHeight="1000.0" styleClass="imagesListView">
         </ListView>
     </children>

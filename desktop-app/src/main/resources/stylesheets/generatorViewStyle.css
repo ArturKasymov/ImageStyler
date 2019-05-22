@@ -1,0 +1,56 @@
+.plus {
+    -fx-background-radius: 50%;
+}
+
+.photo-name {
+    -fx-border: 0;
+    -fx-background: none;
+    -fx-display: block;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-border-color: #3498db;
+    -fx-focus-color: none;
+    -fx-text-fill: white;
+    -fx-border-radius: 16px;
+}
+
+.photo-name:focused {
+    -fx-border-color: #2ecc71;
+}
+
+.gen-button {
+    -fx-border: 0;
+    -fx-background: none;
+    -fx-display: block;
+    -fx-margin-top: 20px;
+    -fx-text-align: center;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-border-color: #2ecc71;
+    -fx-focus-color: none;
+    -fx-color: white;
+    -fx-text-fill: white;
+    -fx-border-radius: 6px;
+    -fx-cursor: hand;
+}
+
+.gen-button:hover {
+    -fx-background-color: #2ecc71;
+    -fx-background-radius: 6px;
+    -fx-scale-x: 1.0;
+}
+
+.shift-button {
+    -fx-border: 0;
+    -fx-background-color: #2ecc71;
+    -fx-text-align: center;
+    -fx-focus-color: none;
+    -fx-color: white;
+    -fx-text-fill: black;
+    -fx-border-radius: 2px;
+    -fx-cursor: hand;
+}
+
+.shift-button {
+    -fx-scale-x: 1.0;
+}
