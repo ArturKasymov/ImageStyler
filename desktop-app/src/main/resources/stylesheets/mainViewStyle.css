@@ -1,0 +1,67 @@
+.canvas {
+    -fx-font-family: sans-serif;
+    -fx-background: #34495e;
+}
+
+.toolbar {
+    -fx-background-color: linear-gradient(from 50% 50% to 100% 100%, #009688, #4caf50);
+}
+
+.menu-button {
+    -fx-background-color: #2ecc71;
+    -fx-background-radius: 5px;
+}
+
+.menu-button:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.context-menu {
+    -fx-background-color: #2ecc71;
+}
+
+.menu-item:focused {
+    -fx-background-color: #34493e;
+    -fx-text-fill: white;
+}
+
+.buttons {
+    -fx-background-color: #2ecc71;
+    -fx-background-radius: 5px;
+}
+
+.buttons:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.combo-box-nn {
+    -fx-background-color: #2ecc71;
+    -fx-background-radius: 5px;
+}
+
+.combo-box-nn:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: #2ecc71;
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: #34493e;
+}
+
+.username {
+    -fx-background-color: #34495e;
+    -fx-text-fill: white;
+    -fx-background-radius: 3px;
+}
+
+.photo-name {
+    /*-fx-text-fill: linear-gradient(from 50% 50% to 100% 100%, #66a688, #66a6ee);*/
+    -fx-text-fill: #66a6ee;
+    -fx-font: 16px;
+}

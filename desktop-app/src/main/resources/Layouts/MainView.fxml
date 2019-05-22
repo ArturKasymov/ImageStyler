@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import Utils.controls.ImagesListView?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -19,21 +21,20 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
-<GridPane fx:id="base" maxHeight="Infinity" maxWidth="Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.MainViewImpl">
+<?import javafx.scene.layout.Pane?>
+<GridPane fx:id="base" alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="canvas" stylesheets="@../stylesheets/mainViewStyle.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.MainViewImpl">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="200.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="400.0" />
+    <ColumnConstraints hgrow="SOMETIMES" percentWidth="33" />
+    <ColumnConstraints hgrow="SOMETIMES" percentWidth="67" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="360.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="Infinity" prefHeight="360.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <ToolBar fx:id="toolbar" maxHeight="Infinity" maxWidth="Infinity" prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: limegreen;" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+      <ToolBar fx:id="toolbar" prefHeight="40.0" prefWidth="600.0" styleClass="toolbar" GridPane.columnSpan="2" GridPane.hgrow="SOMETIMES" GridPane.vgrow="SOMETIMES">
         <items>
-            <MenuButton fx:id="settingsButton" mnemonicParsing="false" prefHeight="20.0" prefWidth="80.0" text="Settings">
+            <MenuButton fx:id="settingsButton" mnemonicParsing="false" prefHeight="20.0" prefWidth="80.0" styleClass="menu-button" text="Settings">
                <font>
                   <Font size="12.0" />
                </font>
@@ -43,9 +44,9 @@
                     <MenuItem mnemonicParsing="false" onAction="#onLogOut" text="LOG OUT" />
                 </items>
             </MenuButton>
-            <Button fx:id="goToGenerateButton" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" onAction="#onGoToGenerate" prefHeight="25.0" prefWidth="25.0" text="+" />
-            <Button fx:id="fullButton" minWidth="70.0" mnemonicParsing="false" onAction="#onFull" prefWidth="70.0" text="HIDE" />
-            <ComboBox fx:id="neuralNetChoice" minHeight="25.0" minWidth="100.0" prefHeight="25.0" prefWidth="100.0" promptText="Neural Net">
+            <Button fx:id="goToGenerateButton" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" onAction="#onGoToGenerate" prefHeight="25.0" prefWidth="25.0" styleClass="buttons" text="+" textAlignment="CENTER" />
+            <Button fx:id="fullButton" minWidth="70.0" mnemonicParsing="false" onAction="#onFull" prefWidth="70.0" styleClass="buttons" text="HIDE" />
+            <ComboBox fx:id="neuralNetChoice" minHeight="25.0" minWidth="100.0" prefHeight="25.0" prefWidth="100.0" promptText="Neural Net" styleClass="combo-box-nn">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="VGG16 - SLOW BUT BEAUTIFUL PHOTOS" />
@@ -53,29 +54,27 @@
                     </FXCollections>
                 </items>
             </ComboBox>
-            <Label fx:id="username" alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: red;" text="Hello UJ" translateX="195.0" />
+            <Pane prefWidth="100.0" HBox.hgrow="SOMETIMES"/>
+            <Label fx:id="username" alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="100.0" styleClass="username" text="Hello UJ" />
         </items>
-         <GridPane.margin>
-            <Insets />
-         </GridPane.margin>
       </ToolBar>
-      <HBox fx:id="contentBox" prefHeight="100.0" prefWidth="200.0" visible="true" GridPane.columnSpan="2" GridPane.rowIndex="1">
+      <HBox fx:id="contentBox" maxHeight="Infinity" maxWidth="Infinity" minHeight="360.0" minWidth="600.0" styleClass="content" GridPane.columnSpan="2" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
          <children>
-             <ImagesListView fx:id="imagesListView" minWidth="0.0" prefHeight="320.0" prefWidth="200.0">
-
-            </ImagesListView>
-            <VBox fx:id="rightPane" alignment="CENTER" opacity="1.0" prefHeight="320.0" prefWidth="400.0">
+             <ImagesListView fx:id="imagesListView" maxHeight="Infinity" maxWidth="250.0" minWidth="0.0" prefHeight="360.0" prefWidth="200.0" />
+            <VBox fx:id="rightPane" alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" minHeight="360.0" minWidth="400.0" styleClass="right-pane" HBox.hgrow="ALWAYS">
                <children>
-                   <Label fx:id="photoName" alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="200.0" text="Hello UJ">
+                   <Pane minHeight="0.0" VBox.vgrow="SOMETIMES" />
+                   <Label fx:id="photoName" alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="200.0" styleClass="photo-name" text="Hello UJ">
                      <VBox.margin>
-                        <Insets left="5.0" top="5.0" />
+                        <Insets top="5.0" />
                      </VBox.margin></Label>
-                  <ImageView fx:id="resultImage" fitHeight="290.0" fitWidth="290.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="resultImage" VBox.vgrow="SOMETIMES" fitHeight="290.0" fitWidth="290.0" pickOnBounds="true" preserveRatio="true" styleClass="main-image-view">
                      <VBox.margin>
-                        <Insets top="1.5" />
+                        <Insets top="2.0" />
                      </VBox.margin>
                   </ImageView>
-                  <Button fx:id="deleteImageButton" onAction="#onDeleteImage" alignment="CENTER" contentDisplay="CENTER" minHeight="32.0" mnemonicParsing="false" prefHeight="32.0" text="Delete image" textAlignment="CENTER">
+                   <Pane minHeight="0.0" VBox.vgrow="SOMETIMES" />
+                  <Button styleClass="buttons" fx:id="deleteImageButton" alignment="CENTER" contentDisplay="CENTER" minHeight="32.0" mnemonicParsing="false" onAction="#onDeleteImage" prefHeight="32.0" text="Delete image" textAlignment="CENTER">
                      <font>
                         <Font size="14.0" />
                      </font>

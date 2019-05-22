@@ -1,5 +1,5 @@
 .list-cell:filled:hover {
-    -fx-background-color: #0f0;
+    -fx-background-color: #2ecc71;
     -fx-cursor: hand;
 }
 .imagesListView .list-cell:filled:selected {
@@ -22,23 +22,25 @@
     -fx-cursor: pointer;
 }
 
-.list-cell { -fx-text-color: black; }
-.list-cell:odd { -fx-background-color: AntiqueWhite; }
-.list-cell:even { -fx-background-color: Aquamarine; }
+.list-cell:odd { -fx-background-color: #90caf9; }
+.list-cell:even { -fx-background-color: #97aabd; }
 
 
 .imagesListView:focused {
     -fx-background-color: transparent;
 }
 
-
+.sorting {
+    -fx-background-color: #2ecc71;
+    -fx-background-radius: 0;
+}
 
 .combo-box .list-cell
 {
     -fx-text-fill: -fx-text-base-color;
     -fx-padding: 3 0 2 7;
     -fx-cell-size: 2em;
-    -fx-background-color: transparent;
+    -fx-background-color: #2ecc71;
 }
 
 .combo-box-popup .list-view
@@ -48,30 +50,23 @@
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 8, 0.0 , 0 , 0 );
 }
 
-.combo-box-popup .list-view .list-cell
-{
+.combo-box-popup .list-view .list-cell {
     -fx-padding: 4 0 4 5;
+    -fx-text-fill: white;
 }
 
 .combo-box-popup .list-view .list-cell:odd {
-    -fx-background-color: AntiqueWhite;
+    -fx-background-color: #190061;
 }
 
 .combo-box-popup .list-view .list-cell:even {
-    -fx-background-color: Aquamarine;
+    -fx-background-color: #3500d3;
 }
-
-/*.combo-box-popup .list-view .list-cell:filled:selected, .combo-box-popup .list-view .list-cell:filled:selected:hover
-{
-    -fx-background: -fx-accent;
-    -fx-background-color: -fx-selection-bar;
-    -fx-text-fill: -fx-selection-bar-text;
-}*/
 
 .combo-box-popup .list-view .list-cell:filled:hover
 {
-    -fx-background-color: #0f0;
-    -fx-text-fill: -fx-text-inner-color;
+    -fx-background-color: #2ecc71;
+    -fx-text-fill: black;
 }
 
 .combo-box-base:hover
@@ -82,10 +77,11 @@
 .combo-box-base:showing
 {
     -fx-color: -fx-pressed-base;
+    -fx-background-color: #2ecc71;
 }
 
 .combo-box-base:focused {
-    -fx-background-color: -fx-focus-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-color: #2ecc71;
     -fx-background-radius: 6.4, 4, 5, 3;
     -fx-background-insets: -1.4, 0, 1, 2;
 }
@@ -141,4 +137,16 @@
 .list-view .scroll-bar:horizontal .increment-button,
 .list-view .scroll-bar:horizontal .decrement-button {
     -fx-padding:0;
+}
+
+.images-search {
+    -fx-border: 0;
+    -fx-background-color: none;
+    -fx-display: block;
+    -fx-text-align: left;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-border-color: #2ecc71;
+    -fx-focus-color: none;
+    -fx-text-fill: white;
 }

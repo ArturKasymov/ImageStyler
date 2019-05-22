@@ -17,6 +17,7 @@ import javafx.scene.control.Label;
 import Views.Interfaces.LoginView;
 import Views.core.BaseView;
 import Views.core.ViewByID;
+import javafx.scene.layout.VBox;
 
 
 public class LoginViewImpl extends BaseView implements LoginView {
@@ -30,6 +31,9 @@ public class LoginViewImpl extends BaseView implements LoginView {
     public ViewByID getViewID() {
         return ViewByID.LOGIN_VIEW;
     }
+
+    @FXML
+    private VBox root;
 
     @FXML
     private TextField loginField;
@@ -59,6 +63,7 @@ public class LoginViewImpl extends BaseView implements LoginView {
             loginButton.setDisable(true);
             registerButton.setDisable(true);
             presenter.login(loginField.getCharacters(), passwordField.getCharacters());
+            root.requestFocus();
         }
 
     }
@@ -92,15 +97,22 @@ public class LoginViewImpl extends BaseView implements LoginView {
     }
 
     public void showWrongDataAlert() {
-        warning.setVisible(true);
+        //warning.setVisible(true);
 
+        loginField.getStyleClass().add("wrong-alert");
+        passwordField.getStyleClass().add("wrong-alert");
         loginButton.setDisable(false);
         registerButton.setDisable(false);
-
-        loginField.requestFocus();
+        loginField.setOnMouseClicked(event -> hideWrongDataAlert());
+        passwordField.setOnMouseClicked(event -> hideWrongDataAlert());
+        //loginField.requestFocus();
     }
 
-    private void hideWrongDataAlert() { warning.setVisible(false); }
+    private void hideWrongDataAlert() {
+        //warning.setVisible(false);
+        loginField.getStyleClass().remove("wrong-alert");
+        passwordField.getStyleClass().remove("wrong-alert");
+    }
 
     public void goToRegister(){
         //presenter.unsubscribe();

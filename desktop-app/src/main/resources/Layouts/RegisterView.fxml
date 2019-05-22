@@ -6,29 +6,29 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.RegisterViewImpl">
+<VBox alignment="CENTER" stylesheets="@../stylesheets/registerViewStyle.css"
+      styleClass="canvas" prefHeight="600.00" prefWidth="400.00" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.RegisterViewImpl">
    <children>
-      <TextField id="LoginField" fx:id="loginField" alignment="CENTER" opacity="0.75" prefWidth="240.0" promptText="login" VBox.vgrow="NEVER">
-         <VBox.margin>
-            <Insets top="-50.0" />
-         </VBox.margin>
-      </TextField>
-      <PasswordField fx:id="passwordField" alignment="CENTER" opacity="0.75" promptText="password">
-         <VBox.margin>
-            <Insets top="5.0" />
-         </VBox.margin>
-      </PasswordField>
-      <PasswordField fx:id="onceMorePasswordField" alignment="CENTER" opacity="0.75" promptText="password (once more)">
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-      </PasswordField>
-      <Button fx:id="registerButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onRegister" prefWidth="250.0" text="Register" textAlignment="CENTER">
-         <VBox.margin>
-            <Insets top="5.0" />
-         </VBox.margin></Button>
-   </children>
-   <padding>
-      <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
-   </padding>
+   <VBox alignment="CENTER" styleClass="form" spacing="10.0">
+      <children>
+         <TextField styleClass="text-field" fx:id="loginField" alignment="CENTER" opacity="0.75" prefWidth="400.0" maxWidth="400.0" promptText="login" VBox.vgrow="NEVER">
+
+         </TextField>
+         <PasswordField styleClass="text-field" fx:id="passwordField" alignment="CENTER" opacity="0.75" prefWidth="400.0" maxWidth="400.0" promptText="password">
+            <VBox.margin>
+               <Insets top="5.0" />
+            </VBox.margin>
+         </PasswordField>
+         <PasswordField styleClass="text-field" fx:id="onceMorePasswordField" alignment="CENTER" opacity="0.75" prefWidth="400.0" maxWidth="400.0" promptText="password (once more)" />
+         <Button styleClass="register-button" fx:id="registerButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onRegister" prefWidth="150.0" text="Register" textAlignment="CENTER">
+            <VBox.margin>
+               <Insets top="5.0" />
+            </VBox.margin></Button>
+      </children>
+      <padding>
+         <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
+      </padding>
+   </VBox>
+
+</children>
 </VBox>

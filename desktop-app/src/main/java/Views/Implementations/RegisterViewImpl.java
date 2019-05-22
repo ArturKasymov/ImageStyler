@@ -50,6 +50,7 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
 
     public void goToMain(){
         //presenter.unsubscribe();
+        hideAlert();
         changeViewTo(new MainViewImpl());
         registerButton.setDisable(false);
         loginField.clear();
@@ -95,26 +96,24 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
     @Override
     public void showAlert() {
         registerButton.setDisable(false);
-        loginField.styleProperty().setValue("-fx-border-color: red;");
-        passwordField.styleProperty().setValue("-fx-border-color: red;");
-        onceMorePasswordField.styleProperty().setValue("-fx-border-color: red;");
+        loginField.getStyleClass().add("wrong-alert");
+        passwordField.getStyleClass().add("wrong-alert");
+        onceMorePasswordField.getStyleClass().add("wrong-alert");
         loginField.setOnMouseClicked(event -> {
-            loginField.styleProperty().setValue("");
-            passwordField.styleProperty().setValue("");
-            onceMorePasswordField.styleProperty().setValue("");
+            hideAlert();
         });
         passwordField.setOnMouseClicked(event -> {
-            loginField.styleProperty().setValue("");
-            passwordField.styleProperty().setValue("");
-            onceMorePasswordField.styleProperty().setValue("");
+            hideAlert();
         });
         onceMorePasswordField.setOnMouseClicked(event -> {
-            loginField.styleProperty().setValue("");
-            passwordField.styleProperty().setValue("");
-            onceMorePasswordField.styleProperty().setValue("");
+            hideAlert();
         });
-        System.out.println("Alert show");
-        loginField.requestFocus();
-        //throw new RuntimeException();
+        //loginField.requestFocus();
+    }
+
+    private void hideAlert() {
+        loginField.getStyleClass().remove("wrong-alert");
+        passwordField.getStyleClass().remove("wrong-alert");
+        onceMorePasswordField.getStyleClass().remove("wrong-alert");
     }
 }

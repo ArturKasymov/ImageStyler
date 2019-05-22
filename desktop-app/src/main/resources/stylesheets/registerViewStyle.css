@@ -16,7 +16,7 @@
     -fx-background: none;
     -fx-display: block;
     -fx-margin-top: 20px;
-    -fx-text-align: center;
+    -fx-test-align: center;
     -fx-border-width: 2px;
     -fx-border-style: solid;
     -fx-border-color: #3498db;
@@ -34,10 +34,9 @@
 
 .form .text-field:focused {
     -fx-border-color: #2ecc71;
-    -fx-scale-x: 1.1;
 }
 
-.form .login-button, .form .register-button {
+.form .register-button {
     -fx-border: 0;
     -fx-background: none;
     -fx-display: block;
@@ -55,7 +54,7 @@
     -fx-cursor: hand;
 }
 
-.form .register-button:hover, .form .login-button:hover {
+.form .register-button:hover {
     -fx-background-color: #2ecc71;
     -fx-background-radius: 24px;
 }
