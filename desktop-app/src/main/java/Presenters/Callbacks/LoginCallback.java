@@ -11,4 +11,5 @@ public interface LoginCallback {
     ArrayList<Integer> getCachedImagesID(int userID);
     void insertUserImage(int imageID, String name, Date date);
     void deleteImage(int imageID);
+    void failedConnect();
 }

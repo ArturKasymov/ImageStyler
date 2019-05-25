@@ -6,10 +6,12 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" stylesheets="@../stylesheets/registerViewStyle.css"
+<?import javafx.scene.layout.Pane?>
+<VBox fx:id="root" alignment="CENTER" stylesheets="@../stylesheets/registerViewStyle.css"
       styleClass="canvas" prefHeight="600.00" prefWidth="400.00" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.RegisterViewImpl">
    <children>
-   <VBox alignment="CENTER" styleClass="form" spacing="10.0">
+      <Pane maxHeight="Infinity" minHeight="0.0" VBox.vgrow="SOMETIMES" />
+   <VBox fx:id="form" alignment="CENTER" styleClass="form" spacing="10.0">
       <children>
          <TextField styleClass="text-field" fx:id="loginField" alignment="CENTER" opacity="0.75" prefWidth="400.0" maxWidth="400.0" promptText="login" VBox.vgrow="NEVER">
 
@@ -29,6 +31,7 @@
          <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
       </padding>
    </VBox>
-
+      <Pane maxHeight="Infinity" minHeight="0.0" VBox.vgrow="SOMETIMES" />
+      <Button fx:id="reconnectButton" styleClass="reconnect-button" disable="true" text="Reconnect" textAlignment="CENTER" />
 </children>
 </VBox>

@@ -1,5 +1,5 @@
 .canvas {
-    -fx-font-family: sans-serif;
+    -fx-font-family: "Serif";
     -fx-background: #34495e;
 }
 
@@ -63,5 +63,5 @@
 .photo-name {
     /*-fx-text-fill: linear-gradient(from 50% 50% to 100% 100%, #66a688, #66a6ee);*/
     -fx-text-fill: #66a6ee;
-    -fx-font: 16px;
+    -fx-font: 16px "Serif";
 }

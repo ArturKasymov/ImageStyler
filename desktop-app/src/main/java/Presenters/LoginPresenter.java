@@ -9,6 +9,9 @@ import javafx.application.Platform;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static Utils.Constants.DEFAULT_SERVER_IP;
+import static Utils.Constants.DEFAULT_SERVER_PORT;
+
 
 public class LoginPresenter implements LoginCallback{
     private LoginViewImpl view;
@@ -21,7 +24,7 @@ public class LoginPresenter implements LoginCallback{
 
     public void login(CharSequence login, CharSequence password) {
         interactor.login(login, password);
-        //ToDo add animation while getting data from server
+        view.setAnimation(true);
     }
 
     public void initCallback(){
@@ -33,11 +36,15 @@ public class LoginPresenter implements LoginCallback{
     }
 
     public void showWrongDataAlert(){
-        Platform.runLater(()->view.showWrongDataAlert());
+        Platform.runLater(()->{
+            view.setAnimation(false);
+            view.showWrongDataAlert();
+        });
     }
     public void goToMain(){
         interactor.checkUserData();
         view.goToMain();
+        Platform.runLater(()->view.setAnimation(false));
     }
 
     @Override
@@ -53,5 +60,14 @@ public class LoginPresenter implements LoginCallback{
     @Override
     public void deleteImage(int imageID) {
         interactor.deleteLocalImage(imageID);
+    }
+
+    @Override
+    public void failedConnect() {
+        view.showReconnectButton();
+    }
+
+    public void reconnect() {
+        Interactor.getInstance().startSessionManager(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
     }
 }
