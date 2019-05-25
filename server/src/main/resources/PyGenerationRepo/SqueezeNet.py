@@ -90,9 +90,9 @@ class SqueezeNet:
             self.LEARNING_RATE = 3.0
             self.DECAY_LR = 0.1
             self.DECAY_LR_AT = 180
-            self.ITERATIONS = 400
+            self.ITERATIONS = 300
             self.CONTENT_WEIGHT = 5e-2
-            self.STYLE_WEIGHTS = [200000, 800, 12, 1]
+            self.STYLE_WEIGHTS = [300000, 1200, 18, 1.5]
             self.TV_WEIGHT = 3e-2
         elif id == 1:
             self.CONTENT_LAYER = 3
