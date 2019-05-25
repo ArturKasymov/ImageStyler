@@ -19,7 +19,7 @@ public class StyleRepo {
         styleImages[2] = getImage("/TestImages/rain_princess.png");
         styleImages[3] = getImage("/TestImages/udnie.png");
         styleImages[4] = getImage("/TestImages/starry_night.png");
-        styleImages[5] = getImage("/TestImages/tubingen.png");
+        styleImages[5] = getImage("/TestImages/the_scream.png");
     }
 
     private static BufferedImage getImage(String path) {

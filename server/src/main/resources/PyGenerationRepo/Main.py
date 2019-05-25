@@ -4,7 +4,8 @@ import sys
 
 
 def main():
-    squeezenet = SqueezeNet()
+    id = sys.stdin.readline()
+    squeezenet = SqueezeNet(int(id))
     if len(sys.argv)>1:
         content_img = PIL.Image.open("/home/demian/ImageStyler/server/target/classes/PyGenerationRepo/images/tubingen.jpg")
         style_img = PIL.Image.open("/home/demian/ImageStyler/server/target/classes/PyGenerationRepo/images/starry_night.jpg")
@@ -17,12 +18,12 @@ def main():
         height = int(shape.split()[0])
         width = int(shape.split()[1])
         log.write("Content shape - (" + str(height) + ", " + str(width) + ")")
-        content_img = PIL.Image.new( 'RGB', (width, height), "black")
+        content_img = PIL.Image.new('RGB', (width, height), "black")
         content_pixels = content_img.load()
         for i in range(height):
             for j in range(width):
                 rgbint = int(sys.stdin.readline())
-                content_pixels[j,i] = ((rgbint >> 16) & 255, (rgbint >> 8) & 255, rgbint & 255)
+                content_pixels[j, i] = ((rgbint >> 16) & 255, (rgbint >> 8) & 255, rgbint & 255)
         content_size = width
         # input style_img
         shape = sys.stdin.readline()

@@ -144,12 +144,7 @@ public class ClientHandler extends Thread{
                     BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageArray));
 
                     int imageID = interactor.insertImage(imageName, currentUserID, imageDate);
-                    System.out.println(image.getType());
-                    try {
-                        File f = new File(getCurrentUserPath()+"/"+imageID+".png");
-                        OutputStream out = new FileOutputStream(f);
-                        ImageIO.write(image, "png", out);
-                    } catch (IOException e) {e.printStackTrace();}
+
                     serverManager.asyncTask(()->{
                         BufferedImage img = RGBConverterRepo.toBufferedImageOfType(image, 1);
                         BufferedImage generatedImage = interactor.generateImage(img, styleID);

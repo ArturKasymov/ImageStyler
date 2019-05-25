@@ -31,6 +31,7 @@ import static Utils.Constants.NUM_STYLE_IMAGES;
 
 public class GeneratorViewImpl extends BaseView implements GeneratorView {
     private BufferedImage styleImages[] = new BufferedImage[NUM_STYLE_IMAGES];
+    private BufferedImage contentImageDefault;
     private int styleImageIndex = 0;
 
     private GeneratorPresenter presenter;
@@ -60,7 +61,7 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
         presenter.initCallback();
         BufferedImage image = styleImages[5];
 
-        setImage(contentImage, image);
+        setImage(contentImage, contentImageDefault);
         setImage(styleImage, image);
         setOnImageClick(contentImage);
         //setOnImageClick(styleImage);
@@ -115,7 +116,9 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
         styleImages[2] = getImage("/TestImages/rain_princess.jpg");
         styleImages[3] = getImage("/TestImages/udnie.jpg");
         styleImages[4] = getImage("/TestImages/starry_night_sq.jpg");
-        styleImages[5] = getImage("/TestImages/tubingen.png");
+        styleImages[5] = getImage("/TestImages/the_scream.png");
+
+        contentImageDefault = getImage("/TestImages/tubingen.png");
     }
 
     private void setOnImageClick(final ImageView imgView) {
