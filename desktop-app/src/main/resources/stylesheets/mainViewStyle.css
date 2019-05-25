@@ -1,5 +1,5 @@
 .canvas {
-    -fx-font-family: "Serif";
+    -fx-font-family: "Tahoma";
     -fx-background: #34495e;
 }
 
@@ -64,4 +64,76 @@
     /*-fx-text-fill: linear-gradient(from 50% 50% to 100% 100%, #66a688, #66a6ee);*/
     -fx-text-fill: #66a6ee;
     -fx-font: 16px "Serif";
+}
+
+.settings-dialog {
+    -fx-border-color: black;
+    -fx-background-color: lightgreen;
+}
+
+.settings-dialog .label {
+    -fx-text-fill: #34495e;
+    -fx-font: 16px "Serif";
+}
+
+.settings-dialog .text-field {
+    -fx-border: 0;
+    -fx-background: none;
+    -fx-display: block;
+    -fx-margin-top: 20px;
+    -fx-text-align: center;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-border-color: #3498db;
+    -fx-padding: 7px 5px;
+    -fx-focus-color: none;
+    -fx-text-fill: black;
+    -fx-border-radius: 4px;
+}
+
+.settings-dialog .text-field:focused {
+    -fx-border-color: #2ecc71;
+}
+
+.settings-dialog .change-button {
+    -fx-border: 0;
+    -fx-background: none;
+    -fx-display: block;
+    -fx-margin-top: 20px;
+    -fx-text-align: center;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-border-color: #2ecc71;
+    -fx-focus-color: none;
+    -fx-color: white;
+    -fx-text-fill: black;
+    -fx-border-radius: 6px;
+    -fx-cursor: hand;
+}
+
+.settings-dialog .change-button:hover {
+    -fx-background-color: #2ecc71;
+    -fx-background-radius: 6px;
+    -fx-text-fill: white;
+}
+
+.settings-dialog .exit-button {
+    -fx-border: 0;
+    -fx-background: none;
+    -fx-display: block;
+    -fx-text-align: center;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-border-color: #34495e;
+    -fx-focus-color: none;
+    -fx-color: white;
+    -fx-text-fill: black;
+    -fx-border-radius: 50%;
+    -fx-cursor: hand;
+}
+
+.settings-dialog .exit-button:hover {
+    -fx-background-color: #34495e;
+    -fx-background-radius: 50%;
+    -fx-text-fill: white;
 }

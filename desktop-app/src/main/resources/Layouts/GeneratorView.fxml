@@ -12,14 +12,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.layout.Pane?>
 <GridPane alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../stylesheets/generatorViewStyle.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.GeneratorViewImpl">
     <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" prefWidth="250.0" />
-        <ColumnConstraints hgrow="SOMETIMES" prefWidth="100.0" />
-        <ColumnConstraints hgrow="SOMETIMES" prefWidth="250.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="Infinity" prefWidth="250.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="Infinity" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="Infinity" prefWidth="250.0" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
+        <RowConstraints prefHeight="40.0" vgrow="NEVER" />
         <RowConstraints prefHeight="20.0" vgrow="SOMETIMES" />
         <RowConstraints prefHeight="240.0" vgrow="SOMETIMES" />
         <RowConstraints prefHeight="100.0" vgrow="SOMETIMES" />
@@ -27,74 +28,61 @@
     <children>
         <VBox alignment="CENTER" prefHeight="20.0" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="1">
             <children>
+                <Pane minHeight="0.0" VBox.vgrow="SOMETIMES" />
                 <Slider maxWidth="400.0" minWidth="400.0" prefWidth="400.0" />
+                <Pane minHeight="0.0" VBox.vgrow="SOMETIMES" />
             </children>
         </VBox>
-        <GridPane alignment="CENTER" prefHeight="240.0" GridPane.columnIndex="0" GridPane.rowIndex="2">
+        <GridPane alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" prefHeight="240.0" GridPane.columnIndex="0" GridPane.rowIndex="2">
             <GridPane.margin>
                 <Insets />
             </GridPane.margin>
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="240.0" />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints minHeight="200.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="40.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <ImageView fx:id="contentImage" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
-                    <GridPane.margin>
-                        <Insets left="25.0" top="30.0" />
-                    </GridPane.margin>
-                </ImageView>
+                <ImageView fx:id="contentImage" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
+                <Button text="Load image" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
             </children>
         </GridPane>
-        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: limegreen;" styleClass="plus" text="+" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2">
-            <GridPane.margin>
-                <Insets left="24.0" />
-            </GridPane.margin>
+        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: limegreen;" styleClass="plus" text="+" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
             <padding>
                 <Insets bottom="3.0" left="5.0" right="5.0" />
             </padding>
             <font>
                 <Font size="30.0" />
             </font>
+         <GridPane.margin>
+            <Insets bottom="10.0" />
+         </GridPane.margin>
         </Label>
         <GridPane alignment="CENTER" prefHeight="240.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
-            <GridPane.margin>
-                <Insets />
-            </GridPane.margin>
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0" />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints minHeight="200.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="40.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <ImageView fx:id="styleImage" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
-                    <GridPane.margin>
-                        <Insets left="25.0" top="30.0" />
-                    </GridPane.margin></ImageView>
-                <Button fx:id="leftStyleImage" minHeight="25.0" minWidth="25.0" onAction="#onShiftLeftStyleImage" prefHeight="25.0" prefWidth="25.0" styleClass="shift-button" text="&lt;" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                    <GridPane.margin>
-                        <Insets left="25.0" top="20.0" />
-                    </GridPane.margin></Button>
-                <Button fx:id="rightStyleImage" alignment="TOP_CENTER" contentDisplay="CENTER" minHeight="25.0" minWidth="25.0" onAction="#onShiftRightStyleImage" prefHeight="25.0" prefWidth="25.0" styleClass="shift-button" text="&gt;" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                    <GridPane.margin>
-                        <Insets left="75.0" top="20.0" />
-                    </GridPane.margin>
-                    <padding>
-                        <Insets top="5.0" />
-                    </padding></Button>
+                <ImageView fx:id="styleImage" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
+                <Button fx:id="leftStyleImage" minHeight="25.0" minWidth="25.0" onAction="#onShiftLeftStyleImage" prefHeight="25.0" prefWidth="25.0" styleClass="shift-button" text="&lt;" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                <Button fx:id="rightStyleImage" alignment="TOP_CENTER" contentDisplay="CENTER" minHeight="25.0" minWidth="25.0" onAction="#onShiftRightStyleImage" prefHeight="25.0" prefWidth="25.0" styleClass="shift-button" text="&gt;" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+               <padding>
+                  <Insets top="5.0" />
+               </padding></Button>
             </children>
         </GridPane>
 
-        <VBox alignment="TOP_CENTER" prefHeight="140.0" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="3">
+        <VBox alignment="TOP_CENTER" prefHeight="100.0" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="3">
             <children>
-                <TextField fx:id="photoName" alignment="TOP_CENTER" maxWidth="150.0" prefWidth="150.0" promptText="Name a photo" styleClass="photo-name">
+                <Pane minHeight="0.0" VBox.vgrow="SOMETIMES" />
+                <TextField fx:id="photoName" alignment="TOP_CENTER" maxWidth="150.0" prefWidth="150.0" promptText="Name a photo" styleClass="photo-name" VBox.vgrow="SOMETIMES">
                     <font>
                         <Font size="14.0" />
                     </font>
@@ -105,11 +93,12 @@
                         <Insets top="15.0" />
                     </VBox.margin>
                 </TextField>
-                <Button fx:id="generateButton" alignment="CENTER" mnemonicParsing="false" onAction="#onGenerate" styleClass="gen-button" text="GENERATE">
+                <Button fx:id="generateButton" alignment="CENTER" mnemonicParsing="false" onAction="#onGenerate" styleClass="gen-button" text="GENERATE" VBox.vgrow="SOMETIMES">
                     <VBox.margin>
                         <Insets top="5.0" />
                     </VBox.margin>
                 </Button>
+                <Pane minHeight="0.0" VBox.vgrow="SOMETIMES" />
             </children>
         </VBox>
     </children>

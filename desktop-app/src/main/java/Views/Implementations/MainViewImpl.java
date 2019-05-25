@@ -23,6 +23,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -224,6 +225,7 @@ public class MainViewImpl extends BaseView implements MainView {
                     BaseView genCtrl = loader.getController();
                     genCtrl.setAppManager(getAppManager());
                 }
+                HBox.setHgrow(generatorView, Priority.SOMETIMES);
                 contentBox.getChildren().setAll(generatorView);
                 goToGenerateButton.textProperty().setValue("-");
                 fullButton.setDisable(true);

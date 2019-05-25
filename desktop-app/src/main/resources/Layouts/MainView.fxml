@@ -17,11 +17,11 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.layout.Pane?>
 <GridPane fx:id="base" alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="canvas" stylesheets="@../stylesheets/mainViewStyle.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.MainViewImpl">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" percentWidth="33" />
@@ -54,7 +54,7 @@
                     </FXCollections>
                 </items>
             </ComboBox>
-            <Pane prefWidth="100.0" HBox.hgrow="SOMETIMES"/>
+            <Pane prefWidth="100.0" HBox.hgrow="SOMETIMES" />
             <Label fx:id="username" alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="100.0" styleClass="username" text="Hello UJ" />
         </items>
       </ToolBar>
@@ -68,13 +68,13 @@
                      <VBox.margin>
                         <Insets top="5.0" />
                      </VBox.margin></Label>
-                  <ImageView fx:id="resultImage" VBox.vgrow="SOMETIMES" fitHeight="290.0" fitWidth="290.0" pickOnBounds="true" preserveRatio="true" styleClass="main-image-view">
+                  <ImageView fx:id="resultImage" fitHeight="290.0" fitWidth="290.0" pickOnBounds="true" preserveRatio="true" styleClass="main-image-view" VBox.vgrow="SOMETIMES">
                      <VBox.margin>
                         <Insets top="2.0" />
                      </VBox.margin>
                   </ImageView>
                    <Pane minHeight="0.0" VBox.vgrow="SOMETIMES" />
-                  <Button styleClass="buttons" fx:id="deleteImageButton" alignment="CENTER" contentDisplay="CENTER" minHeight="32.0" mnemonicParsing="false" onAction="#onDeleteImage" prefHeight="32.0" text="Delete image" textAlignment="CENTER">
+                  <Button fx:id="deleteImageButton" alignment="CENTER" contentDisplay="CENTER" minHeight="32.0" mnemonicParsing="false" onAction="#onDeleteImage" prefHeight="32.0" styleClass="buttons" text="Delete image" textAlignment="CENTER">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -85,32 +85,34 @@
             </VBox>
          </children>
       </HBox>
-       <DialogPane fx:id="settingsDialog" prefHeight="200.0" prefWidth="300.0" style="-fx-border-color: black; -fx-background-color: lightgreen;" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
+       <DialogPane fx:id="settingsDialog" prefHeight="200.0" maxWidth="400.0" styleClass="settings-dialog" visible="false" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
            <header>
-            <AnchorPane nodeOrientation="LEFT_TO_RIGHT">
+            <HBox>
                <children>
-                     <Label alignment="CENTER" contentDisplay="CENTER" layoutX="99.0" minHeight="0.0" minWidth="0.0" prefHeight="50.0" prefWidth="200.0" text="Change your password" textAlignment="CENTER" AnchorPane.leftAnchor="99.0" />
-                   <Button fx:id="exitSettingsButton" minHeight="39.0" minWidth="39.0" onAction="#onCloseSettingsDialog" prefHeight="39.0" prefWidth="39.0" text="X" textAlignment="CENTER" AnchorPane.rightAnchor="0.0" />
+                   <Pane minWidth="0.0" HBox.hgrow="SOMETIMES" />
+                     <Label styleClass="label" alignment="CENTER" contentDisplay="CENTER" minHeight="0.0" minWidth="0.0" prefHeight="50.0" text="Change your password" textAlignment="CENTER" />
+                   <Pane minWidth="0.0" HBox.hgrow="SOMETIMES" />
+                   <Button styleClass="exit-button" fx:id="exitSettingsButton" minHeight="39.0" minWidth="39.0" onAction="#onCloseSettingsDialog" prefHeight="39.0" prefWidth="39.0" text="X" textAlignment="CENTER" AnchorPane.rightAnchor="0.0" />
                </children>
-            </AnchorPane>
+            </HBox>
                
            </header>
            <content>
                <VBox alignment="CENTER">
                    <children>
-                       <PasswordField fx:id="oldPasswordField" alignment="CENTER" opacity="0.75" promptText="Old password">
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin></PasswordField>
-                       <PasswordField fx:id="newPasswordField" alignment="CENTER" opacity="0.75" promptText="New password">
-                     <VBox.margin>
-                        <Insets top="8.0" />
-                     </VBox.margin></PasswordField>
-                       <PasswordField fx:id="onceMoreNewPasswordField" alignment="CENTER" opacity="0.75" promptText="New password (once more)">
+                       <PasswordField styleClass="text-field" fx:id="oldPasswordField" alignment="CENTER" promptText="Old password" VBox.vgrow="NEVER">
                      <VBox.margin>
                         <Insets top="2.0" />
                      </VBox.margin></PasswordField>
-                       <Button fx:id="changePasswordButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onChangePassword" prefWidth="200.0" text="Change" textAlignment="CENTER">
+                       <PasswordField styleClass="text-field" fx:id="newPasswordField" alignment="CENTER" promptText="New password" VBox.vgrow="NEVER">
+                     <VBox.margin>
+                        <Insets top="8.0" />
+                     </VBox.margin></PasswordField>
+                       <PasswordField styleClass="text-field" fx:id="onceMoreNewPasswordField" alignment="CENTER" promptText="New password (once more)" VBox.vgrow="NEVER">
+                     <VBox.margin>
+                        <Insets top="2.0" />
+                     </VBox.margin></PasswordField>
+                       <Button styleClass="change-button" fx:id="changePasswordButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onChangePassword" prefWidth="200.0" text="Change" textAlignment="CENTER" VBox.vgrow="NEVER">
                      <VBox.margin>
                         <Insets top="8.0" />
                      </VBox.margin></Button>
@@ -118,8 +120,9 @@
                </VBox>
            </content>
          <GridPane.margin>
-            <Insets left="-100.0" right="100.0" />
+            <Insets />
          </GridPane.margin>
        </DialogPane>
+
    </children>
 </GridPane>
