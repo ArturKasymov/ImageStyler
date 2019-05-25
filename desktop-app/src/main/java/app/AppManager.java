@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import net.coobird.thumbnailator.Thumbnails;
 import org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner;
 import org.nd4j.linalg.factory.Nd4jBackend;
 import org.nd4j.nativeblas.NativeOpsHolder;
@@ -44,6 +45,7 @@ public class AppManager extends Application {
     private void initModel(){
         executor = Executors.newSingleThreadScheduledExecutor();
         checkAppRootDir();
+        System.out.println(Thread.currentThread().getName());
         interactor=Interactor.getInstance();
         interactor.startSessionManager(DEFAULT_SERVER_IP,DEFAULT_SERVER_PORT);
         loadND4Jdata(false);

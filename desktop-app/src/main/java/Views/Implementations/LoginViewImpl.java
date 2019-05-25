@@ -4,6 +4,8 @@ import Model.Interactors.Interactor;
 import Model.Interactors.MainInteractor;
 import Presenters.LoginPresenter;
 
+import Utils.controls.RingAnimation;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -36,6 +38,9 @@ public class LoginViewImpl extends BaseView implements LoginView {
     private VBox root;
 
     @FXML
+    private VBox form;
+
+    @FXML
     private TextField loginField;
 
     @FXML
@@ -49,6 +54,13 @@ public class LoginViewImpl extends BaseView implements LoginView {
 
     @FXML
     private Label warning;
+
+    @FXML
+    private Button reconnectButton;
+
+    private boolean beingAnimated = false;
+
+    private RingAnimation indicator = new RingAnimation();
 
     private boolean filledIn() {
         return loginField.getCharacters().length()>0 && passwordField.getCharacters().length()>0;
@@ -130,4 +142,20 @@ public class LoginViewImpl extends BaseView implements LoginView {
         registerButton.setDisable(false);
     }
 
+    public void showReconnectButton() {
+        reconnectButton.setDisable(false);
+        reconnectButton.setOnMouseClicked(event -> {
+            presenter.reconnect();
+            reconnectButton.setDisable(true);
+        });
+    }
+
+    public void setAnimation(boolean set) {
+        beingAnimated = set;
+        if (set) {
+            root.getChildren().setAll(indicator);
+        } else {
+            root.getChildren().setAll(form, reconnectButton);
+        }
+    }
 }

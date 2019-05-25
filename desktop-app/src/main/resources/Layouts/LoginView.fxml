@@ -5,21 +5,22 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" stylesheets="@../stylesheets/loginViewStyle.css"
-      styleClass="canvas" fx:id="root" prefHeight="600.00" prefWidth="400.00" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.LoginViewImpl">
+<VBox fx:id="root" alignment="CENTER" prefHeight="600.00" prefWidth="400.00" spacing="10.0" styleClass="canvas" stylesheets="@../stylesheets/loginViewStyle.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.LoginViewImpl">
    <children>
-      <VBox alignment="CENTER" styleClass="form" spacing="10.0">
+      <Pane maxHeight="Infinity" minHeight="0.0" VBox.vgrow="SOMETIMES" />
+      <VBox fx:id="form" alignment="CENTER" spacing="10.0" styleClass="form">
          <children>
-            <TextField styleClass="text-field" fx:id="loginField" alignment="CENTER" opacity="0.75" prefWidth="400.0" maxWidth="400.0" promptText="login" VBox.vgrow="NEVER">
+            <TextField fx:id="loginField" alignment="CENTER" maxWidth="400.0" opacity="0.75" prefWidth="400.0" promptText="login" styleClass="text-field" VBox.vgrow="NEVER">
                <VBox.margin>
                   <Insets top="20.0" />
                </VBox.margin>
             </TextField>
-            <PasswordField styleClass="text-field" fx:id="passwordField" prefWidth="400.0" maxWidth="400.0" alignment="CENTER" opacity="0.75" promptText="password" />
-            <Button styleClass="login-button" fx:id="loginButton" focusTraversable="false" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onLogin" opacity="0.75" prefWidth="250.0" text="SIGN IN" textOverrun="CENTER_ELLIPSIS" />
-            <Button fx:id="registerButton" styleClass="register-button" focusTraversable="false" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onMoveToRegister" prefWidth="150.0" text="SIGN UP" textAlignment="CENTER">
+            <PasswordField fx:id="passwordField" alignment="CENTER" maxWidth="400.0" opacity="0.75" prefWidth="400.0" promptText="password" styleClass="text-field" />
+            <Button fx:id="loginButton" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#onLogin" opacity="0.75" prefWidth="250.0" styleClass="login-button" text="SIGN IN" textOverrun="CENTER_ELLIPSIS" />
+            <Button fx:id="registerButton" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#onMoveToRegister" prefWidth="150.0" styleClass="register-button" text="SIGN UP" textAlignment="CENTER">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
@@ -27,6 +28,8 @@
             <Label fx:id="warning" text="User data is wrong!" textFill="#e11b1b" />
          </children>
       </VBox>
+      <Pane maxHeight="Infinity" minHeight="0.0" VBox.vgrow="SOMETIMES" />
+      <Button fx:id="reconnectButton" styleClass="reconnect-button" disable="true" text="Reconnect" textAlignment="CENTER" />
    </children>
    <padding>
       <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />

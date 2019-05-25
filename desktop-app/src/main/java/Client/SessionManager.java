@@ -7,6 +7,7 @@ import Presenters.Callbacks.LoginCallback;
 import Presenters.Callbacks.MainCallback;
 import Presenters.Callbacks.RegisterCallback;
 import Utils.Constants;
+import javafx.application.Platform;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -84,9 +85,13 @@ public class SessionManager extends Thread {
                 if(inputData.equals(CLOSE_CONNECTION))break;
                 parseServerInput(inputData);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             //TODO go to offline
             e.printStackTrace();
+            Platform.runLater(()->{
+                loginCallback.failedConnect();
+                registerCallback.failedConnect();
+            });
         } finally {
             try {
                 socket.close();

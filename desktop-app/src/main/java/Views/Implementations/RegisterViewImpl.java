@@ -1,6 +1,7 @@
 package Views.Implementations;
 
 import Presenters.RegisterPresenter;
+import Utils.controls.RingAnimation;
 import Views.core.BaseView;
 import Views.Interfaces.RegisterView;
 import Views.core.ViewByID;
@@ -13,10 +14,17 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
 
 
 public class RegisterViewImpl extends BaseView implements RegisterView {
     private RegisterPresenter presenter;
+
+    @FXML
+    private VBox root;
+
+    @FXML
+    private VBox form;
 
     @FXML
     private TextField loginField;
@@ -29,6 +37,12 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
 
     @FXML
     private Button registerButton;
+
+    @FXML
+    private Button reconnectButton;
+
+    private RingAnimation indicator = new RingAnimation();
+    private boolean beingAnimated = false;
 
     private boolean filledIn() {
         return loginField.getCharacters().length()>0 && passwordField.getCharacters().length()>0 && onceMorePasswordField.getCharacters().length()>0;
@@ -115,5 +129,22 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
         loginField.getStyleClass().remove("wrong-alert");
         passwordField.getStyleClass().remove("wrong-alert");
         onceMorePasswordField.getStyleClass().remove("wrong-alert");
+    }
+
+    public void showReconnectButton() {
+        reconnectButton.setDisable(false);
+        reconnectButton.setOnMouseClicked(event -> {
+            presenter.reconnect();
+            reconnectButton.setDisable(true);
+        });
+    }
+
+    public void setAnimation(boolean set) {
+        beingAnimated = set;
+        if (set) {
+            root.getChildren().setAll(indicator);
+        } else {
+            root.getChildren().setAll(form, reconnectButton);
+        }
     }
 }
