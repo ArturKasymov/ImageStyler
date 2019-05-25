@@ -79,21 +79,71 @@ class SqueezeNet:
             self.STYLE_LAYERS = [1, 4, 6, 7]
             self.LEARNING_RATE = 3.0
             self.DECAY_LR = 0.1
-            self.DECAY_LR_AT = 95
+            self.DECAY_LR_AT = 180
             self.ITERATIONS = 200
             self.CONTENT_WEIGHT = 5e-2
             self.STYLE_WEIGHTS = [450000, 1500, 24, 5]
             self.TV_WEIGHT = 3e-2
-        else:
+        elif id == 5:
             self.CONTENT_LAYER = 3
             self.STYLE_LAYERS = [1, 4, 6, 7]
             self.LEARNING_RATE = 3.0
             self.DECAY_LR = 0.1
             self.DECAY_LR_AT = 180
             self.ITERATIONS = 400
+            self.CONTENT_WEIGHT = 5e-2
+            self.STYLE_WEIGHTS = [200000, 800, 12, 1]
+            self.TV_WEIGHT = 3e-2
+        elif id == 1:
+            self.CONTENT_LAYER = 3
+            self.STYLE_LAYERS = [1, 4, 6, 7]
+            self.LEARNING_RATE = 3.0
+            self.DECAY_LR = 0.1
+            self.DECAY_LR_AT = 180
+            self.ITERATIONS = 400
+            self.CONTENT_WEIGHT = 5e-2
+            self.STYLE_WEIGHTS = [200000, 800, 12, 1]
+            self.TV_WEIGHT = 3e-2
+        elif id == 0:
+            self.CONTENT_LAYER = 3
+            self.STYLE_LAYERS = [1, 4, 6, 7]
+            self.LEARNING_RATE = 3.0
+            self.DECAY_LR = 0.1
+            self.DECAY_LR_AT = 180
+            self.ITERATIONS = 300
+            self.CONTENT_WEIGHT = 4e-2
+            self.STYLE_WEIGHTS = [100000, 400, 6, 0.5]
+            self.TV_WEIGHT = 4e-2
+        elif id == 2:
+            self.CONTENT_LAYER = 3
+            self.STYLE_LAYERS = [1, 4, 6, 7]
+            self.LEARNING_RATE = 3.0
+            self.DECAY_LR = 0.1
+            self.DECAY_LR_AT = 180
+            self.ITERATIONS = 200
+            self.CONTENT_WEIGHT = 5e-2
+            self.STYLE_WEIGHTS = [200000, 800, 12, 1]
+            self.TV_WEIGHT = 3e-2
+        elif id == 3:
+            self.CONTENT_LAYER = 3
+            self.STYLE_LAYERS = [1, 4, 6, 7]
+            self.LEARNING_RATE = 3.0
+            self.DECAY_LR = 0.1
+            self.DECAY_LR_AT = 180
+            self.ITERATIONS = 200
             self.CONTENT_WEIGHT = 6e-2
-            self.STYLE_WEIGHTS = [300000, 1000, 15, 3]
-            self.TV_WEIGHT = 2.5e-2
+            self.STYLE_WEIGHTS = [300000, 1200, 18, 1.5]
+            self.TV_WEIGHT = 4e-2
+        else:
+            self.CONTENT_LAYER = 3
+            self.STYLE_LAYERS = [1, 4, 6, 7]
+            self.LEARNING_RATE = 3.0
+            self.DECAY_LR = 0.1
+            self.DECAY_LR_AT = 180
+            self.ITERATIONS = 300
+            self.CONTENT_WEIGHT = 6e-2
+            self.STYLE_WEIGHTS = [200000, 800, 12, 1]
+            self.TV_WEIGHT = 3e-2
         self.verbose = False
 
     def show_image(self, img, iteration):
