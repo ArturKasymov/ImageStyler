@@ -21,6 +21,7 @@ public class PySqueezeNet {
             // PASS INPUT IMAGES
             BufferedWriter inputImagesStream = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()));
             // IMAGE ID
+            System.out.println("Image_id: " + imageId);
             inputImagesStream.write(imageId+"");
             inputImagesStream.newLine();
             // CONTENT IMAGE

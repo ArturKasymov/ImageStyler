@@ -17,6 +17,7 @@ def main():
         shape = sys.stdin.readline()
         height = int(shape.split()[0])
         width = int(shape.split()[1])
+        log.write("image id - (" + id + ")")
         log.write("Content shape - (" + str(height) + ", " + str(width) + ")")
         content_img = PIL.Image.new('RGB', (width, height), "black")
         content_pixels = content_img.load()
@@ -29,8 +30,8 @@ def main():
         shape = sys.stdin.readline()
         height = int(shape.split()[0])
         width = int(shape.split()[1])
-        log.write("Styleshape - (" + str(height) + ", " + str(width) + ")")
-        style_img = PIL.Image.new( 'RGB', (width, height), "black")
+        log.write("Style shape - (" + str(height) + ", " + str(width) + ")")
+        style_img = PIL.Image.new('RGB', (width, height), "black")
         style_pixels = style_img.load()
         for i in range(height):
             for j in range(width):
