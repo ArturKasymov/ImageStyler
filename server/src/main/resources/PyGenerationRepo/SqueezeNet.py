@@ -82,7 +82,7 @@ class SqueezeNet:
             self.DECAY_LR_AT = 95
             self.ITERATIONS = 200
             self.CONTENT_WEIGHT = 5e-2
-            self.STYLE_LAYERS = [450000, 1500, 24, 5]
+            self.STYLE_WEIGHTS = [450000, 1500, 24, 5]
             self.TV_WEIGHT = 3e-2
         else:
             self.CONTENT_LAYER = 3
