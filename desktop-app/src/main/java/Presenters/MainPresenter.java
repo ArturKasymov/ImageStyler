@@ -40,7 +40,8 @@ public class MainPresenter implements MainCallback {
         return interactor.getCurrentUserImagesList();
     }
 
-    public void deleteLocalImage(int imageID) {
+    @Override
+    public void deleteLocalImage(int imageID,int userID) {
         interactor.deleteLocalImage(imageID);
     }
 
@@ -53,17 +54,18 @@ public class MainPresenter implements MainCallback {
     }
 
     @Override
-    public void insertGeneratedImage(int imageID, String photoName, Date date) {
-        Platform.runLater(()->view.notifyList(interactor.insertUserImage(imageID, photoName, date,true)));
+    public void insertGeneratedImage(int imageID,String photoName, Date date) {
+        //TODO delete Log
+        if(Platform.isAccessibilityActive()){
+            System.out.println("insertImage");
+            Platform.runLater(()->view.notifyList(interactor.insertUserImage(imageID,photoName, date,true)));
+        }
+
     }
 
     @Override
-    public void saveGeneratedImage(int imageID, BufferedImage generatedImage) {
-        interactor.saveUserImage(imageID,generatedImage);
-    }
-
-    @Override
-    public void notifyDownload(int imageID) {
+    public void saveGeneratedImage(int imageID, int userID,BufferedImage generatedImage) {
+        interactor.saveUserImage(imageID,userID,generatedImage);
         Platform.runLater(()->view.notifyDownload(imageID));
     }
 
