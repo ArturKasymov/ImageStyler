@@ -80,7 +80,7 @@ public class Interactor implements ClientInteractor {
     @Override
     public BufferedImage generateImage(BufferedImage contentImage, int styleID) {
         BufferedImage styleImage = RGBConverterRepo.toBufferedImageOfType(StyleRepo.getStyle(styleID), 1);
-        return PySqueezeNet.generate(contentImage, styleImage);
+        return PySqueezeNet.generate(contentImage, styleImage, styleID);
     }
 
     @Override

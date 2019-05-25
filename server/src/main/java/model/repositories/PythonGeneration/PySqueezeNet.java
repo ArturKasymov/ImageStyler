@@ -13,13 +13,17 @@ import java.util.Scanner;
 
 public class PySqueezeNet {
 
-    public static BufferedImage generate(BufferedImage contentImage, BufferedImage styleImage){
+    public static BufferedImage generate(BufferedImage contentImage, BufferedImage styleImage, int imageId){
         URL url = Main.class.getResource("/PyGenerationRepo/Main.py");
         try {
             ProcessBuilder pb = new ProcessBuilder("python3", url.toString().substring(5));
             Process p = pb.start();
             // PASS INPUT IMAGES
             BufferedWriter inputImagesStream = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()));
+            // IMAGE ID
+            System.out.println("Image_id: " + imageId);
+            inputImagesStream.write(imageId+"");
+            inputImagesStream.newLine();
             // CONTENT IMAGE
             int contHeight = contentImage.getHeight();
             int contWidth = contentImage.getWidth();
