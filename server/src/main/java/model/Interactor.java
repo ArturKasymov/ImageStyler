@@ -41,15 +41,11 @@ public class Interactor implements ClientInteractor {
 
     @Override
     public int insertUser(String userName, String password) throws SQLException {
-        //TODO logs here
-        //System.out.println(userName+" "+password);
-
         try {
             return dataProvider.insertUser(userName, CryptoRepo.getSaltedHash(password));
-        } catch (Exception e) {
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
         }
-
         return 0;
     }
 

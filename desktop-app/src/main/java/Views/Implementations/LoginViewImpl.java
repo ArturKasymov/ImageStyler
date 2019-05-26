@@ -84,6 +84,7 @@ public class LoginViewImpl extends BaseView implements LoginView {
     public void initialize() {
         presenter.initCallback();
 
+
         warning.setVisible(false);
 
         loginButton.setDisable(true);
@@ -108,16 +109,23 @@ public class LoginViewImpl extends BaseView implements LoginView {
         presenter.register();
     }
 
+    @Override
     public void showWrongDataAlert() {
         //warning.setVisible(true);
+        if(getViewID()==getAppManager().getCurrentView()){
+            loginField.getStyleClass().add("wrong-alert");
+            passwordField.getStyleClass().add("wrong-alert");
+            loginButton.setDisable(false);
+            registerButton.setDisable(false);
+            loginField.setOnMouseClicked(event -> hideWrongDataAlert());
+            passwordField.setOnMouseClicked(event -> hideWrongDataAlert());
+            //loginField.requestFocus();
+        }
+    }
 
-        loginField.getStyleClass().add("wrong-alert");
-        passwordField.getStyleClass().add("wrong-alert");
-        loginButton.setDisable(false);
-        registerButton.setDisable(false);
-        loginField.setOnMouseClicked(event -> hideWrongDataAlert());
-        passwordField.setOnMouseClicked(event -> hideWrongDataAlert());
-        //loginField.requestFocus();
+    @Override
+    public void initViewData() {
+        if(!presenter.checkConnection())showReconnectButton();
     }
 
     private void hideWrongDataAlert() {
@@ -127,7 +135,6 @@ public class LoginViewImpl extends BaseView implements LoginView {
     }
 
     public void goToRegister(){
-        //presenter.unsubscribe();
         hideWrongDataAlert();
         changeViewTo(new RegisterViewImpl());
     }
@@ -142,14 +149,18 @@ public class LoginViewImpl extends BaseView implements LoginView {
         registerButton.setDisable(false);
     }
 
+    @Override
     public void showReconnectButton() {
-        reconnectButton.setDisable(false);
-        reconnectButton.setOnMouseClicked(event -> {
-            presenter.reconnect();
-            reconnectButton.setDisable(true);
-        });
+        if(checkCurrentView()) {
+            reconnectButton.setDisable(false);
+            reconnectButton.setOnMouseClicked(event -> {
+                presenter.reconnect();
+                reconnectButton.setDisable(true);
+            });
+        }
     }
 
+    @Override
     public void setAnimation(boolean set) {
         beingAnimated = set;
         if (set) {

@@ -131,6 +131,11 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
         onceMorePasswordField.getStyleClass().remove("wrong-alert");
     }
 
+    @Override
+    public void initViewData() {
+        if(!presenter.checkConnection())showReconnectButton();
+    }
+
     public void showReconnectButton() {
         reconnectButton.setDisable(false);
         reconnectButton.setOnMouseClicked(event -> {
