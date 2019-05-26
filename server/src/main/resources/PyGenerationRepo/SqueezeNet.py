@@ -13,7 +13,7 @@ class SqueezeNet:
         self.net.type(Utils.getDtype())
         for param in self.net.parameters():
             param.requires_grad = False
-        self.init_hyper_params(id, 2**((strength - 50.0)/100))
+        self.init_hyper_params(id, 2**((strength - 50.0)/50))
 
     def generate(self, content_img, style_img, content_size=192, style_size=512, init_random=False):
         self.CONTENT_SIZE = content_size
