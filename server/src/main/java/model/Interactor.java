@@ -108,6 +108,7 @@ public class Interactor implements ClientInteractor {
     }
 
     public void initStyles(){
+
         StyleRepo.init();
     }
 

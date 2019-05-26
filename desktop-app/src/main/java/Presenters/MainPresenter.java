@@ -43,7 +43,7 @@ public class MainPresenter implements MainCallback {
     @Override
     public void deleteLocalImage(int imageID,int userID) {
         interactor.deleteLocalImage(imageID);
-        view.notifyDelete();
+        Platform.runLater(()->view.notifyDelete());
     }
 
     @Override

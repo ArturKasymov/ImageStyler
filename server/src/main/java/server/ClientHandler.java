@@ -131,7 +131,7 @@ public class ClientHandler extends Thread{
                             try {
                                 insertImageData(imageId,uID,ImageIO.read(new File(getImagePath)));
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                sendDataToClient(INSERT_IMAGE_DATA+" "+FAIL);
                             }
                         });
                 break;
