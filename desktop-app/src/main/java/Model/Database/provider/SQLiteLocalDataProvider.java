@@ -144,6 +144,26 @@ public class SQLiteLocalDataProvider {
         return null;
     }
 
+
+    public ArrayList<Integer> getDownloadedImagesID(int currentUserID){
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(GET_DOWNLOADED_IMAGES_ID);
+            pstmt.setInt(1,currentUserID);
+            pstmt.setBoolean(2,true);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            ArrayList<Integer> userImagesID=new ArrayList<>();
+            while(rs.next()) {
+                userImagesID.add(rs.getInt(1));
+            }
+            return userImagesID;
+        } catch (SQLException  e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public void deleteUserImage(int imageID) {
         try {
             PreparedStatement pstmt = connection.prepareStatement(DELETE_USER_IMAGE);
