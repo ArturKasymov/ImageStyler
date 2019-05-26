@@ -67,11 +67,11 @@ public class LoginViewImpl extends BaseView implements LoginView {
     }
 
     private void buttonToggle() {
-        loginButton.setDisable(!filledIn());
+        loginButton.setDisable(!(filledIn() && presenter.checkConnection()));
     }
 
     private void maybeLogin(KeyEvent event) {
-        if (event==null || (event.getCode().getName().equals("Enter") && filledIn())) {
+        if (event==null || (event.getCode().getName().equals("Enter") && filledIn() && presenter.checkConnection())) {
             loginButton.setDisable(true);
             registerButton.setDisable(true);
             presenter.login(loginField.getCharacters(), passwordField.getCharacters());
@@ -155,7 +155,7 @@ public class LoginViewImpl extends BaseView implements LoginView {
             reconnectButton.setOnMouseClicked(event -> {
                 presenter.reconnect();
                 loginButton.setDisable(false);
-                reconnectButton.setDisable(false);
+                registerButton.setDisable(false);
                 reconnectButton.setDisable(true);
             });
         }

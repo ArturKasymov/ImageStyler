@@ -73,12 +73,12 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
     }
 
     private void buttonToggle() {
-        if (filledIn() && passwordsMatch()) registerButton.setDisable(false);
+        if (filledIn() && passwordsMatch() && presenter.checkConnection()) registerButton.setDisable(false);
         else registerButton.setDisable(true);
     }
 
     private void maybeLogin(KeyEvent event) {
-        if (event==null || (event.getCode().getName().equals("Enter") && filledIn() && passwordsMatch())) {
+        if (event==null || (event.getCode().getName().equals("Enter") && filledIn() && passwordsMatch() && presenter.checkConnection())) {
             registerButton.setDisable(false);
             presenter.register(loginField.getCharacters(), passwordField.getCharacters());
         }

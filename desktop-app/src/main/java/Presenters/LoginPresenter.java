@@ -27,7 +27,7 @@ public class LoginPresenter implements LoginCallback{
         try {
             interactor.login(login, password);
             view.setAnimation(true);
-        }catch (NullPointerException e){ }
+        } catch (NullPointerException e){ }
     }
 
     public void initCallback(){

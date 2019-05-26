@@ -18,8 +18,10 @@ public class RegisterPresenter implements RegisterCallback {
     }
 
     public void register(CharSequence login, CharSequence password){
-        interactor.registerUser(login, password);
-        view.setAnimation(true);
+        try {
+            interactor.registerUser(login, password);
+            view.setAnimation(true);
+        } catch (NullPointerException e) {}
     }
 
     public void showAlert(){
