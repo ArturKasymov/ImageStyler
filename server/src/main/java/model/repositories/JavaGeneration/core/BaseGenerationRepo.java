@@ -57,8 +57,6 @@ public abstract class BaseGenerationRepo implements Generator {
     protected static double ALPHA;
     protected static double BETA;
 
-    protected static double W;
-
     protected DataNormalization IMAGE_PREPROCESSOR;
     protected final ImageLoader LOADER = new ImageLoader(HEIGHT, WIDTH, CHANNELS);
 
@@ -198,7 +196,7 @@ public abstract class BaseGenerationRepo implements Generator {
             String[] spl = s.split(",");
             INDArray styleGram = styleActivationGram.get(spl[0]);
             INDArray forwardGram = gramMatrix(forwardActivation.get(spl[0]), true);
-            loss += forwardGram.squaredDistance(styleGram) * Double.parseDouble(spl[1]) * W;
+            loss += forwardGram.squaredDistance(styleGram) * Double.parseDouble(spl[1]);
         }
         return loss * BETA;
     }
@@ -243,7 +241,7 @@ public abstract class BaseGenerationRepo implements Generator {
         for (String s : STYLE_LAYERS) {
             String[] spl = s.split(",");
             String layerName = spl[0];
-            double weight = Double.parseDouble(spl[1]) * W;
+            double weight = Double.parseDouble(spl[1]);
             INDArray gramActivation = gramActivations.get(layerName);
             INDArray forwardActivation = forwardActivations.get(layerName);
             int index = layerIndex(layerName);
