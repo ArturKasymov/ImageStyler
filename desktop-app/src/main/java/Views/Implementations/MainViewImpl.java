@@ -148,7 +148,7 @@ public class MainViewImpl extends BaseView implements MainView {
 
     @FXML
     protected void onCleanCache(ActionEvent e) {
-        presenter.cleanCache();
+        getAppManager().asyncTask(()->presenter.cleanCache());
     }
 
     @FXML
@@ -262,11 +262,14 @@ public class MainViewImpl extends BaseView implements MainView {
             deleteImageButton.setDisable(true);
         } else {
             String path = newUserImage.getImageUrl();
-            //System.out.println(path);
             this.currentImage = newUserImage;
-            changeImage(resultImage, path);
             photoName.setText(newUserImage.getImageName());
             deleteImageButton.setDisable(false);
+
+            if(!changeImage(resultImage, path)) {
+                setInProgress(newUserImage);
+                getImageFromServer(newUserImage.getImageID());
+            }
         }
     }
 
@@ -286,11 +289,12 @@ public class MainViewImpl extends BaseView implements MainView {
             imagesListView.notifyDownload(imageID, (currentImage==null)?-1:currentImage.getImageID());
     }
 
-    private void changeImage(ImageView imgView, String path) {
+    private boolean changeImage(ImageView imgView, String path) {
         File img = new File(path);
-        if (img==null) return;
+        if (!img.exists()) return false;
         Image image = new Image(img.toURI().toString());
         imgView.setImage(image);
+        return true;
     }
 
     private void goToFullMode(boolean really) {

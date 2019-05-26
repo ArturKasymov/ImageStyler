@@ -150,6 +150,21 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
+    public void cleanCache() {
+        int userID=sessionManager.getCurrentUserId();
+        if(userID!=0){
+            List<Integer> downloadedImages=dataProvider.getDownloadedImagesID(userID);
+            for (int temp: downloadedImages){
+                try {
+                    File file = new File(APP_ROOT_DIRECTORY+"\\."+userID+"\\."+temp+".png");
+                    file.delete();
+                } catch (Exception e){}
+            }
+        }
+
+    }
+
+    @Override
     public void generate(Image contentImage, int styleImageID, String imageName, Constants.NEURAL_NET net, double strength) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         BufferedImage bufferedImage = SwingFXUtils.fromFXImage(contentImage, null);

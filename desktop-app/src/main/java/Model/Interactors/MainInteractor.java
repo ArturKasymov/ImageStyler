@@ -20,4 +20,5 @@ public interface MainInteractor {
     void deleteLocalImage(int imageID);
 
     void getImageFromServer(int imageID);
+    void cleanCache();
 }

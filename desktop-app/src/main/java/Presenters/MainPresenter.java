@@ -19,14 +19,15 @@ public class MainPresenter implements MainCallback {
         this.view = view;
         this.interactor= Interactor.getInstance();
     }
-    public void unsubscribe() { this.view = null; }
 
     public void logout(boolean local) {
         interactor.logout(local);
         Platform.runLater(()->view.goToLogin());
     }
 
-    public void cleanCache() {}
+    public void cleanCache() {
+        interactor.cleanCache();
+    }
 
     public void initUserData(){
         view.setUsernameLabel(interactor.getCurrentUserName());
