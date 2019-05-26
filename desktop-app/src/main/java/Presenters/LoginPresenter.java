@@ -46,8 +46,11 @@ public class LoginPresenter implements LoginCallback{
     }
     public void goToMain(){
         interactor.checkUserData();
-        view.goToMain();
-        Platform.runLater(()->view.setAnimation(false));
+
+        Platform.runLater(()->{
+            view.setAnimation(false);
+            view.goToMain();
+        });
     }
 
     @Override

@@ -301,7 +301,7 @@ public class MainViewImpl extends BaseView implements MainView {
     @FXML
     public void onDeleteImage() {
         presenter.deleteUserImage(this.currentImage.getImageID());
-        if(checkCurrentView())notifyDelete();
+        //if(checkCurrentView())notifyDelete();
     }
 
     public void notifyDelete(){
