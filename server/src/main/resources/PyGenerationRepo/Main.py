@@ -5,7 +5,8 @@ import sys
 
 def main():
     id = sys.stdin.readline()
-    squeezenet = SqueezeNet(int(id))
+    strength = sys.stdin.readline()
+    squeezenet = SqueezeNet(int(id), float(strength))
     if len(sys.argv)>1:
         content_img = PIL.Image.open("/home/demian/ImageStyler/server/target/classes/PyGenerationRepo/images/tubingen.jpg")
         style_img = PIL.Image.open("/home/demian/ImageStyler/server/target/classes/PyGenerationRepo/images/starry_night.jpg")

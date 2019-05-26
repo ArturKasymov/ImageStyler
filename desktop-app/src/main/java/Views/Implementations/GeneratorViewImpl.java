@@ -7,11 +7,14 @@ import Views.Interfaces.MainView;
 import Views.core.BaseView;
 import Views.core.ViewByID;
 import app.AppManager;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -45,6 +48,9 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
     public ViewByID getViewID() { return ViewByID.GENERATOR_VIEW; }
 
     @FXML
+    private Slider strengthSlider;
+
+    @FXML
     private ImageView contentImage;
 
     @FXML
@@ -74,7 +80,7 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
         Image contImg = contentImage.getImage();
         if (photoName.getCharacters().length()>0) {
             getAppManager().asyncTask(()->presenter.generate(contImg, index,
-                    name, toggler.getDefaultNeuralNet()));
+                    name, toggler.getDefaultNeuralNet(), strengthSlider.getValue()));
         } else {
             showNoPhotoNameAlert();
             return;
@@ -82,7 +88,7 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
         photoName.clear();
         setImage(contentImage, contentImageDefault);
         setImage(styleImage, styleImages[5]);
-        styleImageIndex = 0;
+        styleImageIndex = 5;
         toggler.rollBackToMain();
     }
 

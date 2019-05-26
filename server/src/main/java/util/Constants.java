@@ -11,4 +11,20 @@ public class Constants {
     public static final String SERVER_ROOT_DIRECTORY=System.getProperty("user.home")+"/.ImageStyler";
 
     public static final int NUM_STYLE_IMAGES = 6;
+
+    public enum NEURAL_NET {
+        SQUEEZENET,
+        VGG16;
+
+        public static NEURAL_NET getItem(String net) {
+            switch (net) {
+                case "SQUEEZENET":
+                    return SQUEEZENET;
+                case "VGG16":
+                    return VGG16;
+                default:
+                    return SQUEEZENET;
+            }
+        }
+    }
 }

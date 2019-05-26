@@ -5,6 +5,7 @@ import model.Interactor;
 import model.database.entity.User;
 import model.repositories.CryptoRepo;
 import model.repositories.RGBConverterRepo;
+import util.Constants;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -137,8 +138,10 @@ public class ClientHandler extends Thread{
             case INSERT_IMAGE:
                 String imageName = sc.next();
                 long imageDate = new Date().getTime();
-                int styleID=sc.nextInt();
-
+                int styleID = sc.nextInt();
+                String s_net = sc.next();
+                Constants.NEURAL_NET net = Constants.NEURAL_NET.getItem(s_net);
+                double d = sc.nextDouble();
                 try {
                     byte[] imageSizeArray = new byte[4];
                     dis.read(imageSizeArray);
@@ -148,10 +151,10 @@ public class ClientHandler extends Thread{
                     BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageArray));
 
                     int imageID = interactor.insertImage(imageName, currentUserID, imageDate);
-                    final String imagePath=getCurrentUserPath()+"/."+imageID+".png";
+                    final String imagePath = getCurrentUserPath()+"/."+imageID+".png";
                     serverManager.asyncTask(()->{
                         BufferedImage img = RGBConverterRepo.toBufferedImageOfType(image, 1);
-                        BufferedImage generatedImage = interactor.generateImage(img, styleID);
+                        BufferedImage generatedImage = interactor.generateImage(img, styleID, net, d);
                         try {
                             File imageFile = new File(imagePath);
                             OutputStream out;
