@@ -88,7 +88,7 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
         photoName.clear();
         setImage(contentImage, contentImageDefault);
         setImage(styleImage, styleImages[5]);
-        styleImageIndex = 0;
+        styleImageIndex = 5;
         toggler.rollBackToMain();
     }
 
