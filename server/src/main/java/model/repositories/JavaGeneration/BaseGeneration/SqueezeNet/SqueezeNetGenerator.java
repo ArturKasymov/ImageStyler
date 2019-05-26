@@ -1,6 +1,5 @@
 package model.repositories.JavaGeneration.BaseGeneration.SqueezeNet;
 
-import javafx.embed.swing.SwingFXUtils;
 import model.repositories.JavaGeneration.core.BaseGenerationRepo;
 import model.repositories.JavaGeneration.core.GenerationException;
 import org.deeplearning4j.nn.api.Layer;

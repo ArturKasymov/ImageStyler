@@ -1,6 +1,5 @@
 package model.repositories.JavaGeneration.core;
 
-import javafx.embed.swing.SwingFXUtils;
 import net.coobird.thumbnailator.Thumbnails;
 import org.datavec.image.loader.ImageLoader;
 import org.deeplearning4j.nn.api.Layer;

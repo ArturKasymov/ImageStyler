@@ -1,7 +1,5 @@
 package model.repositories.JavaGeneration.BaseGeneration.VGG16;
 
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.Image;
 import model.repositories.JavaGeneration.core.BaseGenerationRepo;
 import model.repositories.JavaGeneration.core.GenerationException;
 import org.deeplearning4j.nn.api.Layer;
