@@ -20,7 +20,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import static Utils.ServerCommand.*;
 
-public class SessionManager extends Thread {
+public class SessionManager implements Runnable {
     private final User defaultUser=new User(0,"ghost");
 
 
@@ -57,31 +57,28 @@ public class SessionManager extends Thread {
         registerCallback=callback;
     }
 
-    // TODO: HANDLE
-    public MainCallback getMainCallback() {
-        return mainCallback;
-    }
-
     public SessionManager(){
-        this.runningStatus=true;
-        executor = Executors.newSingleThreadScheduledExecutor();
+
     }
 
-    private boolean isContinue(){
+    public boolean isContinue(){
         return runningStatus;
     }
+
+
 
     @Override
     public void run() {
         try {
+            executor = Executors.newSingleThreadScheduledExecutor();
             socket = new Socket(serverIP,serverPort);
             dis = new DataInputStream(socket.getInputStream());
             outputStream = new DataOutputStream(socket.getOutputStream());
-
+            this.runningStatus=true;
             String inputData;
 
             //TODO delete logs
-            System.out.println("server connect");
+            System.out.println("server connected");
 
             while(isContinue()){
                 inputData=dis.readUTF();
@@ -90,9 +87,11 @@ public class SessionManager extends Thread {
                 parseServerInput(inputData);
             }
         } catch (Exception e) {
-            //TODO go to offline
             e.printStackTrace();
+            runningStatus=false;
+            outputStream=null;
             Platform.runLater(()->{
+                if(currentUser!=defaultUser)mainCallback.logout(true);
                 loginCallback.failedConnect();
                 registerCallback.failedConnect();
             });
@@ -100,6 +99,7 @@ public class SessionManager extends Thread {
             try {
                 socket.close();
                 executor.shutdown();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -266,12 +266,14 @@ public class SessionManager extends Thread {
     }
 
     public void stopConnection(){
-        this.runningStatus=false;
-        synchronized (outputStream){
-            try {
-                outputStream.writeUTF(CLOSE_CONNECTION);
-            } catch (IOException e) {
-                e.printStackTrace();
+        if(runningStatus){
+            runningStatus=false;
+            synchronized (outputStream){
+                try {
+                    outputStream.writeUTF(CLOSE_CONNECTION);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

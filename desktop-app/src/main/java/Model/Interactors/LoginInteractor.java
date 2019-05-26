@@ -13,4 +13,6 @@ public interface LoginInteractor {
     ArrayList<Integer> getUserCacheDImagesID(int userID);
     UserImage insertUserImage(int imageID, String name, Date date, boolean isWaiting);
     void deleteLocalImage(int imageID);
+    void reconnect();
+    boolean checkConnection();
 }

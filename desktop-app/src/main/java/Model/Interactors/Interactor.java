@@ -19,7 +19,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+
 
 import static Utils.Constants.APP_ROOT_DIRECTORY;
 import static Utils.Constants.LOCAL_DATABASE_NAME;
@@ -135,6 +135,11 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
+    public boolean checkConnection() {
+        return sessionManager.isContinue();
+    }
+
+    @Override
     public void deleteUserImage(int imageID) {
         sessionManager.deleteUserImage(imageID);
     }
@@ -178,6 +183,11 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
 
     public void startSessionManager(String serverIP, int serverPort){
         sessionManager.setSocketConfig(serverIP,serverPort);
-        sessionManager.start();
+        new Thread(sessionManager).start();
+    }
+
+    @Override
+    public void reconnect(){
+        new Thread(sessionManager).start();
     }
 }

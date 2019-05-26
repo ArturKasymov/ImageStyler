@@ -43,8 +43,10 @@ public class MainPresenter implements MainCallback {
     @Override
     public void deleteLocalImage(int imageID,int userID) {
         interactor.deleteLocalImage(imageID);
+        view.notifyDelete();
     }
 
+    @Override
     public void deleteUserImage(int imageID) {
         interactor.deleteUserImage(imageID);
     }
@@ -55,12 +57,8 @@ public class MainPresenter implements MainCallback {
 
     @Override
     public void insertGeneratedImage(int imageID,String photoName, Date date) {
-        //TODO delete Log
-        if(Platform.isAccessibilityActive()){
-            System.out.println("insertImage");
-            Platform.runLater(()->view.notifyList(interactor.insertUserImage(imageID,photoName, date,true)));
-        }
-
+        System.out.println("insertImage");
+        Platform.runLater(()->view.notifyList(interactor.insertUserImage(imageID,photoName, date,true)));
     }
 
     @Override

@@ -6,8 +6,6 @@ import Presenters.Callbacks.RegisterCallback;
 import Views.Interfaces.RegisterView;
 import javafx.application.Platform;
 
-import static Utils.Constants.DEFAULT_SERVER_IP;
-import static Utils.Constants.DEFAULT_SERVER_PORT;
 
 public class RegisterPresenter implements RegisterCallback {
 
@@ -47,11 +45,11 @@ public class RegisterPresenter implements RegisterCallback {
         interactor.initRegisterCallback(this);
     }
 
-    public void unsubscribe(){
-        this.view=null;
+    public void reconnect() {
+        interactor.reconnect();
     }
 
-    public void reconnect() {
-        Interactor.getInstance().startSessionManager(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
+    public boolean checkConnection() {
+        return interactor.checkConnection();
     }
 }

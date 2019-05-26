@@ -1,7 +1,5 @@
 package Presenters.Callbacks;
 
-import Model.Database.Entity.UserImage;
-
 import java.util.ArrayList;
 import java.util.Date;
 

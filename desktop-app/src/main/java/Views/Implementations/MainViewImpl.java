@@ -124,9 +124,7 @@ public class MainViewImpl extends BaseView implements MainView {
 
         changePasswordButton.setDisable(true);
 
-        neuralNetChoice.valueProperty().addListener((observable, oldValue, newValue) -> {
-            changeDefaultNeuralNet(newValue);
-        });
+        neuralNetChoice.valueProperty().addListener((observable, oldValue, newValue) -> changeDefaultNeuralNet(newValue));
     }
 
     @Override
@@ -248,7 +246,6 @@ public class MainViewImpl extends BaseView implements MainView {
 
     @Override
     public void goToLogin() {
-        //presenter.unsubscribe();
         changeViewTo(new LoginViewImpl());
     }
 
@@ -278,7 +275,8 @@ public class MainViewImpl extends BaseView implements MainView {
     }
 
     public void notifyDownload(int imageID) {
-        imagesListView.notifyDownload(imageID, (currentImage==null)?-1:currentImage.getImageID());
+        if(checkCurrentView())
+            imagesListView.notifyDownload(imageID, (currentImage==null)?-1:currentImage.getImageID());
     }
 
     private void changeImage(ImageView imgView, String path) {
@@ -299,8 +297,15 @@ public class MainViewImpl extends BaseView implements MainView {
     @FXML
     public void onDeleteImage() {
         presenter.deleteUserImage(this.currentImage.getImageID());
-        boolean empty = imagesListView.notifyList(this.currentImage, false);
-        if (empty) deleteImageButton.setDisable(true);
+        notifyDelete();
+    }
+
+    //TODO check on exceptions
+    public void notifyDelete(){
+        if(checkCurrentView()){
+            boolean empty = imagesListView.notifyList(this.currentImage, false);
+            if (empty) deleteImageButton.setDisable(true);
+        }
     }
 
     @Override
@@ -310,7 +315,7 @@ public class MainViewImpl extends BaseView implements MainView {
 
     @Override
     public void notifyList(UserImage savedUserImage) {
-        imagesListView.notifyList(savedUserImage, true);
+        if(checkCurrentView())imagesListView.notifyList(savedUserImage, true);
     }
 
     @Override

@@ -4,6 +4,7 @@ import Model.Interactors.Interactor;
 import Model.Interactors.LoginInteractor;
 import Presenters.Callbacks.LoginCallback;
 import Views.Implementations.LoginViewImpl;
+import Views.Interfaces.LoginView;
 import javafx.application.Platform;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import static Utils.Constants.DEFAULT_SERVER_PORT;
 
 
 public class LoginPresenter implements LoginCallback{
-    private LoginViewImpl view;
+    private LoginView view;
     private LoginInteractor interactor;
 
     public LoginPresenter(LoginViewImpl view) {
@@ -23,8 +24,10 @@ public class LoginPresenter implements LoginCallback{
     }
 
     public void login(CharSequence login, CharSequence password) {
-        interactor.login(login, password);
-        view.setAnimation(true);
+        try {
+            interactor.login(login, password);
+            view.setAnimation(true);
+        }catch (NullPointerException e){ }
     }
 
     public void initCallback(){
@@ -68,6 +71,10 @@ public class LoginPresenter implements LoginCallback{
     }
 
     public void reconnect() {
-        Interactor.getInstance().startSessionManager(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
+        interactor.reconnect();
+    }
+
+    public boolean checkConnection(){
+        return interactor.checkConnection();
     }
 }

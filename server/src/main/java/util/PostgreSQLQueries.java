@@ -15,6 +15,9 @@ public class PostgreSQLQueries {
             "image_status boolean NOT NULL\n"+
             ");";
 
+    public static final String CHECK_STYLES="CREATE TABLE IF NOT EXIST styles (\n"+
+            "id_style serial PRIMARY KEY);";
+
     public static final String INSERT_USER="INSERT INTO users(user_name,password_hash) " +
             "VALUES (?,?) RETURNING id_user;";
 

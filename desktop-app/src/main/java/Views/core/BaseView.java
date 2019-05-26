@@ -24,4 +24,7 @@ public abstract class BaseView extends Parent {
 
     public void initViewData(){}
 
+    protected boolean checkCurrentView(){
+        return appManager.getCurrentView()==getViewID();
+    }
 }

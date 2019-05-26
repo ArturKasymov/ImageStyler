@@ -2,6 +2,7 @@ package app;
 
 import Model.Interactors.Interactor;
 import Views.core.BaseView;
+import Views.core.ViewByID;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -9,8 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import net.coobird.thumbnailator.Thumbnails;
 import org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner;
 import org.nd4j.linalg.factory.Nd4jBackend;
 import org.nd4j.nativeblas.NativeOpsHolder;
@@ -23,10 +22,13 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static Utils.Constants.*;
+import static Views.core.ViewByID.*;
 
 
 public class AppManager extends Application {
     private Stage stage;
+
+    private ViewByID currentView;
 
     private Parent LoginView, RegisterView, MainView;
     private BaseView[] controllers = new BaseView[3];
@@ -54,6 +56,7 @@ public class AppManager extends Application {
     private void initStage(){
         stage.setTitle(TITLE);
         stage.setScene(new Scene(LoginView, WIDTH, HEIGHT, Color.TRANSPARENT));
+        currentView= LOGIN_VIEW;
         stage.show();
     }
 
@@ -81,17 +84,24 @@ public class AppManager extends Application {
         {
             case LOGIN_VIEW:
                 setView(LoginView);
+                currentView=LOGIN_VIEW;
                 controllers[0].initViewData();
                 break;
             case REGISTER_VIEW:
                 setView(RegisterView);
+                currentView=REGISTER_VIEW;
                 controllers[1].initViewData();
                 break;
             case MAIN_VIEW:
                 setView(MainView);
+                currentView=MAIN_VIEW;
                 controllers[2].initViewData();
                 break;
         }
+    }
+
+    public ViewByID getCurrentView(){
+        return currentView;
     }
 
     private Parent loadView(String path) throws IOException {
