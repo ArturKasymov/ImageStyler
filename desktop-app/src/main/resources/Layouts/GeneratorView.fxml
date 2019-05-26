@@ -29,7 +29,7 @@
         <VBox alignment="CENTER" prefHeight="20.0" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="1">
             <children>
                 <Pane minHeight="0.0" VBox.vgrow="SOMETIMES" />
-                <Slider maxWidth="400.0" minWidth="400.0" prefWidth="400.0" />
+                <Slider fx:id="strengthSlider" maxWidth="400.0" minWidth="400.0" prefWidth="400.0" />
                 <Pane minHeight="0.0" VBox.vgrow="SOMETIMES" />
             </children>
         </VBox>

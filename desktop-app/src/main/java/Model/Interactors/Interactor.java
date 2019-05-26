@@ -145,7 +145,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public void generate(Image contentImage, int styleImageID, String imageName, Constants.NEURAL_NET net) {
+    public void generate(Image contentImage, int styleImageID, String imageName, Constants.NEURAL_NET net, double strength) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         BufferedImage bufferedImage = SwingFXUtils.fromFXImage(contentImage, null);
         try {
@@ -153,7 +153,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
         } catch (IOException e) {
             e.printStackTrace();
         }
-        sessionManager.generateImage(byteArrayOutputStream, styleImageID, imageName, net);
+        sessionManager.generateImage(byteArrayOutputStream, styleImageID, imageName, net, strength);
     }
 
 

@@ -239,10 +239,10 @@ public class SessionManager extends Thread {
         sendDataToServer(REGISTER + " " + username + " " + password);
     }
 
-    public void generateImage(ByteArrayOutputStream userImage, int styleID, String imageName, Constants.NEURAL_NET net){
+    public void generateImage(ByteArrayOutputStream userImage, int styleID, String imageName, Constants.NEURAL_NET net, double strength){
         synchronized (outputStream){
             try {
-                outputStream.writeUTF(INSERT_IMAGE + " " + imageName + " " + styleID + " " + net);
+                outputStream.writeUTF(INSERT_IMAGE + " " + imageName + " " + styleID + " " + net + " " + strength);
                 byte[] userImageSize = ByteBuffer.allocate(4).putInt(userImage.size()).array();
                 outputStream.write(userImageSize);
                 outputStream.write(userImage.toByteArray());

@@ -8,12 +8,12 @@ from utils import Utils
 
 class SqueezeNet:
 
-    def __init__(self, id):
+    def __init__(self, id, strength):
         self.net = torchvision.models.squeezenet1_1(pretrained=True).features
         self.net.type(Utils.getDtype())
         for param in self.net.parameters():
             param.requires_grad = False
-        self.init_hyper_params(id)
+        self.init_hyper_params(id, 2**((strength - 50.0)/10))
 
     def generate(self, content_img, style_img, content_size=192, style_size=512, init_random=False):
         self.CONTENT_SIZE = content_size
@@ -73,7 +73,7 @@ class SqueezeNet:
         self.generated_image = np.array(Utils.deprocess(img.data.cpu()))
 
 
-    def init_hyper_params(self, id):
+    def init_hyper_params(self, id, w):
         if id == 4:
             self.CONTENT_LAYER = 3
             self.STYLE_LAYERS = [1, 4, 6, 7]
@@ -82,7 +82,7 @@ class SqueezeNet:
             self.DECAY_LR_AT = 180
             self.ITERATIONS = 200
             self.CONTENT_WEIGHT = 5e-2
-            self.STYLE_WEIGHTS = [450000, 1500, 24, 5]
+            self.STYLE_WEIGHTS = [w*x for x in [450000, 1500, 24, 5]]
             self.TV_WEIGHT = 3e-2
         elif id == 5:
             self.CONTENT_LAYER = 3
@@ -92,7 +92,7 @@ class SqueezeNet:
             self.DECAY_LR_AT = 180
             self.ITERATIONS = 300
             self.CONTENT_WEIGHT = 5e-2
-            self.STYLE_WEIGHTS = [300000, 1200, 18, 1.5]
+            self.STYLE_WEIGHTS = [w*x for x in [300000, 1200, 18, 1.5]]
             self.TV_WEIGHT = 3e-2
         elif id == 1:
             self.CONTENT_LAYER = 3
@@ -102,7 +102,7 @@ class SqueezeNet:
             self.DECAY_LR_AT = 180
             self.ITERATIONS = 400
             self.CONTENT_WEIGHT = 5e-2
-            self.STYLE_WEIGHTS = [200000, 800, 12, 1]
+            self.STYLE_WEIGHTS = [w*x for x in [200000, 800, 12, 1]]
             self.TV_WEIGHT = 3e-2
         elif id == 0:
             self.CONTENT_LAYER = 3
@@ -112,7 +112,7 @@ class SqueezeNet:
             self.DECAY_LR_AT = 180
             self.ITERATIONS = 300
             self.CONTENT_WEIGHT = 4e-2
-            self.STYLE_WEIGHTS = [100000, 400, 6, 0.5]
+            self.STYLE_WEIGHTS = [w*x for x in [100000, 400, 6, 0.5]]
             self.TV_WEIGHT = 4e-2
         elif id == 2:
             self.CONTENT_LAYER = 3
@@ -122,7 +122,7 @@ class SqueezeNet:
             self.DECAY_LR_AT = 180
             self.ITERATIONS = 200
             self.CONTENT_WEIGHT = 5e-2
-            self.STYLE_WEIGHTS = [200000, 800, 12, 1]
+            self.STYLE_WEIGHTS = [w*x for x in [200000, 800, 12, 1]]
             self.TV_WEIGHT = 3e-2
         elif id == 3:
             self.CONTENT_LAYER = 3
@@ -132,7 +132,7 @@ class SqueezeNet:
             self.DECAY_LR_AT = 180
             self.ITERATIONS = 200
             self.CONTENT_WEIGHT = 6e-2
-            self.STYLE_WEIGHTS = [300000, 1200, 18, 1.5]
+            self.STYLE_WEIGHTS = [w*x for x in [300000, 1200, 18, 1.5]]
             self.TV_WEIGHT = 4e-2
         else:
             self.CONTENT_LAYER = 3
@@ -142,7 +142,7 @@ class SqueezeNet:
             self.DECAY_LR_AT = 180
             self.ITERATIONS = 300
             self.CONTENT_WEIGHT = 6e-2
-            self.STYLE_WEIGHTS = [200000, 800, 12, 1]
+            self.STYLE_WEIGHTS = [w*x for x in [200000, 800, 12, 1]]
             self.TV_WEIGHT = 3e-2
         self.verbose = False
 

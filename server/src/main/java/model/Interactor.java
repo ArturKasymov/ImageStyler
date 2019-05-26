@@ -81,17 +81,17 @@ public class Interactor implements ClientInteractor {
     }
 
     @Override
-    public BufferedImage generateImage(BufferedImage contentImage, int styleID, Constants.NEURAL_NET net) {
+    public BufferedImage generateImage(BufferedImage contentImage, int styleID, Constants.NEURAL_NET net, double d) {
         BufferedImage styleImage = RGBConverterRepo.toBufferedImageOfType(StyleRepo.getStyle(styleID), 1);
         try {
             switch (net) {
                 case SQUEEZENET:
-                    return PySqueezeNet.generate(contentImage, styleImage, styleID);
+                    return PySqueezeNet.generate(contentImage, styleImage, styleID, d);
                 case VGG16:
-                    Generator generator = new VGG16Generator(contentImage, styleImage);
+                    Generator generator = new VGG16Generator(contentImage, styleImage, d);
                     return generator.generate();
                 default:
-                    return PySqueezeNet.generate(contentImage, styleImage, styleID);
+                    return PySqueezeNet.generate(contentImage, styleImage, styleID, d);
             }
         } catch (Exception e) {
             // TODO: handle

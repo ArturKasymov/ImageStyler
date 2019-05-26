@@ -22,8 +22,8 @@ import java.util.Map;
 
 public class VGG16Generator extends BaseGenerationRepo {
 
-    public VGG16Generator(BufferedImage contentImage, BufferedImage styleImage) {
-        super(contentImage, styleImage);
+    public VGG16Generator(BufferedImage contentImage, BufferedImage styleImage, double d) {
+        super(contentImage, styleImage, d);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class VGG16Generator extends BaseGenerationRepo {
     }
 
     @Override
-    protected void initHyperParams() {
+    protected void initHyperParams(double d) {
         IMAGE_PREPROCESSOR = VGG16HyperParameters.IMAGE_PREPROCESSOR;
         HEIGHT = VGG16HyperParameters.HEIGHT;
         WIDTH = VGG16HyperParameters.WIDTH;
@@ -109,6 +109,8 @@ public class VGG16Generator extends BaseGenerationRepo {
         BETA2 = VGG16HyperParameters.BETA2;
         EPSILON = VGG16HyperParameters.EPSILON;
         NOISE = VGG16HyperParameters.NOISE;
+
+        W = d;
     }
 
     protected INDArray backPropStyles(ComputationGraph graph, HashMap<String, INDArray> gramActivations, Map<String, INDArray> forwardActivations) {
@@ -116,7 +118,7 @@ public class VGG16Generator extends BaseGenerationRepo {
         for (String s : STYLE_LAYERS) {
             String[] spl = s.split(",");
             String layerName = spl[0];
-            double weight = Double.parseDouble(spl[1]);
+            double weight = Double.parseDouble(spl[1]) * W;
             INDArray gramActivation = gramActivations.get(layerName);
             INDArray forwardActivation = forwardActivations.get(layerName);
             int index = layerIndex(layerName);

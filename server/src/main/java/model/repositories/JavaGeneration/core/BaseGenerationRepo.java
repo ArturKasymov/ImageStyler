@@ -57,11 +57,13 @@ public abstract class BaseGenerationRepo implements Generator {
     protected static double ALPHA;
     protected static double BETA;
 
+    protected static double W;
+
     protected DataNormalization IMAGE_PREPROCESSOR;
     protected final ImageLoader LOADER = new ImageLoader(HEIGHT, WIDTH, CHANNELS);
 
-    public BaseGenerationRepo(BufferedImage contentImage, BufferedImage styleImage) {
-        initHyperParams();
+    public BaseGenerationRepo(BufferedImage contentImage, BufferedImage styleImage, double d) {
+        initHyperParams(d);
         INITIAL_HEIGHT = (int) contentImage.getHeight();
         INITIAL_WIDTH = (int) contentImage.getWidth();
         try {
@@ -72,7 +74,7 @@ public abstract class BaseGenerationRepo implements Generator {
         }
     }
 
-    protected void initHyperParams() {
+    protected void initHyperParams(double d) {
 
     }
 
@@ -196,7 +198,7 @@ public abstract class BaseGenerationRepo implements Generator {
             String[] spl = s.split(",");
             INDArray styleGram = styleActivationGram.get(spl[0]);
             INDArray forwardGram = gramMatrix(forwardActivation.get(spl[0]), true);
-            loss += forwardGram.squaredDistance(styleGram) * Double.parseDouble(spl[1]);
+            loss += forwardGram.squaredDistance(styleGram) * Double.parseDouble(spl[1]) * W;
         }
         return loss * BETA;
     }
@@ -241,7 +243,7 @@ public abstract class BaseGenerationRepo implements Generator {
         for (String s : STYLE_LAYERS) {
             String[] spl = s.split(",");
             String layerName = spl[0];
-            double weight = Double.parseDouble(spl[1]);
+            double weight = Double.parseDouble(spl[1]) * W;
             INDArray gramActivation = gramActivations.get(layerName);
             INDArray forwardActivation = forwardActivations.get(layerName);
             int index = layerIndex(layerName);
