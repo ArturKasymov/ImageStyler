@@ -66,7 +66,7 @@ public class VGG16Generator extends BaseGenerationRepo {
                 INDArray styleGrad = backPropStyles(Graph, styleActivationGram, forwardActivation);
                 INDArray contentGrad = backPropContent(Graph, contentActivation, forwardActivation);
                 INDArray totalGrad = contentGrad.muli(ALPHA).addi(styleGrad.muli(BETA));
-                // SAVE RADIENTS TO FILE AND COMPARE WITH SQUEEZENET'S ONES
+                // SAVE GRADIENTS TO FILE AND COMPARE WITH SQUEEZENET'S ONES
                 if (i % 5 == 0) {
                     /*double totalLoss = contentLoss(ALPHA, contentActivation.get(CONTENT_LAYER_NAME), forwardActivation.get(CONTENT_LAYER_NAME)) +
                             styleLoss(styleActivationGram, forwardActivation);
@@ -102,15 +102,13 @@ public class VGG16Generator extends BaseGenerationRepo {
 
         ITERATIONS = VGG16HyperParameters.ITERATIONS;
         ALPHA = VGG16HyperParameters.ALPHA;
-        BETA = VGG16HyperParameters.BETA;
+        BETA = VGG16HyperParameters.BETA * Math.pow(2, (d - 50.0)/50.0);
 
         LEARNING_RATE = VGG16HyperParameters.LEARNING_RATE;
         BETA1 = VGG16HyperParameters.BETA1;
         BETA2 = VGG16HyperParameters.BETA2;
         EPSILON = VGG16HyperParameters.EPSILON;
         NOISE = VGG16HyperParameters.NOISE;
-
-        W = d;
     }
 
     protected INDArray backPropStyles(ComputationGraph graph, HashMap<String, INDArray> gramActivations, Map<String, INDArray> forwardActivations) {
@@ -118,7 +116,7 @@ public class VGG16Generator extends BaseGenerationRepo {
         for (String s : STYLE_LAYERS) {
             String[] spl = s.split(",");
             String layerName = spl[0];
-            double weight = Double.parseDouble(spl[1]) * W;
+            double weight = Double.parseDouble(spl[1]);
             INDArray gramActivation = gramActivations.get(layerName);
             INDArray forwardActivation = forwardActivations.get(layerName);
             int index = layerIndex(layerName);

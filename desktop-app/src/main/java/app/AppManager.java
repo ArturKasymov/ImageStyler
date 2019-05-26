@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner;
 import org.nd4j.linalg.factory.Nd4jBackend;
 import org.nd4j.nativeblas.NativeOpsHolder;
+import sun.util.logging.PlatformLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,6 +52,7 @@ public class AppManager extends Application {
         interactor=Interactor.getInstance();
         interactor.startSessionManager(DEFAULT_SERVER_IP,DEFAULT_SERVER_PORT);
         loadND4Jdata(false);
+        com.sun.javafx.util.Logging.getCSSLogger().setLevel(PlatformLogger.Level.OFF);
     }
 
     private void initStage(){

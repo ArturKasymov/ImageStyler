@@ -108,8 +108,6 @@ public class MainViewImpl extends BaseView implements MainView {
     public void initialize() {
         presenter.initCallback();
 
-        //changeImage(resultImage, "/TestImages/.10.png");
-
         imagesListView.setView(this);
         oldPasswordField.setOnKeyPressed(event -> maybeChange(event));
 
