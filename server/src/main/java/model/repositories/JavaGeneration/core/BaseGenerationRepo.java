@@ -1,6 +1,7 @@
 package model.repositories.JavaGeneration.core;
 
 import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.geometry.Positions;
 import org.datavec.image.loader.ImageLoader;
 import org.deeplearning4j.nn.api.Layer;
 import org.deeplearning4j.nn.conf.dropout.Dropout;
@@ -153,8 +154,7 @@ public abstract class BaseGenerationRepo implements Generator {
     protected INDArray toMatrix(BufferedImage image) throws IOException {
         BufferedImage tmp = new BufferedImage((int) image.getWidth(), (int) image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
         tmp.getGraphics().drawImage(image, 0, 0, null);
-        System.out.println(tmp.getWidth() + " " + tmp.getHeight());
-        INDArray imgMatrix = LOADER.asMatrix(Thumbnails.of(tmp).size(WIDTH, HEIGHT).asBufferedImage());
+        INDArray imgMatrix = LOADER.asMatrix(Thumbnails.of(tmp).crop(Positions.CENTER).size(WIDTH, HEIGHT).keepAspectRatio(true).asBufferedImage());
         System.out.println(Arrays.toString(imgMatrix.shape()));
         imgMatrix = imgMatrix.reshape(1, 3, WIDTH, HEIGHT);
         IMAGE_PREPROCESSOR.transform(imgMatrix);
