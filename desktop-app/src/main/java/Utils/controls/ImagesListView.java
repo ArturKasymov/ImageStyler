@@ -242,6 +242,7 @@ public class ImagesListView extends VBox {
 
     public void cleanList() {
         userImages.clear();
-        imagesListView.setCellFactory(x->null);
+        //imagesListView.setCellFactory(x->null);
+        imagesListView.setCellFactory(x->new ListCell<>());
     }
 }

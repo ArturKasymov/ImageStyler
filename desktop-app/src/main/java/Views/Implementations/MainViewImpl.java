@@ -1,6 +1,5 @@
 package Views.Implementations;
 
-import Model.Database.Entity.User;
 import Model.Database.Entity.UserImage;
 import Presenters.MainPresenter;
 import Utils.Constants;
@@ -11,6 +10,7 @@ import Views.core.BaseView;
 import Views.core.ViewByID;
 import app.AppManager;
 import javafx.animation.Transition;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -108,7 +108,8 @@ public class MainViewImpl extends BaseView implements MainView {
     public void initialize() {
         presenter.initCallback();
 
-        changeImage(resultImage, "/TestImages/.10.png");
+        //changeImage(resultImage, "/TestImages/.10.png");
+
         imagesListView.setView(this);
         oldPasswordField.setOnKeyPressed(event -> maybeChange(event));
 
@@ -135,10 +136,14 @@ public class MainViewImpl extends BaseView implements MainView {
 
     @FXML
     protected void onLogOut(ActionEvent e) {
-        presenter.logout(false);
-        imagesListView.cleanList();
-        if (goToGenerateButton.getText().equals("-")) onGoToGenerate();
-        if (fullButton.getText().equalsIgnoreCase("show")) onFull();
+        Platform.runLater(()->{
+            setResultImage(null);
+            presenter.logout(false);
+            imagesListView.cleanList();
+            if (goToGenerateButton.getText().equals("-")) onGoToGenerate();
+            if (fullButton.getText().equalsIgnoreCase("show")) onFull();
+
+        });
     }
 
     @FXML
@@ -266,6 +271,7 @@ public class MainViewImpl extends BaseView implements MainView {
 
     @Override
     public void setInProgress(UserImage usrImg) {
+
         try {
             resultImage.setImage(SwingFXUtils.toFXImage(ImageIO.read(AppManager.class.getResource(IN_PROGRESS_IMAGE)), null));
             photoName.setText(usrImg.getImageName());
@@ -297,10 +303,9 @@ public class MainViewImpl extends BaseView implements MainView {
     @FXML
     public void onDeleteImage() {
         presenter.deleteUserImage(this.currentImage.getImageID());
-        notifyDelete();
+        if(checkCurrentView())notifyDelete();
     }
 
-    //TODO check on exceptions
     public void notifyDelete(){
         if(checkCurrentView()){
             boolean empty = imagesListView.notifyList(this.currentImage, false);
@@ -316,6 +321,11 @@ public class MainViewImpl extends BaseView implements MainView {
     @Override
     public void notifyList(UserImage savedUserImage) {
         if(checkCurrentView())imagesListView.notifyList(savedUserImage, true);
+    }
+
+    @Override
+    protected boolean checkCurrentView() {
+        return getAppManager().getCurrentView()==getViewID();
     }
 
     @Override
