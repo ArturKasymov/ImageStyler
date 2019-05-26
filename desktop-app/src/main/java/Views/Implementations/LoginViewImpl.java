@@ -1,15 +1,12 @@
 package Views.Implementations;
 
-import Model.Interactors.Interactor;
-import Model.Interactors.MainInteractor;
 import Presenters.LoginPresenter;
 
 import Utils.controls.RingAnimation;
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
+import javafx.animation.Transition;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -20,6 +17,7 @@ import Views.Interfaces.LoginView;
 import Views.core.BaseView;
 import Views.core.ViewByID;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 
 public class LoginViewImpl extends BaseView implements LoginView {
@@ -41,6 +39,9 @@ public class LoginViewImpl extends BaseView implements LoginView {
     private VBox form;
 
     @FXML
+    private Label noConnectionLabel;
+
+    @FXML
     private TextField loginField;
 
     @FXML
@@ -57,6 +58,8 @@ public class LoginViewImpl extends BaseView implements LoginView {
 
     @FXML
     private Button reconnectButton;
+
+    private FadeTransition fadeTransitionNoConnection;
 
     private boolean beingAnimated = false;
 
@@ -96,6 +99,13 @@ public class LoginViewImpl extends BaseView implements LoginView {
 
         passwordField.setOnKeyPressed(event -> maybeLogin(event));
 
+        fadeTransitionNoConnection = new FadeTransition(Duration.seconds(1), noConnectionLabel);
+        noConnectionLabel.setOpacity(1.0);
+        fadeTransitionNoConnection.setFromValue(1.0);
+        fadeTransitionNoConnection.setToValue(0.0);
+        fadeTransitionNoConnection.setCycleCount(Animation.INDEFINITE);
+        fadeTransitionNoConnection.play();
+        showNoConnectionAlert(false);
     }
 
     @FXML
@@ -151,13 +161,23 @@ public class LoginViewImpl extends BaseView implements LoginView {
     @Override
     public void showReconnectButton() {
         if(checkCurrentView()) {
+            showNoConnectionAlert(true);
             reconnectButton.setDisable(false);
             reconnectButton.setOnMouseClicked(event -> {
                 presenter.reconnect();
-                loginButton.setDisable(false);
-                registerButton.setDisable(false);
+                showNoConnectionAlert(false);
+                buttonToggle();
                 reconnectButton.setDisable(true);
             });
+        }
+    }
+
+    private void showNoConnectionAlert(boolean show) {
+        noConnectionLabel.setVisible(show);
+        if (show) {
+            fadeTransitionNoConnection.play();
+        } else {
+            fadeTransitionNoConnection.stop();
         }
     }
 

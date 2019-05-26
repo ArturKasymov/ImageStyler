@@ -6,12 +6,14 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
 
 <VBox fx:id="root" alignment="CENTER" prefHeight="600.00" prefWidth="400.00" spacing="10.0" styleClass="canvas" stylesheets="@../stylesheets/registerViewStyle.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.RegisterViewImpl">
    <children>
       <Pane maxHeight="Infinity" minHeight="0.0" VBox.vgrow="SOMETIMES" />
    <VBox fx:id="form" alignment="CENTER" spacing="10.0" styleClass="form">
       <children>
+         <Label fx:id="noConnectionLabel" text="NO CONNECTION" opacity="0.0" style="-fx-text-fill: red; -fx-font-size: 16px;"/>
          <TextField fx:id="loginField" alignment="CENTER" maxWidth="400.0" opacity="0.75" prefWidth="400.0" promptText="login" styleClass="text-field" VBox.vgrow="NEVER">
 
          </TextField>
