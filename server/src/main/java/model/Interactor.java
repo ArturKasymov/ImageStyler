@@ -3,9 +3,12 @@ package model;
 import model.database.entity.User;
 import model.database.provider.PostgreSQLDataProvider;
 import model.repositories.CryptoRepo;
+import model.repositories.JavaGeneration.BaseGeneration.VGG16.VGG16Generator;
+import model.repositories.JavaGeneration.core.Generator;
 import model.repositories.RGBConverterRepo;
 import model.repositories.PythonGeneration.PySqueezeNet;
 import model.repositories.StyleRepo;
+import util.Constants;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -78,9 +81,23 @@ public class Interactor implements ClientInteractor {
     }
 
     @Override
-    public BufferedImage generateImage(BufferedImage contentImage, int styleID) {
+    public BufferedImage generateImage(BufferedImage contentImage, int styleID, Constants.NEURAL_NET net) {
         BufferedImage styleImage = RGBConverterRepo.toBufferedImageOfType(StyleRepo.getStyle(styleID), 1);
-        return PySqueezeNet.generate(contentImage, styleImage, styleID);
+        try {
+            switch (net) {
+                case SQUEEZENET:
+                    return PySqueezeNet.generate(contentImage, styleImage, styleID);
+                case VGG16:
+                    Generator generator = new VGG16Generator(contentImage, styleImage);
+                    return generator.generate();
+                default:
+                    return PySqueezeNet.generate(contentImage, styleImage, styleID);
+            }
+        } catch (Exception e) {
+            // TODO: handle
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

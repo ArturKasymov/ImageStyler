@@ -1,5 +1,7 @@
 package model.repositories.PythonGeneration;
 
+import model.repositories.JavaGeneration.core.GenerationException;
+import model.repositories.JavaGeneration.core.Generator;
 import server.Main;
 
 import java.awt.*;
@@ -13,7 +15,7 @@ import java.util.Scanner;
 
 public class PySqueezeNet {
 
-    public static BufferedImage generate(BufferedImage contentImage, BufferedImage styleImage, int imageId){
+    public static BufferedImage generate(BufferedImage contentImage, BufferedImage styleImage, int imageId) throws GenerationException {
         URL url = Main.class.getResource("/PyGenerationRepo/Main.py");
         try {
             ProcessBuilder pb = new ProcessBuilder("python3", url.toString().substring(5));
