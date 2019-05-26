@@ -1,6 +1,6 @@
 .canvas {
     -fx-font-family: "Serif";
-    -fx-background: #34495e;
+    -fx-background-color: #34495e;
 }
 .form {
     -fx-width: 400px;

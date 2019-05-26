@@ -9,7 +9,7 @@ public class Main {
     @Option(name = "-help", usage = "print help")
     private boolean printHelp = false;
 
-    public void run(String[] args) throws Exception {
+    public void run(String[] args) {
         CmdLineParser parser = new CmdLineParser(this);
         try {
             parser.parseArgument(args);

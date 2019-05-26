@@ -15,6 +15,7 @@ import org.nd4j.linalg.factory.Nd4jBackend;
 import org.nd4j.nativeblas.NativeOpsHolder;
 import sun.util.logging.PlatformLogger;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -58,7 +59,8 @@ public class AppManager extends Application {
     private void initStage(){
         stage.setTitle(TITLE);
         stage.setScene(new Scene(LoginView, WIDTH, HEIGHT, Color.TRANSPARENT));
-        currentView= LOGIN_VIEW;
+        stage.getIcons().add(new javafx.scene.image.Image(this.getClass().getResource("/TestImages/logo_blue.png").toExternalForm()));
+        currentView = LOGIN_VIEW;
         stage.show();
     }
 

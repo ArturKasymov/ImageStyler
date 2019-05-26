@@ -124,6 +124,8 @@ public class MainViewImpl extends BaseView implements MainView {
         changePasswordButton.setDisable(true);
 
         neuralNetChoice.valueProperty().addListener((observable, oldValue, newValue) -> changeDefaultNeuralNet(newValue));
+
+        deleteImageButton.setDisable(true);
     }
 
     @Override

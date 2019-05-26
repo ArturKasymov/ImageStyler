@@ -5,13 +5,19 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox fx:id="root" alignment="CENTER" prefHeight="600.00" prefWidth="400.00" spacing="10.0" styleClass="canvas" stylesheets="@../stylesheets/loginViewStyle.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.LoginViewImpl">
    <children>
       <Pane maxHeight="Infinity" minHeight="0.0" VBox.vgrow="SOMETIMES" />
-      <Label fx:id="noConnectionLabel" text="NO CONNECTION" opacity="0.0" style="-fx-text-fill: red; -fx-font-size: 16px;"/>
+      <ImageView fitHeight="150.0" fitWidth="150.0">
+         <image>
+            <Image url="@../../../../../../../../Users/Admin/.ImageStyler/admin/logo_transparent.png" />
+         </image></ImageView>
+      <Label fx:id="noConnectionLabel" opacity="0.0" style="-fx-text-fill: red; -fx-font-size: 16px;" text="NO CONNECTION" />
       <VBox fx:id="form" alignment="CENTER" spacing="10.0" styleClass="form">
          <children>
             <TextField fx:id="loginField" alignment="CENTER" maxWidth="400.0" opacity="0.75" prefWidth="400.0" promptText="login" styleClass="text-field" VBox.vgrow="NEVER">
@@ -30,7 +36,7 @@
          </children>
       </VBox>
       <Pane maxHeight="Infinity" minHeight="0.0" VBox.vgrow="SOMETIMES" />
-      <Button fx:id="reconnectButton" styleClass="reconnect-button" disable="true" text="Reconnect" textAlignment="CENTER" />
+      <Button fx:id="reconnectButton" disable="true" styleClass="reconnect-button" text="Reconnect" textAlignment="CENTER" />
    </children>
    <padding>
       <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
