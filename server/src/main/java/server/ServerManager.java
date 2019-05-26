@@ -93,6 +93,7 @@ public class ServerManager {
 
     public void stopServer() throws IOException {
         serverSocket.close();
+        executor.shutdown();
     }
 
     public void asyncTask(Runnable task) {

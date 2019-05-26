@@ -9,6 +9,7 @@ public class Main {
     public static void run(String[] args) throws Exception{
 
         serverManager = new ServerManager(DEFAULT_DATABASE_NAME,DEFAULT_DB_USERNAME,DEFAULT_DB_PASSWORD,DEFAULT_DB_IP,DEFAULT_DB_PORT);
+
         serverManager.init();
 
         try{
