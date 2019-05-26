@@ -264,15 +264,16 @@ public class MainViewImpl extends BaseView implements MainView {
             this.currentImage = newUserImage;
             changeImage(resultImage, path);
             photoName.setText(newUserImage.getImageName());
+            deleteImageButton.setDisable(false);
         }
     }
 
     @Override
     public void setInProgress(UserImage usrImg) {
-
         try {
             resultImage.setImage(SwingFXUtils.toFXImage(ImageIO.read(AppManager.class.getResource(IN_PROGRESS_IMAGE)), null));
             photoName.setText(usrImg.getImageName());
+            deleteImageButton.setDisable(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -347,10 +348,14 @@ public class MainViewImpl extends BaseView implements MainView {
     }
 
     private void showSettingsScreen(boolean show) {
+        base.getChildren().forEach(x->x.setDisable(show));
         settingsDialog.setVisible(show);
-        toolbar.setDisable(show);
-        contentBox.setDisable(show);
+        settingsDialog.setDisable(!show);
         resultImage.setOpacity(show ? 0.5 : 1);
+        ((GridPane)contentBox.getChildren().filtered(x->x instanceof GridPane).get(0))
+                .getChildren().filtered(x->x instanceof GridPane).forEach(x-> {
+            ((GridPane)x).getChildren().filtered(y -> y instanceof ImageView).forEach(y->y.setOpacity(show ? 0.5 : 1));
+        });
         oldPasswordField.requestFocus();
     }
 

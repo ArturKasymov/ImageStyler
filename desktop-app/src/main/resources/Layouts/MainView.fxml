@@ -34,7 +34,7 @@
    <children>
       <ToolBar fx:id="toolbar" prefHeight="40.0" prefWidth="600.0" styleClass="toolbar" GridPane.columnSpan="2" GridPane.hgrow="SOMETIMES" GridPane.vgrow="SOMETIMES">
         <items>
-            <MenuButton fx:id="settingsButton" mnemonicParsing="false" prefHeight="20.0" prefWidth="80.0" styleClass="menu-button" text="Settings">
+            <MenuButton fx:id="settingsButton" focusTraversable="false" mnemonicParsing="false" prefHeight="20.0" prefWidth="80.0" styleClass="menu-button" text="Settings">
                <font>
                   <Font size="12.0" />
                </font>
@@ -44,9 +44,9 @@
                     <MenuItem mnemonicParsing="false" onAction="#onLogOut" text="LOG OUT" />
                 </items>
             </MenuButton>
-            <Button fx:id="goToGenerateButton" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" onAction="#onGoToGenerate" prefHeight="25.0" prefWidth="25.0" styleClass="buttons" text="+" textAlignment="CENTER" />
-            <Button fx:id="fullButton" minWidth="70.0" mnemonicParsing="false" onAction="#onFull" prefWidth="70.0" styleClass="buttons" text="HIDE" />
-            <ComboBox fx:id="neuralNetChoice" minHeight="25.0" minWidth="100.0" prefHeight="25.0" prefWidth="100.0" promptText="Neural Net" styleClass="combo-box-nn">
+            <Button fx:id="goToGenerateButton" focusTraversable="false" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" onAction="#onGoToGenerate" prefHeight="25.0" prefWidth="25.0" styleClass="buttons" text="+" textAlignment="CENTER" />
+            <Button fx:id="fullButton" focusTraversable="false" minWidth="70.0" mnemonicParsing="false" onAction="#onFull" prefWidth="70.0" styleClass="buttons" text="HIDE" />
+            <ComboBox fx:id="neuralNetChoice" focusTraversable="false" minHeight="25.0" minWidth="100.0" prefHeight="25.0" prefWidth="100.0" promptText="Neural Net" styleClass="combo-box-nn">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="VGG16 - SLOW BUT BEAUTIFUL PHOTOS" />
@@ -55,7 +55,7 @@
                 </items>
             </ComboBox>
             <Pane prefWidth="100.0" HBox.hgrow="SOMETIMES" />
-            <Label fx:id="username" alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="100.0" styleClass="username" text="Hello UJ" />
+            <Label fx:id="username" focusTraversable="false" alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="100.0" styleClass="username" text="Hello UJ" />
         </items>
       </ToolBar>
       <HBox fx:id="contentBox" maxHeight="Infinity" maxWidth="Infinity" minHeight="360.0" minWidth="600.0" styleClass="content" GridPane.columnSpan="2" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
@@ -68,13 +68,13 @@
                      <VBox.margin>
                         <Insets top="5.0" />
                      </VBox.margin></Label>
-                  <ImageView fx:id="resultImage" fitHeight="290.0" fitWidth="290.0" pickOnBounds="true" preserveRatio="true" styleClass="main-image-view" VBox.vgrow="SOMETIMES">
+                  <ImageView fx:id="resultImage" focusTraversable="false" fitHeight="290.0" fitWidth="290.0" pickOnBounds="true" preserveRatio="true" styleClass="main-image-view" VBox.vgrow="SOMETIMES">
                      <VBox.margin>
                         <Insets top="2.0" />
                      </VBox.margin>
                   </ImageView>
                    <Pane minHeight="0.0" VBox.vgrow="SOMETIMES" />
-                  <Button fx:id="deleteImageButton" alignment="CENTER" contentDisplay="CENTER" minHeight="32.0" mnemonicParsing="false" onAction="#onDeleteImage" prefHeight="32.0" styleClass="buttons" text="Delete image" textAlignment="CENTER">
+                  <Button fx:id="deleteImageButton" focusTraversable="false" alignment="CENTER" contentDisplay="CENTER" minHeight="32.0" mnemonicParsing="false" onAction="#onDeleteImage" prefHeight="32.0" styleClass="buttons" text="Delete image" textAlignment="CENTER">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -90,9 +90,9 @@
             <HBox>
                <children>
                    <Pane minWidth="0.0" HBox.hgrow="SOMETIMES" />
-                     <Label styleClass="label" alignment="CENTER" contentDisplay="CENTER" minHeight="0.0" minWidth="0.0" prefHeight="50.0" text="Change your password" textAlignment="CENTER" />
+                     <Label styleClass="label" focusTraversable="false" alignment="CENTER" contentDisplay="CENTER" minHeight="0.0" minWidth="0.0" prefHeight="50.0" text="Change your password" textAlignment="CENTER" />
                    <Pane minWidth="0.0" HBox.hgrow="SOMETIMES" />
-                   <Button styleClass="exit-button" fx:id="exitSettingsButton" minHeight="39.0" minWidth="39.0" onAction="#onCloseSettingsDialog" prefHeight="39.0" prefWidth="39.0" text="X" textAlignment="CENTER" AnchorPane.rightAnchor="0.0" />
+                   <Button styleClass="exit-button" focusTraversable="false" fx:id="exitSettingsButton" minHeight="39.0" minWidth="39.0" onAction="#onCloseSettingsDialog" prefHeight="39.0" prefWidth="39.0" text="X" textAlignment="CENTER" AnchorPane.rightAnchor="0.0" />
                </children>
             </HBox>
                

@@ -40,16 +40,16 @@ public class LoginPresenter implements LoginCallback{
 
     public void showWrongDataAlert(){
         Platform.runLater(()->{
-            view.setAnimation(false);
             view.showWrongDataAlert();
+            view.setAnimation(false);
         });
     }
     public void goToMain(){
         interactor.checkUserData();
 
         Platform.runLater(()->{
-            view.setAnimation(false);
             view.goToMain();
+            view.setAnimation(false);
         });
     }
 

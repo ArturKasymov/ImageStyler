@@ -58,3 +58,22 @@
     -fx-background-color: #2ecc71;
     -fx-background-radius: 24px;
 }
+
+.reconnect-button {
+    -fx-border: 0;
+    -fx-background: none;
+    -fx-display: block;
+    -fx-text-align: center;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-border-color: red;
+    -fx-focus-color: none;
+    -fx-text-fill: black;
+    -fx-border-radius: 6px;
+    -fx-cursor: hand;
+}
+
+.reconnect-button:hover {
+    -fx-background-color: red;
+    -fx-background-radius: 6px;
+}

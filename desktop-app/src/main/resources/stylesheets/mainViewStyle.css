@@ -122,9 +122,6 @@
     -fx-background: none;
     -fx-display: block;
     -fx-text-align: center;
-    -fx-border-width: 2px;
-    -fx-border-style: solid;
-    -fx-border-color: #34495e;
     -fx-focus-color: none;
     -fx-color: white;
     -fx-text-fill: black;

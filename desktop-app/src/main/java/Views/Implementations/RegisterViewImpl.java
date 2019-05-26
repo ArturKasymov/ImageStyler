@@ -133,17 +133,19 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
 
     @Override
     public void initViewData() {
-        if(!presenter.checkConnection())showReconnectButton();
+        if (!presenter.checkConnection()) showReconnectButton();
     }
 
     public void showReconnectButton() {
         reconnectButton.setDisable(false);
         reconnectButton.setOnMouseClicked(event -> {
             presenter.reconnect();
+            registerButton.setDisable(false);
             reconnectButton.setDisable(true);
         });
     }
 
+    @Override
     public void setAnimation(boolean set) {
         beingAnimated = set;
         if (set) {

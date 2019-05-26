@@ -84,7 +84,6 @@ public class LoginViewImpl extends BaseView implements LoginView {
     public void initialize() {
         presenter.initCallback();
 
-
         warning.setVisible(false);
 
         loginButton.setDisable(true);
@@ -155,6 +154,8 @@ public class LoginViewImpl extends BaseView implements LoginView {
             reconnectButton.setDisable(false);
             reconnectButton.setOnMouseClicked(event -> {
                 presenter.reconnect();
+                loginButton.setDisable(false);
+                reconnectButton.setDisable(false);
                 reconnectButton.setDisable(true);
             });
         }

@@ -24,16 +24,18 @@ public class RegisterPresenter implements RegisterCallback {
 
     public void showAlert(){
         Platform.runLater(()->{
-            view.setAnimation(false);
             view.showAlert();
+            view.setAnimation(false);
         });
     }
 
     @Override
     public void goToMain() {
         interactor.checkUserDirectory();
-        view.goToMain();
-        Platform.runLater(()->view.setAnimation(false));
+        Platform.runLater(()->{
+            view.goToMain();
+            view.setAnimation(false);
+        });
     }
 
     @Override
