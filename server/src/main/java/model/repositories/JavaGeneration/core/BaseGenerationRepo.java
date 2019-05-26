@@ -24,6 +24,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
@@ -152,7 +153,9 @@ public abstract class BaseGenerationRepo implements Generator {
     protected INDArray toMatrix(BufferedImage image) throws IOException {
         BufferedImage tmp = new BufferedImage((int) image.getWidth(), (int) image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
         tmp.getGraphics().drawImage(image, 0, 0, null);
+        System.out.println(tmp.getWidth() + " " + tmp.getHeight());
         INDArray imgMatrix = LOADER.asMatrix(Thumbnails.of(tmp).size(WIDTH, HEIGHT).asBufferedImage());
+        System.out.println(Arrays.toString(imgMatrix.shape()));
         imgMatrix = imgMatrix.reshape(1, 3, WIDTH, HEIGHT);
         IMAGE_PREPROCESSOR.transform(imgMatrix);
         return imgMatrix;
