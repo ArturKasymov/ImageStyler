@@ -3,6 +3,7 @@ package Views.Implementations;
 import Presenters.LoginPresenter;
 
 import Utils.controls.RingAnimation;
+import app.AppManager;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.Transition;
@@ -11,6 +12,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.control.Label;
 import Views.Interfaces.LoginView;
@@ -31,6 +34,9 @@ public class LoginViewImpl extends BaseView implements LoginView {
     public ViewByID getViewID() {
         return ViewByID.LOGIN_VIEW;
     }
+
+    @FXML
+    private ImageView logo;
 
     @FXML
     private VBox root;
@@ -106,6 +112,8 @@ public class LoginViewImpl extends BaseView implements LoginView {
         fadeTransitionNoConnection.setCycleCount(Animation.INDEFINITE);
         fadeTransitionNoConnection.play();
         showNoConnectionAlert(false);
+
+        logo.setImage(new Image(AppManager.class.getResource("/TestImages/logo_transparent.png").toExternalForm()));
     }
 
     @FXML
