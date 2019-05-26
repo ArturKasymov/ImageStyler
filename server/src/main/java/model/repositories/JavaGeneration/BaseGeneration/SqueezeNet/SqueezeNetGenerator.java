@@ -27,7 +27,7 @@ import java.util.Map;
 public class SqueezeNetGenerator extends BaseGenerationRepo {
 
     public SqueezeNetGenerator(BufferedImage contentImage, BufferedImage styleImage) {
-        super(contentImage, styleImage);
+        super(contentImage, styleImage, 0.0);
         Nd4j.getExecutioner().setProfilingMode(OpExecutioner.ProfilingMode.DISABLED);
     }
 
@@ -87,7 +87,7 @@ public class SqueezeNetGenerator extends BaseGenerationRepo {
     }
 
     @Override
-    protected void initHyperParams() {
+    protected void initHyperParams(double d) {
         IMAGE_PREPROCESSOR = SqueezeNetHyperParameters.IMAGE_PREPROCESSOR;
         HEIGHT = SqueezeNetHyperParameters.HEIGHT;
         WIDTH = SqueezeNetHyperParameters.WIDTH;

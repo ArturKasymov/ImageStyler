@@ -18,7 +18,7 @@ import java.util.HashMap;
 
 public class DarkNetGenerator extends BaseGenerationRepo {
     public DarkNetGenerator(BufferedImage contentImage, BufferedImage styleImage) {
-        super(contentImage, styleImage);
+        super(contentImage, styleImage, 0.0);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class DarkNetGenerator extends BaseGenerationRepo {
     }
 
     @Override
-    protected void initHyperParams() {
+    protected void initHyperParams(double d) {
         IMAGE_PREPROCESSOR = DarkNetHyperParameters.IMAGE_PREPROCESSOR;
         HEIGHT = DarkNetHyperParameters.HEIGHT;
         WIDTH = DarkNetHyperParameters.WIDTH;
