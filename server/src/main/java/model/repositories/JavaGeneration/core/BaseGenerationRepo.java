@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class BaseGenerationRepo implements Generator {
-    protected static final Logger log = LoggerFactory.getLogger(BaseGenerationRepo.class);
 
     protected INDArray contentImage;
     protected INDArray styleImage;
@@ -96,7 +95,6 @@ public abstract class BaseGenerationRepo implements Generator {
             AdamUpdater optim = createAdamUpdater();
             for (int i = 0; i < ITERATIONS; i++) {
                 if (i % 5 == 0) {
-                    log.info("iteration " + i);
                     if ( i%25 == 0) {
                         BufferedImage output = fromMatrix(generatedImage);
                         URL resource = getClass().getResource(".");

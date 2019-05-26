@@ -31,7 +31,6 @@ public class VGG16Generator extends BaseGenerationRepo {
         ZooModel zooModel = VGG16.builder().build();
         ComputationGraph vgg16 = (ComputationGraph) zooModel.initPretrained(PretrainedType.IMAGENET);
         vgg16.initGradientsView();
-        if (logIt) log.info(vgg16.summary());
         return vgg16;
     }
 
@@ -55,7 +54,6 @@ public class VGG16Generator extends BaseGenerationRepo {
             AdamUpdater optim = createAdamUpdater();
             for (int i = 0; i < ITERATIONS; i++) {
                 if (i % 5 == 0) {
-                    log.info("iteration " + i);
                     /*if ( i%25 == 0) {
                         INDArray genImage = generatedImage.dup();
                         BufferedImage output = SwingFXUtils.fromFXImage(fromMatrix(genImage), null);

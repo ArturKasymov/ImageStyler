@@ -42,7 +42,6 @@ public class SqueezeNetGenerator extends BaseGenerationRepo {
             AdamUpdater optim = createAdamUpdater();
             for (int i = 0; i < ITERATIONS; i++) {
                 if (i % 5 == 0) {
-                    log.info("iteration " + i);
                     /*if ( i%25 == 0) {
                         INDArray genImage = generatedImage.dup();
                         BufferedImage output = SwingFXUtils.fromFXImage(fromMatrix(genImage), null);
@@ -84,7 +83,6 @@ public class SqueezeNetGenerator extends BaseGenerationRepo {
         ZooModel zooModel = SqueezeNet.builder().build();
         ComputationGraph squeezeNet = (ComputationGraph) zooModel.initPretrained(PretrainedType.IMAGENET);
         squeezeNet.initGradientsView();
-        if (logIt) log.info(squeezeNet.summary());
         return squeezeNet;
     }
 

@@ -27,7 +27,6 @@ public class DarkNetGenerator extends BaseGenerationRepo {
         zooModel.setInputShape(new int[][] {{3, 224, 224}});
         ComputationGraph darkNet = (ComputationGraph) zooModel.initPretrained(PretrainedType.IMAGENET);
         darkNet.initGradientsView();
-        if (logIt) log.info(darkNet.summary());
         return darkNet;
     }
 
