@@ -1,5 +1,6 @@
 package model.repositories.PythonGeneration;
 
+import org.bytedeco.javacv.FrameFilter;
 import server.Main;
 
 import java.awt.*;
@@ -23,15 +24,15 @@ public class FastPyTransformer {
             BufferedWriter inputImagesStream = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()));
             // IMAGE ID
             System.out.println("Image_id: " + imageId);
-            inputImagesStream.write(imageId+"");
+            inputImagesStream.write(imageId + "");
             inputImagesStream.newLine();
             // STRENGTH
             System.out.println("Strength: " + d);
-            inputImagesStream.write(d+"");
+            inputImagesStream.write(d + "");
             inputImagesStream.newLine();
             // PRESERVE SIZE
             System.out.println("Preserve Size: " + preserveSize);
-            inputImagesStream.write(preserveSize+"");
+            inputImagesStream.write(preserveSize + "");
             inputImagesStream.newLine();
             // CONTENT IMAGE
             int contHeight = contentImage.getHeight();
@@ -40,13 +41,16 @@ public class FastPyTransformer {
             int[] contPixelsBytes = ((DataBufferInt) contentImage.getRaster().getDataBuffer()).getData();
             inputImagesStream.write(contHeight + " " + contWidth);
             inputImagesStream.newLine();
-            System.out.println(errorStream.nextLine());
-            for (int j = 0; j < contHeight; j++) {
-                for (int i = 0; i < contWidth; i++) {
-                    System.out.println(i+j*contWidth);
-                    inputImagesStream.write(String.valueOf(contPixelsBytes[i+j*contWidth]));
-                    inputImagesStream.newLine();
+            try {
+                for (int j = 0; j < contHeight; j++) {
+                    for (int i = 0; i < contWidth; i++) {
+                        System.out.println(i + j * contWidth);
+                        inputImagesStream.write(String.valueOf(contPixelsBytes[i + j * contWidth]));
+                        inputImagesStream.newLine();
+                    }
                 }
+            } catch (Exception e) {
+                while (errorStream.hasNext()) System.out.println(errorStream.nextLine());
             }
             inputImagesStream.close();
             // GET GENERATED IMAGE
