@@ -2,6 +2,7 @@ import PIL
 import sys
 import cv2
 from Transformer import Net
+import numpy
 
 
 def main():
