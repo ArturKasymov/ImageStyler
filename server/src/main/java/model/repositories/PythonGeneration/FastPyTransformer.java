@@ -17,11 +17,14 @@ public class FastPyTransformer {
         URL url = Main.class.getResource("/FastPyGenerationRepo/Main.py");
         try {
             ProcessBuilder pb = new ProcessBuilder("python3", url.toString().substring(5));
-            System.out.println(url.toString());
             Process p = pb.start();
             // PASS INPUT IMAGES
             BufferedWriter inputImagesStream = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()));
-            // IMAGE ID
+            inputImagesStream.write(imageId + "");
+            inputImagesStream.newLine();
+            inputImagesStream.close();
+            p.destroy();
+            /*// IMAGE ID
             System.out.println("Image_id: " + imageId);
             inputImagesStream.write(imageId+"");
             inputImagesStream.newLine();
@@ -40,7 +43,7 @@ public class FastPyTransformer {
             int[] contPixelsBytes = ((DataBufferInt) contentImage.getRaster().getDataBuffer()).getData();
             inputImagesStream.write(contHeight + " " + contWidth);
             inputImagesStream.newLine();
-            /*for (int j = 0; j < contHeight; j++) {
+            for (int j = 0; j < contHeight; j++) {
                 for (int i = 0; i < contWidth; i++) {
                     inputImagesStream.write(String.valueOf(contPixelsBytes[i+j*contWidth]));
                     inputImagesStream.newLine();

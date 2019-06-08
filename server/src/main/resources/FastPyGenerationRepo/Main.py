@@ -7,7 +7,10 @@ import numpy
 
 def main():
     id = sys.stdin.readline()
-    _ = sys.stdin.readline()
+    log = open("ab.txt", "w+")
+    log.write(id)
+    log.close()
+    '''_ = sys.stdin.readline()
     preserve_size = sys.stdin.readline()
     if preserve_size == "false":
         preserve_size = False
@@ -22,7 +25,7 @@ def main():
     log.write("image id - (" + id + ")")
     log.write("Content shape - (" + str(height) + ", " + str(width) + ")")
     log.close()
-    '''content_img = PIL.Image.new('RGB', (width, height), "black")
+    content_img = PIL.Image.new('RGB', (width, height), "black")
     content_pixels = content_img.load()
     for i in range(height):
         for j in range(width):
