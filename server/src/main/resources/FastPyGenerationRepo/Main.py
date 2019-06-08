@@ -39,7 +39,6 @@ def main():
             content_size = height
     else:
         content_size = 224
-    style_size = 224
     net.generate(content_img, content_size=content_size)
     gen_img = net.get_image()
     log.write("Result shape - (" + str(gen_img.shape[0]) + ", "+ str(gen_img.shape[1]) + ")")

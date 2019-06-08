@@ -56,8 +56,9 @@ public class FastPyTransformer {
             Scanner imgSc = new Scanner(generatedImageStream);
             BufferedImage img;
             while (true) {
-                while (!imgSc.hasNext());
+                while (!imgSc.hasNext()) if (errorStream.hasNext()) while (errorStream.hasNext()) System.out.println(errorStream.nextLine());
                 String line = imgSc.nextLine();
+                System.out.println(line);
                 if (line.charAt(0)!='I') {
                     System.out.println(line);
                     String[] spl = line.split(",");
