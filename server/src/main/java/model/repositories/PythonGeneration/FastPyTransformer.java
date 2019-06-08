@@ -48,6 +48,7 @@ public class FastPyTransformer {
             }
             inputImagesStream.close();
             // GET GENERATED IMAGE
+            System.out.println("GET GENERATED IMAGE");
             InputStream generatedImageStream = p.getInputStream();
             Scanner imgSc = new Scanner(generatedImageStream);
             BufferedImage img;
