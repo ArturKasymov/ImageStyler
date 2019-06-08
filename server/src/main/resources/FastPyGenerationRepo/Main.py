@@ -22,7 +22,7 @@ def main():
     log.write("image id - (" + id + ")")
     log.write("Content shape - (" + str(height) + ", " + str(width) + ")")
     log.close()
-    content_img = PIL.Image.new('RGB', (width, height), "black")
+    '''content_img = PIL.Image.new('RGB', (width, height), "black")
     content_pixels = content_img.load()
     for i in range(height):
         for j in range(width):
@@ -45,7 +45,7 @@ def main():
         for j in range(gen_img.shape[1]):
             print("%d %d %d" % (gen_img[i, j, 0], gen_img[i, j, 1], gen_img[i, j, 2]))
     log.write("Finished")
-    log.close()
+    log.close()'''
 
 
 if __name__ == '__main__':
