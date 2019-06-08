@@ -2,6 +2,7 @@ import PIL
 import sys
 import cv2
 from Transformer import Net
+from utils import Utils
 import numpy
 
 
@@ -28,6 +29,7 @@ def main():
             rgbint = int(sys.stdin.readline())
             content_pixels[j, i] = ((rgbint >> 16) & 255, (rgbint >> 8) & 255, rgbint & 255)
     content_img = cv2.cvtColor(numpy.array(content_img), cv2.COLOR_RGB2BGR)
+    Utils.save_img(content_img, "img.jpg")
     if preserve_size:
         if width < height:
             content_size = width
