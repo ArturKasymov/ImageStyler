@@ -23,7 +23,7 @@ class Net:
             self.generated_image = Utils.deprocess(generated_tensor)
 
     def get_image(self):
-        return PIL.Image.fromarray(self.generated_image)
+        return self.generated_image
 
 
 class TransformerNet(nn.Module):
