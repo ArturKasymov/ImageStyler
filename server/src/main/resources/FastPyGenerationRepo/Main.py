@@ -7,11 +7,8 @@ import numpy
 
 def main():
     id = sys.stdin.readline()
-    #print(id)
     _ = sys.stdin.readline()
-    #print(_)
     preserve_size = sys.stdin.readline()
-    #print(preserve_size)
     if preserve_size == "false":
         preserve_size = False
     else:
@@ -20,7 +17,6 @@ def main():
     log = open("ab.txt", "w+")
     # input content_img
     shape = sys.stdin.readline()
-    #print(shape)
     height = int(shape.split()[0])
     width = int(shape.split()[1])
     log.write("image id - (" + id + ")")
