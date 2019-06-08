@@ -17,18 +17,11 @@ public class FastPyTransformer {
         URL url = Main.class.getResource("/FastPyGenerationRepo/Main.py");
         try {
             ProcessBuilder pb = new ProcessBuilder("python3", url.toString().substring(5));
-            System.out.println(url.toString());
             Process p = pb.start();
             Scanner errorStream = new Scanner(p.getErrorStream());
             // PASS INPUT IMAGES
             BufferedWriter inputImagesStream = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()));
-            inputImagesStream.write(imageId + "");
-            inputImagesStream.newLine();
-            inputImagesStream.close();
-            while (errorStream.hasNext()) System.out.println(errorStream.nextLine());
-            System.out.println(p.exitValue());
-            //p.destroy();
-            /*// IMAGE ID
+            // IMAGE ID
             System.out.println("Image_id: " + imageId);
             inputImagesStream.write(imageId+"");
             inputImagesStream.newLine();
@@ -49,6 +42,9 @@ public class FastPyTransformer {
             inputImagesStream.newLine();
             for (int j = 0; j < contHeight; j++) {
                 for (int i = 0; i < contWidth; i++) {
+                    if (errorStream.hasNext()) {
+                        while (errorStream.hasNext()) System.out.println(errorStream.nextLine());
+                    }
                     inputImagesStream.write(String.valueOf(contPixelsBytes[i+j*contWidth]));
                     inputImagesStream.newLine();
                 }
@@ -81,8 +77,8 @@ public class FastPyTransformer {
                     break;
                 }
             }
-            p.destroy();*/
-            return contentImage;
+            p.destroy();
+            return img;
         } catch (Exception e) {
             e.printStackTrace();
         }

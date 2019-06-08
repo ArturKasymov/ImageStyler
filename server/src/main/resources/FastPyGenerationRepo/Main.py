@@ -7,17 +7,14 @@ import numpy
 
 def main():
     id = sys.stdin.readline()
-    log = open("ab.txt", "w+")
-    log.write(""+id)
-    log.close()
-    '''_ = sys.stdin.readline()
+    _ = sys.stdin.readline()
     preserve_size = sys.stdin.readline()
     if preserve_size == "false":
         preserve_size = False
     else:
         preserve_size = True
     net = Net(int(id), preserve_size)
-    log = open("aa.txt", "w+")
+    log = open("ab.txt", "w+")
     # input content_img
     shape = sys.stdin.readline()
     height = int(shape.split()[0])
