@@ -90,7 +90,7 @@ public class Interactor implements ClientInteractor {
                 case TRANSFORMER:
                     return FastPyTransformer.generate(contentImage, styleID, d, preserveSize);
                 default:
-                    return PySqueezeNet.generate(contentImage, styleImage, styleID, d, preserveSize);
+                    return FastPyTransformer.generate(contentImage, styleID, d, preserveSize);
             }
         } catch (Exception e) {
             // TODO: handle

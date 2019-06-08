@@ -14,7 +14,7 @@ import java.util.Scanner;
 public class FastPyTransformer {
 
     public static BufferedImage generate(BufferedImage contentImage, int imageId, double d, boolean preserveSize) {
-        URL url = Main.class.getResource("/FastPyGenerationRepo/Main.py");
+        URL url = Main.class.getResource("/PyGenerationRepo/FastMain.py");
         try {
             ProcessBuilder pb = new ProcessBuilder("python3", url.toString().substring(5));
             System.out.println(url.toString());
