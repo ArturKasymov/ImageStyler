@@ -17,6 +17,7 @@ public class FastPyTransformer {
         URL url = Main.class.getResource("/FastPyGenerationRepo/Main.py");
         try {
             ProcessBuilder pb = new ProcessBuilder("python3", url.toString().substring(5));
+            System.out.println(url.toString());
             Process p = pb.start();
             // PASS INPUT IMAGES
             BufferedWriter inputImagesStream = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()));
