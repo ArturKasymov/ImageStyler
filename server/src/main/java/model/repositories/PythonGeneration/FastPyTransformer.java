@@ -14,16 +14,19 @@ import java.util.Scanner;
 public class FastPyTransformer {
 
     public static BufferedImage generate(BufferedImage contentImage, int imageId, double d, boolean preserveSize) {
-        URL url = Main.class.getResource("/PyGenerationRepo/FastMain.py");
+        URL url = Main.class.getResource("/FastPyGenerationRepo/Main.py");
         try {
             ProcessBuilder pb = new ProcessBuilder("python3", url.toString().substring(5));
             System.out.println(url.toString());
             Process p = pb.start();
+            Scanner errorStream = new Scanner(p.getErrorStream());
             // PASS INPUT IMAGES
             BufferedWriter inputImagesStream = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()));
             inputImagesStream.write(imageId + "");
             inputImagesStream.newLine();
             inputImagesStream.close();
+            while (errorStream.hasNext()) System.out.println(errorStream.nextLine());
+            System.out.println(p.exitValue());
             //p.destroy();
             /*// IMAGE ID
             System.out.println("Image_id: " + imageId);

@@ -96,7 +96,7 @@ public class MainViewImpl extends BaseView implements MainView {
     @FXML
     private ComboBox<String> neuralNetChoice;
 
-    private Constants.NEURAL_NET defaultNeuralNet = Constants.NEURAL_NET.SQUEEZENET;
+    private Constants.NEURAL_NET defaultNeuralNet = Constants.NEURAL_NET.TRANSFORMER;
 
     private UserImage currentImage;
 
