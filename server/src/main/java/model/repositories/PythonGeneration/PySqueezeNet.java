@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 public class PySqueezeNet {
 
-    public static BufferedImage generate(BufferedImage contentImage, BufferedImage styleImage, int imageId, double d) {
+    public static BufferedImage generate(BufferedImage contentImage, BufferedImage styleImage, int imageId, double d, boolean preserveSize) {
         URL url = Main.class.getResource("/PyGenerationRepo/Main.py");
         try {
             ProcessBuilder pb = new ProcessBuilder("python3", url.toString().substring(5));
@@ -27,6 +27,10 @@ public class PySqueezeNet {
             // STRENGTH
             System.out.println("Strength: " + d);
             inputImagesStream.write(d+"");
+            inputImagesStream.newLine();
+            // PRESERVE SIZE
+            System.out.println("Preserve Size: " + preserveSize);
+            inputImagesStream.write(preserveSize+"");
             inputImagesStream.newLine();
             // CONTENT IMAGE
             int contHeight = contentImage.getHeight();

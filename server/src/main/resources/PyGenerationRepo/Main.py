@@ -6,6 +6,11 @@ import sys
 def main():
     id = sys.stdin.readline()
     strength = sys.stdin.readline()
+    preserve_size = sys.stdin.readline()
+    if preserve_size == "false":
+        preserve_size = False
+    else:
+        preserve_size = True
     squeezenet = SqueezeNet(int(id), float(strength))
     if len(sys.argv)>1:
         content_img = PIL.Image.open("/home/demian/ImageStyler/server/target/classes/PyGenerationRepo/images/tubingen.jpg")
@@ -26,7 +31,13 @@ def main():
             for j in range(width):
                 rgbint = int(sys.stdin.readline())
                 content_pixels[j, i] = ((rgbint >> 16) & 255, (rgbint >> 8) & 255, rgbint & 255)
-        content_size = width
+        if preserve_size:
+            if width < height:
+                content_size = width
+            else:
+                content_size = height
+        else:
+            content_size = 224
         # input style_img
         shape = sys.stdin.readline()
         height = int(shape.split()[0])
@@ -38,8 +49,8 @@ def main():
             for j in range(width):
                 rgbint = int(sys.stdin.readline())
                 style_pixels[j,i] = ((rgbint >> 16) & 255, (rgbint >> 8) & 255, rgbint & 255)
-        style_size = width
-        squeezenet.generate(content_img, style_img, 224, 224)
+        style_size = 224
+        squeezenet.generate(content_img, style_img, content_size=content_size, style_size=style_size)
         gen_img = squeezenet.get_image()
         log.write("Result shape - (" + str(gen_img.shape[0]) + ", "+ str(gen_img.shape[1]) + ")")
         print(gen_img.shape)

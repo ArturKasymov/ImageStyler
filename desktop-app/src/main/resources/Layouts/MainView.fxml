@@ -51,6 +51,7 @@
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="VGG16 - SLOW BUT BEAUTIFUL PHOTOS" />
                         <String fx:value="SqueezeNet - FAST BUT AVERAGE-QUALITY PHOTOS" />
+                        <String fx:value="Transformer - FAST AND BEAUTIFUL PHOTOS (beta)" />
                     </FXCollections>
                 </items>
             </ComboBox>

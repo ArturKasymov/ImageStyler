@@ -24,6 +24,7 @@ public class Constants {
 
     public enum NEURAL_NET {
         SQUEEZENET,
-        VGG16
+        VGG16,
+        TRANSFORMER,
     }
 }

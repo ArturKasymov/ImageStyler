@@ -394,6 +394,9 @@ public class MainViewImpl extends BaseView implements MainView {
             case 'S':
                 defaultNeuralNet = Constants.NEURAL_NET.SQUEEZENET;
                 break;
+            case 'T':
+                defaultNeuralNet = Constants.NEURAL_NET.TRANSFORMER;
+                break;
             default:
                 break;
         }

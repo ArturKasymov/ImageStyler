@@ -5,6 +5,7 @@ import model.database.provider.PostgreSQLDataProvider;
 import model.repositories.CryptoRepo;
 import model.repositories.JavaGeneration.BaseGeneration.VGG16.VGG16Generator;
 import model.repositories.JavaGeneration.core.Generator;
+import model.repositories.PythonGeneration.FastPyTransformer;
 import model.repositories.RGBConverterRepo;
 import model.repositories.PythonGeneration.PySqueezeNet;
 import model.repositories.StyleRepo;
@@ -77,17 +78,19 @@ public class Interactor implements ClientInteractor {
     }
 
     @Override
-    public BufferedImage generateImage(BufferedImage contentImage, int styleID, Constants.NEURAL_NET net, double d) {
+    public BufferedImage generateImage(BufferedImage contentImage, int styleID, Constants.NEURAL_NET net, double d, boolean preserveSize) {
         BufferedImage styleImage = RGBConverterRepo.toBufferedImageOfType(StyleRepo.getStyle(styleID), 1);
         try {
             switch (net) {
                 case SQUEEZENET:
-                    return PySqueezeNet.generate(contentImage, styleImage, styleID, d);
+                    return PySqueezeNet.generate(contentImage, styleImage, styleID, d, preserveSize);
                 case VGG16:
                     Generator generator = new VGG16Generator(contentImage, styleImage, d);
                     return generator.generate();
+                case TRANSFORMER:
+                    return FastPyTransformer.generate(contentImage, styleID, d, preserveSize);
                 default:
-                    return PySqueezeNet.generate(contentImage, styleImage, styleID, d);
+                    return PySqueezeNet.generate(contentImage, styleImage, styleID, d, preserveSize);
             }
         } catch (Exception e) {
             // TODO: handle

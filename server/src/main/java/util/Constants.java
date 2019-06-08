@@ -14,7 +14,8 @@ public class Constants {
 
     public enum NEURAL_NET {
         SQUEEZENET,
-        VGG16;
+        VGG16,
+        TRANSFORMER;
 
         public static NEURAL_NET getItem(String net) {
             switch (net) {
@@ -22,6 +23,8 @@ public class Constants {
                     return SQUEEZENET;
                 case "VGG16":
                     return VGG16;
+                case "TRANSFORMER":
+                    return TRANSFORMER;
                 default:
                     return SQUEEZENET;
             }

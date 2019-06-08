@@ -142,6 +142,7 @@ public class ClientHandler extends Thread{
                 String s_net = sc.next();
                 Constants.NEURAL_NET net = Constants.NEURAL_NET.getItem(s_net);
                 double d = sc.nextDouble();
+                boolean preserveSize = sc.nextBoolean();
                 try {
                     byte[] imageSizeArray = new byte[4];
                     dis.read(imageSizeArray);
@@ -154,7 +155,7 @@ public class ClientHandler extends Thread{
                     final String imagePath = getCurrentUserPath()+"/."+imageID+".png";
                     serverManager.asyncTask(()->{
                         BufferedImage img = RGBConverterRepo.toBufferedImageOfType(image, 1);
-                        BufferedImage generatedImage = interactor.generateImage(img, styleID, net, d);
+                        BufferedImage generatedImage = interactor.generateImage(img, styleID, net, d, preserveSize);
                         try {
                             File imageFile = new File(imagePath);
                             OutputStream out;

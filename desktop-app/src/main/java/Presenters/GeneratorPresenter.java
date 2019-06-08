@@ -21,8 +21,8 @@ public class GeneratorPresenter implements GeneratorCallback {
         this.interactor= Interactor.getInstance();
     }
 
-    public void generate(Image contentImage, int styleImageID, String imageName, Constants.NEURAL_NET net, double strength) {
-        interactor.generate(contentImage, styleImageID, imageName, net, strength);
+    public void generate(Image contentImage, int styleImageID, String imageName, Constants.NEURAL_NET net, double strength, boolean preserveSize) {
+        interactor.generate(contentImage, styleImageID, imageName, net, strength, preserveSize);
     }
 
     public void initCallback(){

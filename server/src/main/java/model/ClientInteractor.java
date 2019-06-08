@@ -12,7 +12,7 @@ public interface ClientInteractor {
     int insertUser(String userName, String password) throws SQLException;
     int insertImage(String imageName, int userID, long imageDate);
     User getUser(String username);
-    BufferedImage generateImage(BufferedImage contentImage, int styleID, Constants.NEURAL_NET net, double d);
+    BufferedImage generateImage(BufferedImage contentImage, int styleID, Constants.NEURAL_NET net, double d, boolean preserveSize);
     void checkUserDir(String userPath);
     String getUserImagesListString(int userID);
     void deleteUserImage(int imageID, String userPath);

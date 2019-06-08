@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -57,10 +58,15 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
     private ImageView styleImage;
 
     @FXML
+    private CheckBox fullSizeCheck;
+
+    @FXML
     private Button generateButton;
 
     @FXML
     private TextField photoName;
+
+    private boolean preserveSize = false;
 
     @FXML
     public void initialize() {
@@ -80,7 +86,7 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
         Image contImg = contentImage.getImage();
         if (photoName.getCharacters().length()>0) {
             getAppManager().asyncTask(()->presenter.generate(contImg, index,
-                    name, toggler.getDefaultNeuralNet(), strengthSlider.getValue()));
+                    name, toggler.getDefaultNeuralNet(), strengthSlider.getValue(), preserveSize));
         } else {
             showNoPhotoNameAlert();
             return;
@@ -143,6 +149,17 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
                 System.out.println(e);
             }
         });
+        imgView.setOnMouseEntered(event -> {
+
+        });
+        imgView.setOnMouseExited(event -> {
+
+        });
+    }
+
+    @FXML
+    public void onFullSize() {
+        preserveSize = !preserveSize;
     }
 
     private void setImage(ImageView imgView, BufferedImage img) {

@@ -239,10 +239,10 @@ public class SessionManager implements Runnable {
         sendDataToServer(REGISTER + " " + username + " " + password);
     }
 
-    public void generateImage(ByteArrayOutputStream userImage, int styleID, String imageName, Constants.NEURAL_NET net, double strength){
+    public void generateImage(ByteArrayOutputStream userImage, int styleID, String imageName, Constants.NEURAL_NET net, double strength, boolean preserveSize) {
         synchronized (outputStream){
             try {
-                outputStream.writeUTF(INSERT_IMAGE + " " + imageName + " " + styleID + " " + net + " " + strength);
+                outputStream.writeUTF(INSERT_IMAGE + " " + imageName + " " + styleID + " " + net + " " + strength + " " + preserveSize);
                 byte[] userImageSize = ByteBuffer.allocate(4).putInt(userImage.size()).array();
                 outputStream.write(userImageSize);
                 outputStream.write(userImage.toByteArray());
