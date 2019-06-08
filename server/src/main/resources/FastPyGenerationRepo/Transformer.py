@@ -10,9 +10,9 @@ class Net:
     def __init__(self, id, preserve_size):
         self.net = TransformerNet()
         if id == 3:
-            self.net.load_state_dict(torch.load("../Transform_weights/udnie.pth", map_location='cpu'))
+            self.net.load_state_dict(torch.load("server/src/main/resources/Transform_weights/udnie.pth", map_location='cpu'))
         elif id == 4:
-            self.net.load_state_dict(torch.load("../Transform_weights/starry.pth", map_location='cpu'))
+            self.net.load_state_dict(torch.load("server/src/main/resources/Transform_weights/starry.pth", map_location='cpu'))
         self.net = self.net.to("cpu")
         self.generated_image = None
 
