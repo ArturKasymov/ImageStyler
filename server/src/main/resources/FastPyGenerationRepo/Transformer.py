@@ -12,7 +12,7 @@ class Net:
             self.net.load_state_dict(torch.load("../Transform_weights/udnie.pth", map_location='cpu'))
         elif id == 4:
             self.net.load_state_dict(torch.load("../Transform_weights/starry.pth", map_location='cpu'))
-        self.net = net.to("cpu")
+        self.net = self.net.to("cpu")
         self.generated_image = None
 
     def generate(self, content_img, content_size=224):
