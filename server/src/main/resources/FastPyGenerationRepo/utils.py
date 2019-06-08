@@ -21,8 +21,7 @@ class Utils(object):
     @staticmethod
     def preprocess(img):
         transform = T.Compose([
-            T.ToTensor(),
-            T.Lambda(lambda x: x.mul(255))
+            T.ToTensor()
         ])
         return transform(img).unsqueeze(dim=0)
 
@@ -30,7 +29,7 @@ class Utils(object):
     def deprocess(tensor):
         tensor = tensor.squeeze()
         img = tensor.cpu().numpy()
-        return img.transpose(1, 2, 0) / 255
+        return img.transpose(1, 2, 0)
 
     @staticmethod
     def save_img(img, image_path):
