@@ -40,7 +40,7 @@ public class FastPyTransformer {
             int[] contPixelsBytes = ((DataBufferInt) contentImage.getRaster().getDataBuffer()).getData();
             inputImagesStream.write(contHeight + " " + contWidth);
             inputImagesStream.newLine();
-            while (errorStream.hasNext()) System.out.println(errorStream.nextLine());
+            System.out.println(errorStream.nextLine());
             for (int j = 0; j < contHeight; j++) {
                 for (int i = 0; i < contWidth; i++) {
                     System.out.println(i+j*contWidth);
