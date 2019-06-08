@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import cv2
 from utils import Utils
+import PIL
 
 
 class Net:
