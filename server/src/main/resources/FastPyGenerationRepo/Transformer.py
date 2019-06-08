@@ -23,7 +23,7 @@ class Net:
             self.generated_image = Utils.deprocess(generated_tensor)
 
     def get_image(self):
-        return PIL.Image.fromarray(cv2.cvtColor(self.generated_image, cv2.COLOR_BGR2RGB))
+        return PIL.Image.fromarray(self.generated_image)
 
 
 class TransformerNet(nn.Module):
