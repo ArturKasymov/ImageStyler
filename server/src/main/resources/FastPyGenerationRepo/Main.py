@@ -8,7 +8,7 @@ import numpy
 def main():
     id = sys.stdin.readline()
     log = open("ab.txt", "w+")
-    log.write(id)
+    log.write(""+id)
     log.close()
     '''_ = sys.stdin.readline()
     preserve_size = sys.stdin.readline()

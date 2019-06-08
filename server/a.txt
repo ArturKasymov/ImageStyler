@@ -1,1 +1,0 @@
-Content shape - (1024, 768)Styleshape - (500, 500)Result shape - (298, 224)Finished

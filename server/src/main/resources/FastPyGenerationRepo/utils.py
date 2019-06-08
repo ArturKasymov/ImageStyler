@@ -2,7 +2,6 @@ import torchvision.transforms as T
 import numpy as np
 import cv2
 import torch
-import matplotlib.pyplot as plt
 
 
 class Utils(object):
@@ -32,15 +31,6 @@ class Utils(object):
         tensor = tensor.squeeze()
         img = tensor.cpu().numpy()
         return img.transpose(1, 2, 0)
-
-    @staticmethod
-    def show(img):
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        img = np.array(img/255).clip(0, 1)
-
-        plt.figure(figsize=(10, 5))
-        plt.imshow(img)
-        plt.show()
 
     @staticmethod
     def save_img(img, image_path):
