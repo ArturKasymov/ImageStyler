@@ -24,7 +24,7 @@ public class FastPyTransformer {
             inputImagesStream.write(imageId + "");
             inputImagesStream.newLine();
             inputImagesStream.close();
-            p.destroy();
+            //p.destroy();
             /*// IMAGE ID
             System.out.println("Image_id: " + imageId);
             inputImagesStream.write(imageId+"");

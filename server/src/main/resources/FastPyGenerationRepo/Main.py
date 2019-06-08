@@ -1,8 +1,8 @@
-import PIL
+'''import PIL
 import sys
 import cv2
 from Transformer import Net
-import numpy
+import numpy'''
 
 
 def main():
