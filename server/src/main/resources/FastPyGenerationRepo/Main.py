@@ -14,11 +14,6 @@ def main():
     else:
         preserve_size = True
     net = Net(int(id), preserve_size)
-    if len(sys.argv)>1:
-        content_img = PIL.Image.open("../TestImages/tubingen.jpg")
-        net.generate(content_img)
-        print(net.get_image().shape)
-        return
     log = open("aa.txt", "w+")
     # input content_img
     shape = sys.stdin.readline()
