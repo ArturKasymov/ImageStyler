@@ -44,7 +44,7 @@ public class FastPyTransformer {
                 for (int i = 0; i < contWidth; i++) {
                     System.out.println(i+j*contWidth);
                     if (errorStream.hasNext()) {
-                        while (errorStream.hasNext()) System.out.println(errorStream.nextLine());
+                        System.out.println(errorStream.nextLine());
                     }
                     inputImagesStream.write(String.valueOf(contPixelsBytes[i+j*contWidth]));
                     inputImagesStream.newLine();
