@@ -14,7 +14,7 @@ def main():
         preserve_size = True
     net = Net(int(id), preserve_size)
     if len(sys.argv)>1:
-        content_img = PIL.Image.open("/home/demian/ImageStyler/server/target/classes/PyGenerationRepo/images/tubingen.jpg")
+        content_img = PIL.Image.open("../TestImages/tubingen.jpg")
         net.generate(content_img)
         print(net.get_image().shape)
         return
