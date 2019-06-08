@@ -30,7 +30,7 @@ class Utils(object):
     def deprocess(tensor):
         tensor = tensor.squeeze()
         img = tensor.cpu().numpy()
-        return img.transpose(1, 2, 0)
+        return img.transpose(1, 2, 0) / 255
 
     @staticmethod
     def save_img(img, image_path):

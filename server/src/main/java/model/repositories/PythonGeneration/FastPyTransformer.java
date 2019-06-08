@@ -41,16 +41,11 @@ public class FastPyTransformer {
             int[] contPixelsBytes = ((DataBufferInt) contentImage.getRaster().getDataBuffer()).getData();
             inputImagesStream.write(contHeight + " " + contWidth);
             inputImagesStream.newLine();
-            try {
-                for (int j = 0; j < contHeight; j++) {
-                    for (int i = 0; i < contWidth; i++) {
-                        System.out.println(i + j * contWidth);
-                        inputImagesStream.write(String.valueOf(contPixelsBytes[i + j * contWidth]));
-                        inputImagesStream.newLine();
-                    }
+            for (int j = 0; j < contHeight; j++) {
+                for (int i = 0; i < contWidth; i++) {
+                    inputImagesStream.write(String.valueOf(contPixelsBytes[i + j * contWidth]));
+                    inputImagesStream.newLine();
                 }
-            } catch (Exception e) {
-                while (errorStream.hasNext()) System.out.println(errorStream.nextLine());
             }
             inputImagesStream.close();
             // GET GENERATED IMAGE
@@ -59,7 +54,7 @@ public class FastPyTransformer {
             Scanner imgSc = new Scanner(generatedImageStream);
             BufferedImage img;
             while (true) {
-                while (!imgSc.hasNext()) if (errorStream.hasNext()) while (errorStream.hasNext()) System.out.println(errorStream.nextLine());
+                while (!imgSc.hasNext());
                 String line = imgSc.nextLine();
                 System.out.println(line);
                 if (line.charAt(0)!='I') {
