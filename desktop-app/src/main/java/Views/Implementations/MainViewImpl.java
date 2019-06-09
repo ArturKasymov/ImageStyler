@@ -226,6 +226,7 @@ public class MainViewImpl extends BaseView implements MainView {
                     generatorView = loader.load();
                     generatorCtrl = loader.getController();
                     generatorCtrl.setViewsToggler(this);
+                    generatorCtrl.handleNNChange(defaultNeuralNet);
                     BaseView genCtrl = loader.getController();
                     genCtrl.setAppManager(getAppManager());
                 }
@@ -401,7 +402,11 @@ public class MainViewImpl extends BaseView implements MainView {
             default:
                 break;
         }
-        generatorCtrl.handleNNChange(defaultNeuralNet);
+        try {
+            generatorCtrl.handleNNChange(defaultNeuralNet);
+        } catch (NullPointerException e) {
+
+        }
     }
 
     public Constants.NEURAL_NET getDefaultNeuralNet() {
