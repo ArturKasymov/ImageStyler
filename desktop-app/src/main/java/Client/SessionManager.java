@@ -1,35 +1,32 @@
 package Client;
 
 import Model.Database.Entity.User;
-import Model.Database.Entity.UserImage;
-import Presenters.Callbacks.GeneratorCallback;
+import Model.Repositories.ConnectionCryptoRepo;
 import Presenters.Callbacks.LoginCallback;
 import Presenters.Callbacks.MainCallback;
 import Presenters.Callbacks.RegisterCallback;
 import Utils.Constants;
 import javafx.application.Platform;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
-import java.nio.ByteBuffer;
+import java.security.GeneralSecurityException;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
+import static Utils.Constants.KEY_GEN_LENGHT;
 import static Utils.ServerCommand.*;
 
 public class SessionManager implements Runnable {
     private final User defaultUser=new User(0,"ghost");
-
-
     private User currentUser=defaultUser;
 
     private boolean runningStatus;
+
     private Socket socket;
     private ScheduledExecutorService executor;
-
 
     private String serverIP;
     private int serverPort;
@@ -39,16 +36,13 @@ public class SessionManager implements Runnable {
 
     //CallBacks
     private LoginCallback loginCallback;
-    private GeneratorCallback generatorCallback;
     private MainCallback mainCallback;
     private RegisterCallback registerCallback;
 
+    private ConnectionCryptoRepo connectionCryptoRepo;
 
     public void initLoginCallback(LoginCallback callback){
         loginCallback=callback;
-    }
-    public void initGeneratorCallback(GeneratorCallback callback){
-        generatorCallback=callback;
     }
     public void initMainCallback(MainCallback callback){
         mainCallback=callback;
@@ -71,6 +65,13 @@ public class SessionManager implements Runnable {
     public void run() {
         try {
             executor = Executors.newSingleThreadScheduledExecutor();
+
+            try {
+                connectionCryptoRepo=new ConnectionCryptoRepo(KEY_GEN_LENGHT);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
             socket = new Socket(serverIP,serverPort);
             dis = new DataInputStream(socket.getInputStream());
             outputStream = new DataOutputStream(socket.getOutputStream());
@@ -79,10 +80,16 @@ public class SessionManager implements Runnable {
 
             //TODO delete logs
             System.out.println("server connected");
+            connectionCryptoRepo.sendPublicKey(outputStream);
 
             while(isContinue()){
                 inputData=dis.readUTF();
-                System.out.println(inputData);
+                if(inputData.equals(INIT)){
+                    connectionCryptoRepo.setServerPublicKey(dis);
+                    System.out.println("Connection INIT");
+                    continue;
+                }
+                inputData=connectionCryptoRepo.decryptMessage(inputData);
                 if(inputData.equals(CLOSE_CONNECTION))break;
                 parseServerInput(inputData);
             }
@@ -99,7 +106,6 @@ public class SessionManager implements Runnable {
             try {
                 socket.close();
                 executor.shutdown();
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -187,17 +193,12 @@ public class SessionManager implements Runnable {
                     case SUCCESS:
                         int imageID = sc.nextInt();
                         int userID= sc.nextInt();
+                        int encryptImageSize= sc.nextInt();
                         try {
-                            byte[] imageSizeArray = new byte[4];
-                            dis.read(imageSizeArray);
-                            int size = ByteBuffer.wrap(imageSizeArray).asIntBuffer().get();
-                            byte[] imageArray = new byte[size];
-                            dis.readFully(imageArray,0,size);
-                            BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageArray));
+                            BufferedImage image = connectionCryptoRepo.decryptImage(dis,encryptImageSize);
                             if(currentUser.getUserID()==userID)executor.execute(()->mainCallback.saveGeneratedImage(imageID, userID,image));
                         } catch (Exception e){
                             e.printStackTrace();
-                            //TODO handle
                         }
                         break;
                 }
@@ -242,12 +243,13 @@ public class SessionManager implements Runnable {
     public void generateImage(ByteArrayOutputStream userImage, int styleID, String imageName, Constants.NEURAL_NET net, double strength, boolean preserveSize) {
         synchronized (outputStream){
             try {
-                outputStream.writeUTF(INSERT_IMAGE + " " + imageName + " " + styleID + " " + net + " " + strength + " " + preserveSize);
-                byte[] userImageSize = ByteBuffer.allocate(4).putInt(userImage.size()).array();
-                outputStream.write(userImageSize);
-                outputStream.write(userImage.toByteArray());
+                byte [] encryptImage= connectionCryptoRepo.encryptImage(userImage.toByteArray());
+                outputStream.writeUTF(connectionCryptoRepo.encryptMessage
+                        (INSERT_IMAGE + " " + imageName + " " + styleID + " " + net + " "
+                                + strength + " " + preserveSize + " " + encryptImage.length));
+                outputStream.write(encryptImage);
                 outputStream.flush();
-            } catch (IOException e) {
+            } catch (IOException | GeneralSecurityException e) {
                 e.printStackTrace();
             }
         }
@@ -297,11 +299,10 @@ public class SessionManager implements Runnable {
 
 
     private void sendDataToServer(String data){
-        //TODO add hashing
         synchronized (outputStream){
             try {
-                outputStream.writeUTF(data);
-            } catch (IOException e) {
+                outputStream.writeUTF(connectionCryptoRepo.encryptMessage(data));
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
