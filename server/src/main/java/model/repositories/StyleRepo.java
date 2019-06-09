@@ -13,7 +13,6 @@ public class StyleRepo {
     public static void init(){}
     private static BufferedImage styleImages[] = new BufferedImage[NUM_STYLE_IMAGES];
     static {
-        //TODO check
         styleImages[0] = getImage("/TestImages/img1.png");
         styleImages[1] = getImage("/TestImages/la_muse.png");
         styleImages[2] = getImage("/TestImages/rain_princess.png");

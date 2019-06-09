@@ -112,7 +112,6 @@ public class AppManager extends Application {
         String layouts = separator+"Layouts";
         URL url = AppManager.class.getResource(layouts+path);
         FXMLLoader loader = new FXMLLoader(url);
-        System.out.println(layouts);
         Parent view = loader.load();
         BaseView controller = loader.getController();
         saveController(controller);

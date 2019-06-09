@@ -10,8 +10,8 @@ public class Constants {
 
     public static final String SERVER_ROOT_DIRECTORY=System.getProperty("user.home")+"/.ImageStyler";
 
-    public static final int NUM_STYLE_IMAGES = 6;
-    public static final int KEY_GEN_LENGHT=2048;
+    public static final int NUM_STYLE_IMAGES = 7;
+    public static final int KEY_GEN_LENGHT = 2048;
 
     public enum NEURAL_NET {
         SQUEEZENET,
