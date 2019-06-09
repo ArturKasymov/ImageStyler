@@ -2,7 +2,6 @@ import PIL
 import sys
 import cv2
 from Transformer import Net
-from utils import Utils
 import numpy
 
 
@@ -40,7 +39,6 @@ def main():
     gen_img = net.get_image()
     log.write("Result shape - (" + str(gen_img.shape[0]) + ", "+ str(gen_img.shape[1]) + ")")
     print(gen_img.shape)
-    Utils.save_img(gen_img, "img.jpg")
     gen_img = gen_img.clip(0, 255)
     for i in range(gen_img.shape[0]):
         for j in range(gen_img.shape[1]):
