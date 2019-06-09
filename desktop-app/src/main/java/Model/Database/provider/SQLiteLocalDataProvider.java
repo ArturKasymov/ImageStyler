@@ -3,7 +3,6 @@ package Model.Database.provider;
 import Model.Database.Entity.User;
 import Model.Database.Entity.UserImage;
 import javafx.scene.image.Image;
-import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ import static Utils.SQLiteQueries.*;
 public class SQLiteLocalDataProvider {
     private Connection connection;
 
-    public SQLiteLocalDataProvider(@NotNull String dbname) {
+    public SQLiteLocalDataProvider(String dbname) {
         try {
             connection = DriverManager.getConnection(String.format("jdbc:sqlite:%s", dbname));
 

@@ -4,7 +4,7 @@ import java.io.File;
 
 public class Constants {
 
-    public static final String separator = File.separator;
+    public static final String separator = "/";
 
     public static final String TITLE = "Hello UJ";
     public static final int KEY_GEN_LENGHT=2048;
