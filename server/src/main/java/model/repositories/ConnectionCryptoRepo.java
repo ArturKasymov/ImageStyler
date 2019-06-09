@@ -107,7 +107,7 @@ public class ConnectionCryptoRepo {
 
     public byte[] encryptImage(byte[] input)
             throws GeneralSecurityException {
-        cipherAES.init(Cipher.ENCRYPT_MODE, secretKey, parameterSpec);
+        cipherAES.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key, "AES"), new GCMParameterSpec(128, iv));
         return this.cipherAES.doFinal(input);
     }
 
