@@ -22,12 +22,12 @@ def main():
     width = int(shape.split()[1])
     log.write("image id - (" + id + ")")
     log.write("Content shape - (" + str(height) + ", " + str(width) + ")")
-    content_img = PIL.Image.new('RGB', (height, width), "black")
+    content_img = PIL.Image.new('RGB', (width, height), "black")
     content_pixels = content_img.load()
-    for i in range(height):
-        for j in range(width):
+    for i in range(width):
+        for j in range(height):
             rgbint = int(sys.stdin.readline())
-            content_pixels[i, j] = ((rgbint >> 16) & 255, (rgbint >> 8) & 255, rgbint & 255)
+            content_pixels[j, i] = ((rgbint >> 16) & 255, (rgbint >> 8) & 255, rgbint & 255)
     content_img = cv2.cvtColor(numpy.array(content_img), cv2.COLOR_RGB2BGR)
     if preserve_size:
         if width < height:
@@ -41,6 +41,7 @@ def main():
     log.write("Result shape - (" + str(gen_img.shape[0]) + ", "+ str(gen_img.shape[1]) + ")")
     print(gen_img.shape)
     Utils.save_img(gen_img, "img.jpg")
+    gen_img = gen_img.clip(0, 255)
     for i in range(gen_img.shape[0]):
         for j in range(gen_img.shape[1]):
             print("%d %d %d" % (gen_img[i, j, 0], gen_img[i, j, 1], gen_img[i, j, 2]))
