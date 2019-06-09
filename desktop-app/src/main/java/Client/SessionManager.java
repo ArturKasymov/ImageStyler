@@ -226,6 +226,11 @@ public class SessionManager implements Runnable {
                         break;
                 }
                 break;
+            case AES:
+                int size= sc.nextInt();
+                connectionCryptoRepo.setAES(dis,size);
+                System.out.println("AES init");
+                break;
         }
     }
 

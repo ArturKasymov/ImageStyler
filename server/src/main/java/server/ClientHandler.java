@@ -17,6 +17,7 @@ import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
@@ -74,6 +75,7 @@ public class ClientHandler extends Thread{
                 if(inputData.equals(INIT)){
                     connectionCryptoRepo.setClientPublicKey(dis);
                     System.out.println("Connection INIT");
+                    connectionCryptoRepo.sendAESsettings(dos);
                     continue;
                 }
                 inputData=connectionCryptoRepo.decryptMessage(inputData);
@@ -166,7 +168,6 @@ public class ClientHandler extends Thread{
                 int encryptImageSize= sc.nextInt();
                 try {
                     BufferedImage image = connectionCryptoRepo.decryptImage(dis,encryptImageSize);
-
                     int imageID = interactor.insertImage(imageName, currentUserID, imageDate);
                     final String imagePath = getCurrentUserPath()+"/."+imageID+".png";
                     serverManager.asyncTask(()->{
@@ -190,7 +191,7 @@ public class ClientHandler extends Thread{
                         for(ClientHandler temp : serverManager.getUserSessions(currentUserID)){
                             temp.insertUserImage(imageID, currentUserID , imageName, imageDate);
                         }
-                } catch (IOException | NullPointerException | BadPaddingException | IllegalBlockSizeException | InvalidKeyException e) {
+                } catch (IOException | NullPointerException | BadPaddingException | IllegalBlockSizeException | InvalidKeyException | InvalidAlgorithmParameterException e) {
                     e.printStackTrace();
                 }
                 break;
