@@ -142,6 +142,7 @@ public class LoginViewImpl extends BaseView implements LoginView {
 
     @Override
     public void initViewData() {
+        logo.setImage(new Image(AppManager.class.getResource("/TestImages/logo_transparent.png").toExternalForm()));
         if(!presenter.checkConnection())showReconnectButton();
     }
 

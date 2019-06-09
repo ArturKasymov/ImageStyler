@@ -37,6 +37,7 @@
 }
 
 .combo-box-nn {
+    -fx-width: 100px;
     -fx-background-color: #2ecc71;
     -fx-background-radius: 5px;
 }

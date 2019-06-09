@@ -47,6 +47,7 @@ public class MainViewImpl extends BaseView implements MainView {
     private GridPane base;
 
     private Parent generatorView = null;
+    private GeneratorView generatorCtrl = null;
 
     @FXML
     private ToolBar toolbar;
@@ -223,8 +224,8 @@ public class MainViewImpl extends BaseView implements MainView {
                     FXMLLoader loader = new FXMLLoader(getAppManager().getClass()
                             .getResource("/Layouts/GeneratorView.fxml"));
                     generatorView = loader.load();
-                    GeneratorView ctrl = loader.getController();
-                    ctrl.setViewsToggler(this);
+                    generatorCtrl = loader.getController();
+                    generatorCtrl.setViewsToggler(this);
                     BaseView genCtrl = loader.getController();
                     genCtrl.setAppManager(getAppManager());
                 }
@@ -400,6 +401,7 @@ public class MainViewImpl extends BaseView implements MainView {
             default:
                 break;
         }
+        generatorCtrl.handleNNChange(defaultNeuralNet);
     }
 
     public Constants.NEURAL_NET getDefaultNeuralNet() {

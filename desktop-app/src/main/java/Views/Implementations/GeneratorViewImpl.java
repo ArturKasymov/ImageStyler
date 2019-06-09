@@ -2,6 +2,7 @@ package Views.Implementations;
 
 import Model.Database.Entity.UserImage;
 import Presenters.GeneratorPresenter;
+import Utils.Constants;
 import Views.Interfaces.GeneratorView;
 import Views.Interfaces.MainView;
 import Views.core.BaseView;
@@ -77,6 +78,8 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
         setImage(styleImage, image);
         setOnImageClick(contentImage);
         //setOnImageClick(styleImage);
+
+        handleNNChange(Constants.NEURAL_NET.TRANSFORMER);
     }
 
     @FXML
@@ -149,12 +152,6 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
                 System.out.println(e);
             }
         });
-        imgView.setOnMouseEntered(event -> {
-
-        });
-        imgView.setOnMouseExited(event -> {
-
-        });
     }
 
     @FXML
@@ -173,6 +170,23 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
 
     public void setViewsToggler(MainView view) {
         this.toggler = view;
+    }
+
+    @Override
+    public void handleNNChange(Constants.NEURAL_NET net) {
+        switch (net) {
+            case TRANSFORMER:
+                strengthSlider.setValue(50);
+                strengthSlider.setDisable(true);
+                fullSizeCheck.setSelected(true);
+                fullSizeCheck.setDisable(true);
+                break;
+            default:
+                strengthSlider.setDisable(false);
+                fullSizeCheck.setSelected(false);
+                fullSizeCheck.setDisable(false);
+                break;
+        }
     }
 
     public void notifyList(UserImage savedUserImage) {

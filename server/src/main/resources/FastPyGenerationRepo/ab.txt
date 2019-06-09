@@ -1,2 +1,0 @@
-image id - (3
-)Content shape - (100, 100)Result shape - (100, 100)Finished

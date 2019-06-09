@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
@@ -46,8 +47,14 @@
                 <RowConstraints minHeight="40.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <ImageView fx:id="contentImage" fitHeight="200.0" fitWidth="200.0" focusTraversable="false" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
-                <CheckBox fx:id="fullSizeCheck" GridPane.columnIndex="0" GridPane.rowIndex="1" mnemonicParsing="false" text="Generate with original size" onAction="#onFullSize"/>
+                <ImageView fx:id="contentImage" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></ImageView>
+                <CheckBox fx:id="fullSizeCheck" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#onFullSize" prefWidth="190.0" text="Generate with original size" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></CheckBox>
             </children>
         </GridPane>
         <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: limegreen;" styleClass="plus" text="+" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
@@ -71,7 +78,7 @@
                 <RowConstraints minHeight="40.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <ImageView fx:id="styleImage" fitHeight="200.0" fitWidth="200.0" focusTraversable="false" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
+                <ImageView fx:id="styleImage" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
                 <Button fx:id="leftStyleImage" focusTraversable="false" minHeight="25.0" minWidth="25.0" onAction="#onShiftLeftStyleImage" prefHeight="25.0" prefWidth="25.0" styleClass="shift-button" text="&lt;" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                 <Button fx:id="rightStyleImage" alignment="TOP_CENTER" contentDisplay="CENTER" focusTraversable="false" minHeight="25.0" minWidth="25.0" onAction="#onShiftRightStyleImage" prefHeight="25.0" prefWidth="25.0" styleClass="shift-button" text="&gt;" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <padding>
