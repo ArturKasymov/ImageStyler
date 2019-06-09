@@ -90,19 +90,23 @@ public class ConnectionCryptoRepo {
 
     public byte[] encryptImage(byte[] input)
             throws GeneralSecurityException {
-        byte[] iv = new byte[12];
-        secureRandom.nextBytes(iv);
-        cipherAES.init(Cipher.DECRYPT_MODE, secretKey, new GCMParameterSpec(128, iv));
-        return this.cipherAES.doFinal(input);
+        //TODO fix
+        //byte[] iv = new byte[12];
+        //secureRandom.nextBytes(iv);
+        //cipherAES.init(Cipher.DECRYPT_MODE, secretKey, new GCMParameterSpec(128, iv));
+        //return this.cipherAES.doFinal(input);
+        return input;
     }
 
     public BufferedImage decryptImage(DataInputStream dis, int encryptImageSize) throws BadPaddingException, IllegalBlockSizeException, IOException, InvalidKeyException, InvalidAlgorithmParameterException {
         byte [] encryptImage =new byte[encryptImageSize];
         dis.readFully(encryptImage,0,encryptImageSize);
-        byte[] iv = new byte[12];
-        secureRandom.nextBytes(iv);
-        cipherAES.init(Cipher.DECRYPT_MODE,secretKey,new GCMParameterSpec(128, iv));
-        return ImageIO.read(new ByteArrayInputStream( this.cipherAES.doFinal(encryptImage)));
+        //TODO fix
+        //byte[] iv = new byte[12];
+        //secureRandom.nextBytes(iv);
+        //cipherAES.init(Cipher.DECRYPT_MODE,secretKey,new GCMParameterSpec(128, iv));
+        //return ImageIO.read(new ByteArrayInputStream( this.cipherAES.doFinal(encryptImage)));
+        return ImageIO.read(new ByteArrayInputStream( encryptImage));
     }
 
 }
