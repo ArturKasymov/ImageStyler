@@ -1,10 +1,8 @@
 package Model.Interactors;
 
 import Client.SessionManager;
-import Model.Database.Entity.User;
 import Model.Database.Entity.UserImage;
 import Model.Database.provider.SQLiteLocalDataProvider;;
-import Presenters.Callbacks.GeneratorCallback;
 import Presenters.Callbacks.LoginCallback;
 import Presenters.Callbacks.MainCallback;
 import Presenters.Callbacks.RegisterCallback;
@@ -92,11 +90,6 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     @Override
     public void initMainCallback(MainCallback callback) {
         sessionManager.initMainCallback(callback);
-    }
-
-    @Override
-    public void initGeneratorCallback(GeneratorCallback callback) {
-        sessionManager.initGeneratorCallback(callback);
     }
 
     public void checkUserDirectory(){

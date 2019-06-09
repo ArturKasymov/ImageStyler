@@ -1,6 +1,8 @@
 package util;
 
 public class ServerCommand {
+    public static final String INIT="INIT";
+    public static final String AES="AES";
     public static final String CLOSE_CONNECTION="CLOSE_CONNECTION";
 
     public static final String LOGIN="LOGIN";

@@ -3,20 +3,28 @@ package server;
 import model.ClientInteractor;
 import model.Interactor;
 import model.database.entity.User;
+import model.repositories.ConnectionCryptoRepo;
 import model.repositories.CryptoRepo;
 import model.repositories.RGBConverterRepo;
 import util.Constants;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Scanner;
 
+import static util.Constants.KEY_GEN_LENGHT;
 import static util.Constants.SERVER_ROOT_DIRECTORY;
 import static util.ServerCommand.*;
 
@@ -30,6 +38,8 @@ public class ClientHandler extends Thread{
     private final DataOutputStream dos;
 
     private int currentUserID;
+    private ConnectionCryptoRepo connectionCryptoRepo;
+
 
     public ClientHandler(ServerManager serverManager,Socket currentSocket, DataInputStream dis, DataOutputStream dos){
         this.serverManager=serverManager;
@@ -37,6 +47,11 @@ public class ClientHandler extends Thread{
         this.dis=dis;
         this.dos=dos;
         this.currentUserID=-1;
+        try {
+            connectionCryptoRepo=new ConnectionCryptoRepo(KEY_GEN_LENGHT);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+            e.printStackTrace();
+        }
     }
 
     private String getCurrentUserPath(){
@@ -50,20 +65,27 @@ public class ClientHandler extends Thread{
 
         // TODO delete logs
         System.out.println("new client added");
+        connectionCryptoRepo.sendPublicKey(dos);
 
-        //TODO add sending init PublicKey to Client
 
         while (isRunning)
         {
             try {
                 inputData = dis.readUTF();
+                if(inputData.equals(INIT)){
+                    connectionCryptoRepo.setClientPublicKey(dis);
+                    System.out.println("Connection INIT");
+                    connectionCryptoRepo.sendAESsettings(dos);
+                    continue;
+                }
+                inputData=connectionCryptoRepo.decryptMessage(inputData);
                 System.out.println(inputData);
                 if(inputData.equals(CLOSE_CONNECTION)){
                     sendDataToClient(CLOSE_CONNECTION);
                     isRunning=false;
                 }
                 else parseClientInput(inputData);
-            } catch (IOException e) {
+            } catch (IOException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
                 e.printStackTrace();
                 isRunning=false;
             }
@@ -143,14 +165,9 @@ public class ClientHandler extends Thread{
                 Constants.NEURAL_NET net = Constants.NEURAL_NET.getItem(s_net);
                 double d = sc.nextDouble();
                 boolean preserveSize = sc.nextBoolean();
+                int encryptImageSize= sc.nextInt();
                 try {
-                    byte[] imageSizeArray = new byte[4];
-                    dis.read(imageSizeArray);
-                    int size = ByteBuffer.wrap(imageSizeArray).asIntBuffer().get();
-                    byte[] imageArray = new byte[size];
-                    dis.readFully(imageArray, 0, size);
-                    BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageArray));
-
+                    BufferedImage image = connectionCryptoRepo.decryptImage(dis,encryptImageSize);
                     int imageID = interactor.insertImage(imageName, currentUserID, imageDate);
                     final String imagePath = getCurrentUserPath()+"/."+imageID+".png";
                     serverManager.asyncTask(()->{
@@ -174,7 +191,7 @@ public class ClientHandler extends Thread{
                         for(ClientHandler temp : serverManager.getUserSessions(currentUserID)){
                             temp.insertUserImage(imageID, currentUserID , imageName, imageDate);
                         }
-                } catch (IOException | NullPointerException e) {
+                } catch (IOException | NullPointerException | BadPaddingException | IllegalBlockSizeException | InvalidKeyException | InvalidAlgorithmParameterException e) {
                     e.printStackTrace();
                 }
                 break;
@@ -221,16 +238,12 @@ public class ClientHandler extends Thread{
     private void insertImageData(int imageID, int userID, BufferedImage bufferedImage){
         synchronized (dos) {
             try {
-                dos.writeUTF(INSERT_IMAGE_DATA+" "+SUCCESS+" "+imageID+" "+userID);
-
                 ByteArrayOutputStream generatedImage = new ByteArrayOutputStream();
                 ImageIO.write(bufferedImage, "png", generatedImage);
-
-                byte[] userImageSize = ByteBuffer.allocate(4).putInt(generatedImage.size()).array();
-                dos.write(userImageSize);
-                dos.write(generatedImage.toByteArray());
+                byte [] encryptImage= connectionCryptoRepo.encryptImage(generatedImage.toByteArray());
+                dos.writeUTF(connectionCryptoRepo.encryptMessage(INSERT_IMAGE_DATA+" "+SUCCESS+" "+imageID+" "+userID+" "+encryptImage.length));
+                dos.write(encryptImage);
                 dos.flush();
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -240,7 +253,7 @@ public class ClientHandler extends Thread{
     private void sendDataToClient(String data){
         synchronized (dos) {
             try {
-                dos.writeUTF(data);
+                dos.writeUTF(connectionCryptoRepo.encryptMessage(data));
             } catch (Exception e) {
                 e.printStackTrace();
             }

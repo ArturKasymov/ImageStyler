@@ -71,7 +71,6 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
 
     @FXML
     public void initialize() {
-        presenter.initCallback();
         BufferedImage image = styleImages[5];
 
         setImage(contentImage, contentImageDefault);
