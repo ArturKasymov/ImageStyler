@@ -44,7 +44,7 @@ def main():
     gen_img = gen_img.clip(0, 255)
     for i in range(gen_img.shape[0]):
         for j in range(gen_img.shape[1]):
-            print("%d %d %d" % (gen_img[i, j, 0], gen_img[i, j, 1], gen_img[i, j, 2]))
+            print("%d %d %d" % (gen_img[i, j, 2], gen_img[i, j, 1], gen_img[i, j, 0]))
     log.write("Finished")
     log.close()
 
