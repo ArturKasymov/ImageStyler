@@ -22,12 +22,13 @@ public class ConnectionCryptoRepo {
     private PublicKey publicKey;
     private PrivateKey privateKey;
     private SecretKey secretKey;
-    private GCMParameterSpec parameterSpec;
+    private SecureRandom secureRandom;
 
     private PublicKey serverPublicKey;
 
     public ConnectionCryptoRepo(int keyGenLength) throws NoSuchAlgorithmException, NoSuchPaddingException {
         keyPairGenerator=KeyPairGenerator.getInstance("RSA");
+        keyPairGenerator.initialize(keyGenLength);
         cipherRSA = Cipher.getInstance("RSA");
         KeyPair keyPair=keyPairGenerator.generateKeyPair();
         publicKey= keyPair.getPublic();
@@ -40,13 +41,8 @@ public class ConnectionCryptoRepo {
             byte [] settingsBytes =new byte[AESsize];
             dis.readFully(settingsBytes,0,AESsize);
             this.cipherRSA.init(Cipher.DECRYPT_MODE, privateKey);
-            byte[]temp=cipherRSA.doFinal(settingsBytes);
-            byte[] key=new byte[16];
-            byte[] iv=new byte[12];
-            for(int i=0;i<16;i++)key[i]=temp[i];
-            for(int i=16;i<28;i++)iv[i-16]=temp[i];
+            byte[] key=cipherRSA.doFinal(settingsBytes);
             secretKey = new SecretKeySpec(key, "AES");
-            parameterSpec = new GCMParameterSpec(128, iv);
         }catch (IOException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             e.printStackTrace();
         }
@@ -94,14 +90,18 @@ public class ConnectionCryptoRepo {
 
     public byte[] encryptImage(byte[] input)
             throws GeneralSecurityException {
-        cipherAES.init(Cipher.ENCRYPT_MODE, secretKey, parameterSpec);
+        byte[] iv = new byte[12];
+        secureRandom.nextBytes(iv);
+        cipherAES.init(Cipher.DECRYPT_MODE, secretKey, new GCMParameterSpec(128, iv));
         return this.cipherAES.doFinal(input);
     }
 
     public BufferedImage decryptImage(DataInputStream dis, int encryptImageSize) throws BadPaddingException, IllegalBlockSizeException, IOException, InvalidKeyException, InvalidAlgorithmParameterException {
         byte [] encryptImage =new byte[encryptImageSize];
         dis.readFully(encryptImage,0,encryptImageSize);
-        cipherAES.init(Cipher.DECRYPT_MODE,secretKey,parameterSpec);
+        byte[] iv = new byte[12];
+        secureRandom.nextBytes(iv);
+        cipherAES.init(Cipher.DECRYPT_MODE,secretKey,new GCMParameterSpec(128, iv));
         return ImageIO.read(new ByteArrayInputStream( this.cipherAES.doFinal(encryptImage)));
     }
 
