@@ -29,3 +29,6 @@ Difference between neural nets:
 2) VGG16 (that one will spend around 30 mins of your time and result in beautiful images).
 3) Transformer (that one will spend just 10 secs of your time and generate excellent images, though 
 the algorithm we used here differs absolutely from the previous ones) - beta version (appeared only a few days ago).
+
+You cannot be worried about your information as we use RSA algorithm to encrypt all the data that streams to and from the server.
+Also, we fully synchronize the changes you do from your computer with other computers that are logged in the same account - e.g. generated image on other computer on your account will appear also in your gallery in your computer.
