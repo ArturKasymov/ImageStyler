@@ -9,12 +9,18 @@ Usage:
 1) After executing an app you will find yourself at LogIn page, so register firstly.
 2) At main page, you can look up your gallery, delete existing images, sort them by name or date;
 in the toolbar, there are a few important buttons:
+
   a) Settings: here you can clean local cache (all previously downloaded from server images), change the password 
   in the Profile Settings section and log out from your account.
+  
   b) +: it is where the things are happening - this button will lead you to the Generator page, which we will discuss later.
+  
   c) Hide/Show: this allows you to hide/show the left bar (images list) and leave just the photo you've chosen.
+  
   d) Neural net: here you can choose the neural net which will be used for stylizing the image.
+  
   e) the last thing, with the bottom 'Delete' button, you can delete any image (already downloaded from server/generated).
+  
 "IN PROGRESS" image means that it is being downloaded from server or generated at that moment.
 
 Generator page:
