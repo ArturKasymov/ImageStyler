@@ -1,4 +1,5 @@
 ImageStyler
+
 It's a semester project for Object-Oriented Programming course on Theoretical Computer Science department of Jagiellonian University.
 
 Application allows one to stylize images using our best style images (e.g. 'The Scream' by Van Gogh) with one of several neural nets 
