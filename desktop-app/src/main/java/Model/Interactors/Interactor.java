@@ -18,9 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
-import static Utils.Constants.APP_ROOT_DIRECTORY;
-import static Utils.Constants.LOCAL_DATABASE_NAME;
+import static Utils.Constants.*;
 
 public class Interactor implements GeneratorInteractor, LoginInteractor, MainInteractor, RegisterInteractor {
 
@@ -105,7 +103,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
 
     @Override
     public void saveUserImage(int imageID, int userID,BufferedImage image) {
-        final String path=APP_ROOT_DIRECTORY+"\\."+userID+"\\."+imageID+".png";
+        final String path=APP_ROOT_DIRECTORY+separator+"."+userID+separator+"."+imageID+".png";
         File imageFile = new File(path);
         OutputStream out;
         try {
@@ -149,7 +147,7 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
             List<Integer> downloadedImages=dataProvider.getDownloadedImagesID(userID);
             for (int temp: downloadedImages){
                 try {
-                    File file = new File(APP_ROOT_DIRECTORY+"\\."+userID+"\\."+temp+".png");
+                    File file = new File(APP_ROOT_DIRECTORY+separator+"."+userID+separator+"."+temp+".png");
                     file.delete();
                 } catch (Exception e){}
             }

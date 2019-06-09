@@ -52,23 +52,22 @@ public class AppManager extends Application {
         System.out.println(Thread.currentThread().getName());
         interactor=Interactor.getInstance();
         interactor.startSessionManager(DEFAULT_SERVER_IP,DEFAULT_SERVER_PORT);
-        loadND4Jdata(false);
         com.sun.javafx.util.Logging.getCSSLogger().setLevel(PlatformLogger.Level.OFF);
     }
 
     private void initStage(){
         stage.setTitle(TITLE);
         stage.setScene(new Scene(LoginView, WIDTH, HEIGHT, Color.TRANSPARENT));
-        stage.getIcons().add(new javafx.scene.image.Image(this.getClass().getResource("/TestImages/logo_blue.png").toExternalForm()));
+        stage.getIcons().add(new javafx.scene.image.Image(this.getClass().getResource(separator+"TestImages"+separator+"logo_blue.png").toExternalForm()));
         currentView = LOGIN_VIEW;
         stage.show();
     }
 
     private void initViews() {
         try {
-            LoginView = loadView("/LoginView.fxml");
-            RegisterView = loadView("/RegisterView.fxml");
-            MainView = loadView("/MainView.fxml");
+            LoginView = loadView(separator+"LoginView.fxml");
+            RegisterView = loadView(separator+"RegisterView.fxml");
+            MainView = loadView(separator+"MainView.fxml");
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -109,7 +108,7 @@ public class AppManager extends Application {
     }
 
     private Parent loadView(String path) throws IOException {
-        String layouts = "/Layouts";
+        String layouts = separator+"Layouts";
         URL url = AppManager.class.getResource(layouts+path);
         FXMLLoader loader = new FXMLLoader(url);
         Parent view = loader.load();
@@ -140,17 +139,6 @@ public class AppManager extends Application {
 
     public void asyncTaskLater(Runnable task, long delay, TimeUnit unit) {
         executor.schedule(task, delay, unit);
-    }
-
-    private void loadND4Jdata(boolean load) {
-        if (load) try {
-            Nd4jBackend.load();
-            NativeOpsHolder.getInstance();
-            new DefaultOpExecutioner();
-
-        } catch (Nd4jBackend.NoAvailableBackendException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

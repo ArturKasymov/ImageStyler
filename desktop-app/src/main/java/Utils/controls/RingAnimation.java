@@ -1,5 +1,6 @@
 package Utils.controls;
 
+import Utils.Constants;
 import app.AppManager;
 import com.sun.javafx.css.converters.SizeConverter;
 import javafx.beans.property.DoubleProperty;
@@ -17,7 +18,7 @@ import java.util.List;
 public class RingAnimation extends Control {
 
     public RingAnimation() {
-        this.getStylesheets().add(AppManager.class.getResource("../stylesheets/ringAnimation.css")
+        this.getStylesheets().add(AppManager.class.getResource(".."+ Constants.separator+"stylesheets"+Constants.separator+"ringAnimation.css")
                 .toExternalForm());
         this.getStyleClass().add("ringindicator");
     }

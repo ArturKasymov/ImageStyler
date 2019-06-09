@@ -3,6 +3,7 @@ package Model.Database.Entity;
 import java.util.Date;
 
 import static Utils.Constants.APP_ROOT_DIRECTORY;
+import static Utils.Constants.separator;
 
 
 public class UserImage {
@@ -39,7 +40,7 @@ public class UserImage {
         return imageID;
     }
     public String getImageUrl() {
-        return APP_ROOT_DIRECTORY+"\\."+userID+"\\."+imageID+".png";
+        return APP_ROOT_DIRECTORY+separator+"."+userID+separator+"."+imageID+".png";
     }
 
     public boolean getIsDownloaded(){

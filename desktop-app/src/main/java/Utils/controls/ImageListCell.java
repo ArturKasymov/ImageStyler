@@ -1,6 +1,7 @@
 package Utils.controls;
 
 import Model.Database.Entity.UserImage;
+import Utils.Constants;
 import app.AppManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,7 +32,7 @@ public class ImageListCell extends ListCell<UserImage> {
 
     public ImageListCell() {
         try {
-            view = attachView("/ImageListCell.fxml", this);
+            view = attachView(Constants.separator +"ImageListCell.fxml", this);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -52,7 +53,7 @@ public class ImageListCell extends ListCell<UserImage> {
     }
 
     private Parent attachView(String path, Object controller) throws IOException {
-        String layouts = "/Layouts";
+        String layouts = Constants.separator+"Layouts";
         URL url = AppManager.class.getResource(layouts+path);
         FXMLLoader loader = new FXMLLoader(url);
         loader.setController(controller);

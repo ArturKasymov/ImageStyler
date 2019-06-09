@@ -33,6 +33,7 @@ import java.net.URL;
 import java.util.Date;
 
 import static Utils.Constants.NUM_STYLE_IMAGES;
+import static Utils.Constants.separator;
 
 public class GeneratorViewImpl extends BaseView implements GeneratorView {
     private BufferedImage styleImages[] = new BufferedImage[NUM_STYLE_IMAGES];
@@ -76,7 +77,6 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
         setImage(contentImage, contentImageDefault);
         setImage(styleImage, image);
         setOnImageClick(contentImage);
-        //setOnImageClick(styleImage);
 
         handleNNChange(Constants.NEURAL_NET.TRANSFORMER);
     }
@@ -126,14 +126,15 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
     }
 
     private void loadStyleImages() {
-        styleImages[0] = getImage("/TestImages/img1.png");
-        styleImages[1] = getImage("/TestImages/la_muse.jpg");
-        styleImages[2] = getImage("/TestImages/rain_princess.jpg");
-        styleImages[3] = getImage("/TestImages/udnie.jpg");
-        styleImages[4] = getImage("/TestImages/starry_night_sq.jpg");
-        styleImages[5] = getImage("/TestImages/the_scream.png");
+        styleImages[0] = getImage(separator+"TestImages"+separator+"img1.png");
+        styleImages[1] = getImage(separator+"TestImages"+separator+"la_muse.jpg");
+        styleImages[2] = getImage(separator+"TestImages"+separator+"rain_princess.jpg");
+        styleImages[3] = getImage(separator+"TestImages"+separator+"udnie.jpg");
+        styleImages[4] = getImage(separator+"TestImages"+separator+"starry_night_sq.jpg");
+        styleImages[5] = getImage(separator+"TestImages"+separator+"the_scream.png");
+        styleImages[6] = getImage(separator+"TestImages"+separator+"composition_vii.jpg");
 
-        contentImageDefault = getImage("/TestImages/tubingen_sq.png");
+        contentImageDefault = getImage(separator+"TestImages"+separator+"tubingen_sq.png");
     }
 
     private void setOnImageClick(final ImageView imgView) {

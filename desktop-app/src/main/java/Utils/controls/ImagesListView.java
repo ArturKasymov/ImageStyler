@@ -46,7 +46,7 @@ public class ImagesListView extends VBox {
 
     public ImagesListView() {
         try {
-            attachView("/ImagesListView.fxml", this, this);
+            attachView(Constants.separator+"ImagesListView.fxml", this, this);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -92,7 +92,7 @@ public class ImagesListView extends VBox {
     }
 
     private Parent attachView(String path, Object controller, Object root) throws IOException {
-        String layouts = "/Layouts";
+        String layouts = Constants.separator+"Layouts";
         URL url = AppManager.class.getResource(layouts+path);
         FXMLLoader loader = new FXMLLoader(url);
         loader.setController(controller);
@@ -153,7 +153,6 @@ public class ImagesListView extends VBox {
     }
 
     private void checkForVerticalBar() {
-        // TODO: listen for visibility of bar, not for elements number
         if (userImages.size()>=10) {
             imagesListView.setCellFactory(x->new ImageListCell() {
                 {
