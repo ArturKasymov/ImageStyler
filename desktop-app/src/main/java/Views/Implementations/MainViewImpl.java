@@ -32,7 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static Utils.Constants.IN_PROGRESS_IMAGE;
+import static Utils.Constants.*;
 
 public class MainViewImpl extends BaseView implements MainView {
     private MainPresenter presenter;
@@ -222,7 +222,7 @@ public class MainViewImpl extends BaseView implements MainView {
             try {
                 if (generatorView==null) {
                     FXMLLoader loader = new FXMLLoader(getAppManager().getClass()
-                            .getResource("/Layouts/GeneratorView.fxml"));
+                            .getResource(separator+"Layouts"+separator+"GeneratorView.fxml"));
                     generatorView = loader.load();
                     generatorCtrl = loader.getController();
                     generatorCtrl.setViewsToggler(this);
@@ -259,7 +259,7 @@ public class MainViewImpl extends BaseView implements MainView {
     public void setResultImage(UserImage newUserImage) {
         if (newUserImage==null) {
             resultImage.setImage(null);
-            photoName.setText("Hello UJ");
+            photoName.setText(TITLE);
             deleteImageButton.setDisable(true);
         } else {
             String path = newUserImage.getImageUrl();
@@ -443,7 +443,6 @@ public class MainViewImpl extends BaseView implements MainView {
             newPasswordField.styleProperty().setValue("");
             onceMoreNewPasswordField.styleProperty().setValue("");
         });
-        System.out.println("Alert show");
         oldPasswordField.requestFocus();
     }
 

@@ -2,6 +2,7 @@ package Views.Implementations;
 
 import Presenters.LoginPresenter;
 
+import Utils.Constants;
 import Utils.controls.RingAnimation;
 import app.AppManager;
 import javafx.animation.Animation;
@@ -113,7 +114,7 @@ public class LoginViewImpl extends BaseView implements LoginView {
         fadeTransitionNoConnection.play();
         showNoConnectionAlert(false);
 
-        logo.setImage(new Image(AppManager.class.getResource("/TestImages/logo_transparent.png").toExternalForm()));
+        logo.setImage(new Image(AppManager.class.getResource(Constants.separator+"TestImages"+Constants.separator+"logo_transparent.png").toExternalForm()));
     }
 
     @FXML
@@ -142,7 +143,7 @@ public class LoginViewImpl extends BaseView implements LoginView {
 
     @Override
     public void initViewData() {
-        logo.setImage(new Image(AppManager.class.getResource("/TestImages/logo_transparent.png").toExternalForm()));
+        logo.setImage(new Image(AppManager.class.getResource(Constants.separator+"TestImages"+Constants.separator+"logo_transparent.png").toExternalForm()));
         if(!presenter.checkConnection())showReconnectButton();
     }
 

@@ -13,6 +13,16 @@ class Net:
             self.net.load_state_dict(torch.load("src/main/resources/Transform_weights/udnie.pth", map_location='cpu'))
         elif id == 4:
             self.net.load_state_dict(torch.load("src/main/resources/Transform_weights/starry.pth", map_location='cpu'))
+        elif id == 1:
+            self.net.load_state_dict(torch.load("src/main/resources/Transform_weights/la_muse.pth", map_location='cpu'))
+        elif id == 2:
+            self.net.load_state_dict(torch.load("src/main/resources/Transform_weights/rain_princess.pth", map_location='cpu'))
+        elif id == 6:
+            self.net.load_state_dict(torch.load("src/main/resources/Transform_weights/composition_vii.pth", map_location='cpu'))
+        elif id == 5:
+            self.net.load_state_dict(torch.load("src/main/resources/Transform_weights/the_scream.pth", map_location='cpu'))
+        elif id == 0:
+            self.net.load_state_dict(torch.load("src/main/resources/Transform_weights/img1.pth", map_location='cpu'))
         self.net = self.net.to("cpu")
         self.generated_image = None
 

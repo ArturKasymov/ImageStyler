@@ -20,6 +20,7 @@ public class StyleRepo {
         styleImages[3] = getImage("/TestImages/udnie.png");
         styleImages[4] = getImage("/TestImages/starry_night.png");
         styleImages[5] = getImage("/TestImages/the_scream.png");
+        styleImages[6] = getImage("/TestImages/composition_vii.png");
     }
 
     private static BufferedImage getImage(String path) {
