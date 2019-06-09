@@ -241,7 +241,7 @@ public class ClientHandler extends Thread{
                 ByteArrayOutputStream generatedImage = new ByteArrayOutputStream();
                 ImageIO.write(bufferedImage, "png", generatedImage);
                 byte [] encryptImage= connectionCryptoRepo.encryptImage(generatedImage.toByteArray());
-                dos.writeUTF(INSERT_IMAGE_DATA+" "+SUCCESS+" "+imageID+" "+userID+" "+encryptImage.length);
+                dos.writeUTF(connectionCryptoRepo.encryptMessage(INSERT_IMAGE_DATA+" "+SUCCESS+" "+imageID+" "+userID+" "+encryptImage.length));
                 dos.write(encryptImage);
                 dos.flush();
             } catch (Exception e) {

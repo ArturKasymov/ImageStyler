@@ -40,7 +40,7 @@ public class ConnectionCryptoRepo {
             byte [] settingsBytes =new byte[AESsize];
             dis.readFully(settingsBytes,0,AESsize);
             this.cipherRSA.init(Cipher.DECRYPT_MODE, privateKey);
-            byte[]temp=cipherAES.doFinal(settingsBytes);
+            byte[]temp=cipherRSA.doFinal(settingsBytes);
             byte[] key=new byte[16];
             byte[] iv=new byte[12];
             for(int i=0;i<16;i++)key[i]=temp[i];
