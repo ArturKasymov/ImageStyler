@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Label?>
 
-<VBox fx:id="root" alignment="CENTER" prefHeight="600.00" prefWidth="400.00" spacing="10.0" styleClass="canvas" stylesheets="@../stylesheets/registerViewStyle.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.RegisterViewImpl">
+<VBox fx:id="root" alignment="CENTER" prefHeight="600.00" prefWidth="400.00" spacing="10.0" styleClass="canvas" stylesheets="@../stylesheets/registerViewStyle.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane maxHeight="Infinity" minHeight="0.0" VBox.vgrow="SOMETIMES" />
    <VBox fx:id="form" alignment="CENTER" spacing="10.0" styleClass="form">

@@ -223,8 +223,9 @@ public class MainViewImpl extends BaseView implements MainView {
                 if (generatorView==null) {
                     FXMLLoader loader = new FXMLLoader(getAppManager().getClass()
                             .getResource(separator+"Layouts"+separator+"GeneratorView.fxml"));
+                    generatorCtrl = new GeneratorViewImpl();
+                    loader.setController(generatorCtrl);
                     generatorView = loader.load();
-                    generatorCtrl = loader.getController();
                     generatorCtrl.setViewsToggler(this);
                     generatorCtrl.handleNNChange(defaultNeuralNet);
                     BaseView genCtrl = loader.getController();

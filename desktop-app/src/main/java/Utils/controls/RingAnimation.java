@@ -18,7 +18,7 @@ import java.util.List;
 public class RingAnimation extends Control {
 
     public RingAnimation() {
-        this.getStylesheets().add(AppManager.class.getResource(".."+ Constants.separator+"stylesheets"+Constants.separator+"ringAnimation.css")
+        this.getStylesheets().add(AppManager.class.getResource( Constants.separator+"stylesheets"+Constants.separator+"ringAnimation.css")
                 .toExternalForm());
         this.getStyleClass().add("ringindicator");
     }

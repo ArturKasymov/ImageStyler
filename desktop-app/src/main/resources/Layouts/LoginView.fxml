@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="root" alignment="CENTER" prefHeight="600.00" prefWidth="400.00" spacing="10.0" styleClass="canvas" stylesheets="@../stylesheets/loginViewStyle.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.LoginViewImpl">
+<VBox fx:id="root" alignment="CENTER" prefHeight="600.00" prefWidth="400.00" spacing="10.0" styleClass="canvas" stylesheets="@../stylesheets/loginViewStyle.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane maxHeight="Infinity" minHeight="0.0" VBox.vgrow="SOMETIMES" />
       <ImageView fx:id="logo" fitHeight="150.0" fitWidth="150.0" />
