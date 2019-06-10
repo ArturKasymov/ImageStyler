@@ -22,7 +22,7 @@ public class ConnectionCryptoRepo {
     private final Cipher cipherAES;
     private PublicKey publicKey;
     private PrivateKey privateKey;
-    private SecureRandom secureRandom;
+    private SecureRandom secureRandom=new SecureRandom();
     private byte [] keyAES;
 
     private PublicKey serverPublicKey;

@@ -23,7 +23,7 @@ public class ConnectionCryptoRepo {
     private PublicKey publicKey;
     private PrivateKey privateKey;
     private PublicKey clientPublicKey;
-    private SecureRandom secureRandom;
+    private SecureRandom secureRandom=new SecureRandom();
     private byte[] keyAES=new byte[16];
 
     public ConnectionCryptoRepo(int keyGenLength) throws NoSuchAlgorithmException, NoSuchPaddingException {
@@ -34,8 +34,6 @@ public class ConnectionCryptoRepo {
         publicKey= keyPair.getPublic();
         privateKey=keyPair.getPrivate();
 
-
-        secureRandom = new SecureRandom();
         secureRandom.nextBytes(keyAES);
         cipherAES = Cipher.getInstance("AES/GCM/NoPadding");
     }
