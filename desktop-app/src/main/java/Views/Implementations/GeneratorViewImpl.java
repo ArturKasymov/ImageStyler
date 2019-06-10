@@ -149,7 +149,6 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
                 BufferedImage buffimage = ImageIO.read(file);
                 setImage(imgView, buffimage);
             } catch (IOException e) {
-                System.out.println(e);
             }
         });
     }
