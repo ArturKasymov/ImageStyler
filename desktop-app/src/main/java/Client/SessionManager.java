@@ -10,10 +10,15 @@ import Utils.annotations.Getter;
 import Utils.annotations.Setter;
 import javafx.application.Platform;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
 import java.security.GeneralSecurityException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -130,8 +135,16 @@ public class SessionManager implements Runnable {
                         int userID=sc.nextInt();
                         String userName=sc.next();
                         currentUser=new User(userID,userName);
+                        int cryptBytesSize=sc.nextInt();
+                        byte[] msg=null;
+                        try {
+                            msg=connectionCryptoRepo.decryptBytes(dis,cryptBytesSize);
+                        } catch (BadPaddingException | IllegalBlockSizeException | IOException | InvalidKeyException | InvalidAlgorithmParameterException e) {
+                            e.printStackTrace();
+                        }
+                        Scanner usc = new Scanner(new String(msg));
 
-                        int userImagesCount=sc.nextInt();
+                        int userImagesCount=usc.nextInt();
                         if(userImagesCount>0){
                             ArrayList<Integer> cachedImages=loginCallback.getCachedImagesID(userID);
                             int currentCheckIndex=0;
@@ -140,12 +153,11 @@ public class SessionManager implements Runnable {
                             String imageName;
                             long imageDate;
                             for(int i=0;i<userImagesCount;i++) {
-                                imageID = sc.nextInt();
-                                imageName = sc.next();
-                                imageDate = sc.nextLong();
+                                imageID = usc.nextInt();
+                                imageName = usc.next();
+                                imageDate = usc.nextLong();
                                 if (currentCheckIndex < cachedImages.size()) {
                                     if (imageID == cachedImages.get(currentCheckIndex)) {
-
                                         currentCheckIndex++;
                                         continue;
                                     } else loginCallback.deleteImage(cachedImages.get(currentCheckIndex++));
@@ -198,7 +210,7 @@ public class SessionManager implements Runnable {
                         int userID= sc.nextInt();
                         int encryptImageSize= sc.nextInt();
                         try {
-                            BufferedImage image = connectionCryptoRepo.decryptImage(dis,encryptImageSize);
+                            BufferedImage image = ImageIO.read(new ByteArrayInputStream(connectionCryptoRepo.decryptBytes(dis,encryptImageSize)));
                             if(currentUser.getUserID()==userID)executor.execute(()->mainCallback.saveGeneratedImage(imageID, userID,image));
                         } catch (Exception e){
                             e.printStackTrace();
