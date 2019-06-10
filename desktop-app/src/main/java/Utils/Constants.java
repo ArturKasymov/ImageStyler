@@ -1,13 +1,12 @@
 package Utils;
 
-import java.io.File;
 
 public class Constants {
 
     public static final String separator = "/";
 
     public static final String TITLE = "Hello UJ";
-    public static final int KEY_GEN_LENGHT = 8192;
+    public static final int KEY_GEN_LENGHT = 2048;
     public static final int WIDTH = 900;
     public static final int HEIGHT = 600;
     public static final String APP_ROOT_DIRECTORY=System.getProperty("user.home")+separator+".ImageStyler";

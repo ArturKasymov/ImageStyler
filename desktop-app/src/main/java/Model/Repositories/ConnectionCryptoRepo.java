@@ -1,5 +1,6 @@
 package Model.Repositories;
 
+import com.google.common.primitives.Bytes;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.*;
@@ -21,8 +22,8 @@ public class ConnectionCryptoRepo {
     private final Cipher cipherAES;
     private PublicKey publicKey;
     private PrivateKey privateKey;
-    private SecretKey secretKey;
     private SecureRandom secureRandom;
+    private byte [] keyAES;
 
     private PublicKey serverPublicKey;
 
@@ -41,8 +42,7 @@ public class ConnectionCryptoRepo {
             byte [] settingsBytes =new byte[AESsize];
             dis.readFully(settingsBytes,0,AESsize);
             this.cipherRSA.init(Cipher.DECRYPT_MODE, privateKey);
-            byte[] key=cipherRSA.doFinal(settingsBytes);
-            secretKey = new SecretKeySpec(key, "AES");
+            keyAES=cipherRSA.doFinal(settingsBytes);
         }catch (IOException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             e.printStackTrace();
         }
@@ -90,23 +90,43 @@ public class ConnectionCryptoRepo {
 
     public byte[] encryptImage(byte[] input)
             throws GeneralSecurityException {
-        //TODO fix
-        //byte[] iv = new byte[12];
-        //secureRandom.nextBytes(iv);
-        //cipherAES.init(Cipher.DECRYPT_MODE, secretKey, new GCMParameterSpec(128, iv));
-        //return this.cipherAES.doFinal(input);
+        byte[] iv = null;
+        byte[] encrypted = null;
+        try {
+            iv = new byte[12];
+            secureRandom.nextBytes(iv);
+            cipherAES.init(Cipher.DECRYPT_MODE, new SecretKeySpec(keyAES,"AES"), new GCMParameterSpec(128, iv));
+            encrypted = cipherAES.doFinal(input);
+
+            ByteBuffer byteBuffer = ByteBuffer.allocate(1 + iv.length + encrypted.length);
+            byteBuffer.put((byte) iv.length);
+            byteBuffer.put(iv);
+            byteBuffer.put(encrypted);
+            return byteBuffer.array();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return input;
     }
 
     public BufferedImage decryptImage(DataInputStream dis, int encryptImageSize) throws BadPaddingException, IllegalBlockSizeException, IOException, InvalidKeyException, InvalidAlgorithmParameterException {
         byte [] encryptImage =new byte[encryptImageSize];
         dis.readFully(encryptImage,0,encryptImageSize);
-        //TODO fix
-        //byte[] iv = new byte[12];
-        //secureRandom.nextBytes(iv);
-        //cipherAES.init(Cipher.DECRYPT_MODE,secretKey,new GCMParameterSpec(128, iv));
-        //return ImageIO.read(new ByteArrayInputStream( this.cipherAES.doFinal(encryptImage)));
-        return ImageIO.read(new ByteArrayInputStream( encryptImage));
+        byte[] iv = null;
+        byte[] encrypted = null;
+        try {
+            ByteBuffer byteBuffer = ByteBuffer.wrap(encryptImage);
+            int ivLength = byteBuffer.get();
+            iv = new byte[ivLength];
+            byteBuffer.get(iv);
+            encrypted = new byte[byteBuffer.remaining()];
+            byteBuffer.get(encrypted);
+            cipherAES.init(Cipher.DECRYPT_MODE,new SecretKeySpec(keyAES, "AES"),new GCMParameterSpec(128, iv));
+            return ImageIO.read(new ByteArrayInputStream(cipherAES.doFinal(encrypted)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ImageIO.read(new ByteArrayInputStream(encryptImage));
     }
 
 }
