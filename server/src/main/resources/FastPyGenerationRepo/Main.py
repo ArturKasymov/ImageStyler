@@ -23,8 +23,8 @@ def main():
     log.write("Content shape - (" + str(height) + ", " + str(width) + ")")
     content_img = PIL.Image.new('RGB', (width, height), "black")
     content_pixels = content_img.load()
-    for i in range(width):
-        for j in range(height):
+    for i in range(height):
+        for j in range(width):
             rgbint = int(sys.stdin.readline())
             content_pixels[j, i] = ((rgbint >> 16) & 255, (rgbint >> 8) & 255, rgbint & 255)
     content_img = cv2.cvtColor(numpy.array(content_img), cv2.COLOR_RGB2BGR)

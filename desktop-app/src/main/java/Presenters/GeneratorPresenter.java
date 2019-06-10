@@ -10,6 +10,7 @@ public class GeneratorPresenter{
 
     private GeneratorViewImpl view;
     private GeneratorInteractor interactor;
+
     public GeneratorPresenter(GeneratorViewImpl view) {
         this.view = view;
         this.interactor= Interactor.getInstance();

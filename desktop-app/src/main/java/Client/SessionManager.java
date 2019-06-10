@@ -6,6 +6,8 @@ import Presenters.Callbacks.LoginCallback;
 import Presenters.Callbacks.MainCallback;
 import Presenters.Callbacks.RegisterCallback;
 import Utils.Constants;
+import Utils.annotations.Getter;
+import Utils.annotations.Setter;
 import javafx.application.Platform;
 
 import javax.crypto.BadPaddingException;
@@ -21,12 +23,12 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import static Utils.Constants.KEY_GEN_LENGHT;
+import static Utils.Constants.KEY_GEN_LENGTH;
 import static Utils.ServerCommand.*;
 
 public class SessionManager implements Runnable {
-    private final User defaultUser=new User(0,"ghost");
-    private User currentUser=defaultUser;
+    private final User defaultUser = new User(0,"ghost");
+    private User currentUser = defaultUser;
 
     private boolean runningStatus;
 
@@ -39,12 +41,12 @@ public class SessionManager implements Runnable {
     private DataOutputStream outputStream;
     private DataInputStream dis;
 
+    private ConnectionCryptoRepo connectionCryptoRepo;
+
     //CallBacks
     private LoginCallback loginCallback;
     private MainCallback mainCallback;
     private RegisterCallback registerCallback;
-
-    private ConnectionCryptoRepo connectionCryptoRepo;
 
     public void initLoginCallback(LoginCallback callback){
         loginCallback=callback;
@@ -56,15 +58,7 @@ public class SessionManager implements Runnable {
         registerCallback=callback;
     }
 
-    public SessionManager(){
-
-    }
-
-    public boolean isContinue(){
-        return runningStatus;
-    }
-
-
+    public SessionManager(){}
 
     @Override
     public void run() {
@@ -72,11 +66,14 @@ public class SessionManager implements Runnable {
             executor = Executors.newSingleThreadScheduledExecutor();
 
             try {
-                connectionCryptoRepo=new ConnectionCryptoRepo(KEY_GEN_LENGHT);
+                connectionCryptoRepo=new ConnectionCryptoRepo(KEY_GEN_LENGTH);
             }catch (Exception e){
                 e.printStackTrace();
             }
 
+            /**
+             * SET UP SERVER COMMUNICATION
+             */
             socket = new Socket(serverIP,serverPort);
             dis = new DataInputStream(socket.getInputStream());
             outputStream = new DataOutputStream(socket.getOutputStream());
@@ -87,6 +84,9 @@ public class SessionManager implements Runnable {
             System.out.println("server connected");
             connectionCryptoRepo.sendPublicKey(outputStream);
 
+            /**
+             * WAIT FOR NOTIFICATIONS FROM SERVER
+             */
             while(isContinue()){
                 inputData=dis.readUTF();
                 if(inputData.equals(INIT)){
@@ -99,6 +99,9 @@ public class SessionManager implements Runnable {
                 parseServerInput(inputData);
             }
         } catch (Exception e) {
+            /**
+             * CONNECTION FAILED
+             */
             e.printStackTrace();
             runningStatus=false;
             outputStream=null;
@@ -246,16 +249,49 @@ public class SessionManager implements Runnable {
         }
     }
 
+    public boolean isContinue(){
+        return runningStatus;
+    }
+
+    /**
+     * SEND LOGIN DATA TO SERVER
+     * @param username entered by user
+     * @param password entered by user
+     */
+
     public void login(String username, String password) {
         sendDataToServer(LOGIN+" "+username+" "+password);
     }
+
+    /**
+     * SEND LOGOUT NOTIFICATION TO SERVER and logout from currentUser
+     * @param local whether to logout from local session or from server too
+     */
+
     public void logout(boolean local) {
         if (!local) sendDataToServer(LOGOUT);
         currentUser=defaultUser;
     }
+
+    /**
+     * SEND REGISTER DATA TO SERVER
+     * @param username entered by user
+     * @param password entered by user
+     */
+
     public void register(String username, String password){
         sendDataToServer(REGISTER + " " + username + " " + password);
     }
+
+    /**
+     * SEND IMAGE-GENERATION DATA TO SERVER
+     * @param userImage image byte-array
+     * @param styleID ID of the chosen style image
+     * @param imageName entered by user
+     * @param net chosen Neural Net
+     * @param strength of the style impact
+     * @param preserveSize whether to preserve original size of the content image
+     */
 
     public void generateImage(ByteArrayOutputStream userImage, int styleID, String imageName, Constants.NEURAL_NET net, double strength, boolean preserveSize) {
         synchronized (outputStream){
@@ -272,17 +308,37 @@ public class SessionManager implements Runnable {
         }
     }
 
+    /**
+     * SEND CHANGED USER DATA TO SERVER
+     * @param oldPassword entered by user (and to be checked)
+     * @param newPassword entered by user
+     */
+
     public void changeUserPassword(String oldPassword, String newPassword) {
         sendDataToServer(CHANGE_PASSWORD + " " + oldPassword + " " + newPassword);
     }
+
+    /**
+     * ASK SERVER TO DELETE GIVEN IMAGE
+     * @param imageID of the image
+     */
 
     public void deleteUserImage(int imageID) {
         sendDataToServer(DELETE_IMAGE + " " + imageID);
     }
 
+    /**
+     * ASK SERVER FOR AN IMAGE WITH
+     * @param imageID of the image
+     */
+
     public void getImage(int imageID) {
         sendDataToServer(GET_IMAGE+" "+imageID);
     }
+
+    /**
+     * STOP CONNECTION WITH SERVER
+     */
 
     public void stopConnection(){
         if(runningStatus){
@@ -297,23 +353,31 @@ public class SessionManager implements Runnable {
         }
     }
 
+    @Setter
     public void setSocketConfig(String serverIP, int serverPort){
         this.serverIP=serverIP;
         this.serverPort=serverPort;
     }
 
+    @Getter
     public String getCurrentUserName(){
         return currentUser.getUserName();
     }
 
+    @Getter
     public int getCurrentUserId(){
         return currentUser.getUserID();
     }
 
+    @Getter
     public String getCurrentUserPath(){
         return currentUser.getCurrentUserPath();
     }
 
+    /**
+     * SEND STRING DATA TO SERVER
+     * @param data to be sent
+     */
 
     private void sendDataToServer(String data){
         synchronized (outputStream){

@@ -12,7 +12,6 @@ public class Constants {
 
     public static final int NUM_STYLE_IMAGES = 7;
     public static final int KEY_GEN_LENGHT = 2048;
-
     public enum NEURAL_NET {
         SQUEEZENET,
         VGG16,

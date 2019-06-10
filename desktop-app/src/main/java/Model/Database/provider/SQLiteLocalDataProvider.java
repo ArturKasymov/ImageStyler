@@ -2,7 +2,6 @@ package Model.Database.provider;
 
 import Model.Database.Entity.User;
 import Model.Database.Entity.UserImage;
-import javafx.scene.image.Image;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,11 +16,14 @@ public class SQLiteLocalDataProvider {
     public SQLiteLocalDataProvider(String dbname) {
         try {
             connection = DriverManager.getConnection(String.format("jdbc:sqlite:%s", dbname));
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    /**
+     * CREATE NEEDED TABLES
+     */
 
     public void checkTables(){
         try {
@@ -34,27 +36,14 @@ public class SQLiteLocalDataProvider {
         }
     }
 
-    public void insertUser(int userID,String userName){
-        try {
-            PreparedStatement pstmt = connection.prepareStatement(INSERT_USER);
-            pstmt.setInt(1,userID);
-            pstmt.setString(2, userName);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void changePassword(String userName, String passwordHash) {
-        try {
-            PreparedStatement pstmt = connection.prepareStatement(CHANGE_PASSWORD);
-            pstmt.setString(1, passwordHash);
-            pstmt.setString(2, userName);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+    /**
+     * INSERT FRESHLY GENERATED IMAGE IN DB
+     * @param imageID id of the image at server db
+     * @param imageName entered by user
+     * @param userID id of the user
+     * @param date generation date
+     * @param isDownloaded whether it is downloaded
+     */
 
     public void insertUserImage(int imageID, String imageName, int userID, Date date, boolean isDownloaded) {
         System.out.println(imageID);
@@ -71,36 +60,11 @@ public class SQLiteLocalDataProvider {
         }
     }
 
-
-    public User getUser(String userName){
-        try {
-            PreparedStatement pstmt = connection.prepareStatement(GET_USER);
-            pstmt.setString(1,userName);
-            ResultSet rs = pstmt.executeQuery();
-            if(rs.isClosed()) return null;
-            return new User(rs.getInt("id_user"),
-                    rs.getString("user_name")
-            );
-        } catch (SQLException  e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public List<String> getLocalUsersNameList(){
-        try {
-            Statement stmt=connection.createStatement();
-            ResultSet rs = stmt.executeQuery(GET_USER_NAMES);
-            List<String> localUsersNameList= new ArrayList<String>();
-            while(rs.next()) {
-                localUsersNameList.add(rs.getString("user_name"));
-            }
-            return localUsersNameList;
-        } catch (SQLException  e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+    /**
+     * GET THE GALLERY OF THE USER currentUser
+     * @param currentUserId id of the user
+     * @return arrayList of images
+     */
 
     public ArrayList<UserImage> getUserImages(int currentUserId) {
         try {
@@ -126,6 +90,12 @@ public class SQLiteLocalDataProvider {
         return null;
     }
 
+    /**
+     * GET THE IDs of user's images
+     * @param currentUserID id of the user
+     * @return arrayList of IDs
+     */
+
     public ArrayList<Integer> getUserImagesID(int currentUserID){
         try {
             PreparedStatement pstmt = connection.prepareStatement(GET_CACHED_IMAGES_ID);
@@ -143,6 +113,11 @@ public class SQLiteLocalDataProvider {
         return null;
     }
 
+    /**
+     * GET THE IDs of all the downloaded from server images
+     * @param currentUserID id of the user
+     * @return IDs of the images
+     */
 
     public ArrayList<Integer> getDownloadedImagesID(int currentUserID){
         try {
@@ -163,6 +138,11 @@ public class SQLiteLocalDataProvider {
         return null;
     }
 
+    /**
+     * DELETE THE IMAGE FROM DB
+     * @param imageID id of the image
+     */
+
     public void deleteUserImage(int imageID) {
         try {
             PreparedStatement pstmt = connection.prepareStatement(DELETE_USER_IMAGE);
@@ -172,6 +152,11 @@ public class SQLiteLocalDataProvider {
             e.printStackTrace();
         }
     }
+
+    /**
+     * UPDATE THE STATUS OF THE FRESHLY DOWNLOADED IMAGE
+     * @param imageID
+     */
 
     public void updateUserImageIsDownloaded(int imageID) {
         try {

@@ -1,6 +1,7 @@
 package app;
 
 import Model.Interactors.Interactor;
+import Utils.annotations.Getter;
 import Views.core.BaseView;
 import Views.core.ViewByID;
 import javafx.application.Application;
@@ -10,16 +11,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner;
-import org.nd4j.linalg.factory.Nd4jBackend;
-import org.nd4j.nativeblas.NativeOpsHolder;
 import sun.util.logging.PlatformLogger;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.FileSystem;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -47,6 +43,12 @@ public class AppManager extends Application {
         initStage();
     }
 
+    /**
+     *
+     *  APPLICATION ENVIRONMENT INITIALIZATION
+     *
+     */
+
     private void initModel(){
         executor = Executors.newSingleThreadScheduledExecutor();
         checkAppRootDir();
@@ -54,14 +56,6 @@ public class AppManager extends Application {
         interactor=Interactor.getInstance();
         interactor.startSessionManager(DEFAULT_SERVER_IP,DEFAULT_SERVER_PORT);
         com.sun.javafx.util.Logging.getCSSLogger().setLevel(PlatformLogger.Level.OFF);
-    }
-
-    private void initStage(){
-        stage.setTitle(TITLE);
-        stage.setScene(new Scene(LoginView, WIDTH, HEIGHT, Color.TRANSPARENT));
-        stage.getIcons().add(new javafx.scene.image.Image(this.getClass().getResource(separator+"TestImages"+separator+"logo_blue.png").toExternalForm()));
-        currentView = LOGIN_VIEW;
-        stage.show();
     }
 
     private void initViews() {
@@ -74,10 +68,25 @@ public class AppManager extends Application {
         }
     }
 
+    private void initStage(){
+        stage.setTitle(TITLE);
+        stage.setScene(new Scene(LoginView, WIDTH, HEIGHT, Color.TRANSPARENT));
+        stage.getIcons().add(new javafx.scene.image.Image(this.getClass().getResource(separator+"TestImages"+separator+"logo_blue.png").toExternalForm()));
+        currentView = LOGIN_VIEW;
+        stage.show();
+    }
+
     private void checkAppRootDir(){
         File dir = new File(APP_ROOT_DIRECTORY);
         if (!dir.exists())dir.mkdirs();
     }
+
+    /**
+     *
+     * SCENE VIEW MANAGEMENT
+     *
+     * @param view to be set
+     */
 
     private void setView(Parent view) {
         Platform.runLater(() -> stage.getScene().setRoot(view));
@@ -104,6 +113,7 @@ public class AppManager extends Application {
         }
     }
 
+    @Getter
     public ViewByID getCurrentView(){
         return currentView;
     }
@@ -134,6 +144,13 @@ public class AppManager extends Application {
         }
     }
 
+    /**
+     *
+     *  ASYNC TASK SCHEDULING MANAGER
+     *
+     * @param task
+     */
+
     public void asyncTask(Runnable task) {
         executor.execute(task);
     }
@@ -141,6 +158,11 @@ public class AppManager extends Application {
     public void asyncTaskLater(Runnable task, long delay, TimeUnit unit) {
         executor.schedule(task, delay, unit);
     }
+
+    /**
+     *
+      * @throws Exception
+     */
 
     @Override
     public void stop() throws Exception {

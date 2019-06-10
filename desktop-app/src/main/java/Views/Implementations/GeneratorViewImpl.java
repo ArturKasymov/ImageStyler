@@ -86,7 +86,7 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
         String name = photoName.getCharacters().toString();
         int index = styleImageIndex;
         Image contImg = contentImage.getImage();
-        if (photoName.getCharacters().length()>0) {
+        if (photoName.getCharacters().length()>0 && photoName.getCharacters().length()<=Constants.MAX_STRING_LENGTH) {
             getAppManager().asyncTask(()->presenter.generate(contImg, index,
                     name, toggler.getDefaultNeuralNet(), strengthSlider.getValue(), preserveSize));
         } else {
@@ -149,7 +149,6 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
                 BufferedImage buffimage = ImageIO.read(file);
                 setImage(imgView, buffimage);
             } catch (IOException e) {
-                System.out.println(e);
             }
         });
     }

@@ -73,7 +73,8 @@ public class LoginViewImpl extends BaseView implements LoginView {
     private RingAnimation indicator = new RingAnimation();
 
     private boolean filledIn() {
-        return loginField.getCharacters().length()>0 && passwordField.getCharacters().length()>0;
+        return loginField.getCharacters().length()>0 && passwordField.getCharacters().length()>0 &&
+                loginField.getCharacters().length()<=Constants.MAX_LOGIN_LENGTH && passwordField.getCharacters().length()<=Constants.MAX_PASSWORD_LENGTH;
     }
 
     private void buttonToggle() {
