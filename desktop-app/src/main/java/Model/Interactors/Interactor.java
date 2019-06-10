@@ -7,6 +7,7 @@ import Presenters.Callbacks.LoginCallback;
 import Presenters.Callbacks.MainCallback;
 import Presenters.Callbacks.RegisterCallback;
 import Utils.Constants;
+import Utils.annotations.Getter;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
@@ -26,15 +27,14 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
 
     private SQLiteLocalDataProvider dataProvider;
     private SessionManager sessionManager;
-    private List<String> usersName;
 
-    private Interactor(){
+    private Interactor() {
         this.dataProvider = new SQLiteLocalDataProvider(APP_ROOT_DIRECTORY+"\\"+LOCAL_DATABASE_NAME);
         dataProvider.checkTables();
-        usersName = dataProvider.getLocalUsersNameList();
         sessionManager = new SessionManager();
     }
 
+    @Getter //SINGLETON
     public static Interactor getInstance(){
         if(instance == null) instance = new Interactor();
         return instance;
@@ -48,16 +48,6 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     @Override
     public void registerUser(CharSequence username, CharSequence password) {
         sessionManager.register(username.toString(),password.toString());
-    }
-
-    @Override
-    public boolean checkChangePassword(CharSequence oldPassword) {
-        try {
-            //return cryptoRepo.checkPassword(oldPassword.toString(), sessionManager.getCurrentUserPassword());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     @Override
@@ -76,11 +66,6 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     }
 
     @Override
-    public ArrayList<Integer> getUserCacheDImagesID(int userID) {
-        return dataProvider.getUserImagesID(userID);
-    }
-
-    @Override
     public void initRegisterCallback(RegisterCallback callback) {
         sessionManager.initRegisterCallback(callback);
     }
@@ -93,6 +78,11 @@ public class Interactor implements GeneratorInteractor, LoginInteractor, MainInt
     public void checkUserDirectory(){
         File dir = new File(sessionManager.getCurrentUserPath());
         if (!dir.exists()) dir.mkdirs();
+    }
+
+    @Override
+    public ArrayList<Integer> getUserCachedImagesID(int userID) {
+        return dataProvider.getUserImagesID(userID);
     }
 
     @Override

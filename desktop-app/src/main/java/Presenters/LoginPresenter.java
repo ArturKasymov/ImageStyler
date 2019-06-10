@@ -10,9 +10,6 @@ import javafx.application.Platform;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static Utils.Constants.DEFAULT_SERVER_IP;
-import static Utils.Constants.DEFAULT_SERVER_PORT;
-
 
 public class LoginPresenter implements LoginCallback{
     private LoginView view;
@@ -55,7 +52,7 @@ public class LoginPresenter implements LoginCallback{
 
     @Override
     public ArrayList<Integer> getCachedImagesID(int userID) {
-        return interactor.getUserCacheDImagesID(userID);
+        return interactor.getUserCachedImagesID(userID);
     }
 
     @Override
