@@ -22,9 +22,7 @@ public class ConnectionCryptoRepo {
     private final Cipher cipherAES;
     private PublicKey publicKey;
     private PrivateKey privateKey;
-
     private PublicKey clientPublicKey;
-    private SecretKey secretKey;
     private SecureRandom secureRandom;
     private byte[] keyAES=new byte[16];
 
@@ -103,8 +101,7 @@ public class ConnectionCryptoRepo {
         try {
             iv = new byte[12];
             secureRandom.nextBytes(iv);
-
-            cipherAES.init(Cipher.DECRYPT_MODE, new SecretKeySpec(keyAES,"AES"), new GCMParameterSpec(128, iv));
+            cipherAES.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(keyAES,"AES"), new GCMParameterSpec(128, iv));
             encrypted = cipherAES.doFinal(input);
 
             ByteBuffer byteBuffer = ByteBuffer.allocate(1 + iv.length + encrypted.length);
