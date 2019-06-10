@@ -5,6 +5,8 @@ It's a semester project for Object-Oriented Programming course on Theoretical Co
 Application allows one to stylize images using our best style images (e.g. 'The Scream' by Van Gogh) with one of several neural nets 
 and maintain an own gallery of generated images.
 
+<img src="docs/assets/main_page.png" width="600">
+
 ## Usage:
 1) After executing an app you will find yourself at LogIn page, so register firstly.
 2) At main page, you can look up your gallery, delete existing images, sort them by name or date;
@@ -22,12 +24,16 @@ and maintain an own gallery of generated images.
   
 #### "IN PROGRESS" image means that it is being downloaded from server or generated at that moment.
 
+<img src="docs/assets/styleA.png" width="600">
+
 ## Generator page:
 1) Just click on the left image to choose the image you want to stylize.
 2) Click the left and right arrows under the right image to choose the appropriate style image (at the moment, you can choose from 7 images).
 3) Under the right image, decide whether you would like to preserve the original size of image or get a generated image of size 224px (available only with SQUEEZENET and VGG16 nets).
 4) Use the slider at the top to adjust how much the style will impact the generation process (available only with SQUEEZENET and VGG16 nets).
 5) Name the photo below and that's it.
+
+<img src="docs/assets/styleB.png" width="600">
 
 ## Difference between neural nets:
 1) SqueezeNet (that one will spend around 30 secs of your time and give you average-quality (in my opinion) images).
