@@ -11,6 +11,10 @@ import javafx.css.StyleableProperty;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,8 +22,7 @@ import java.util.List;
 public class RingAnimation extends Control {
 
     public RingAnimation() {
-        this.getStylesheets().add(AppManager.class.getResource(".."+ Constants.separator+"stylesheets"+Constants.separator+"ringAnimation.css")
-                .toExternalForm());
+        this.getStylesheets().add(AppManager.class.getResource(Constants.separator+"stylesheets"+Constants.separator+"ringAnimation.css").toExternalForm());
         this.getStyleClass().add("ringindicator");
     }
 

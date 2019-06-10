@@ -92,6 +92,7 @@ public class LoginViewImpl extends BaseView implements LoginView {
 
     @FXML
     public void initialize() {
+        System.out.println("init");
         presenter.initCallback();
 
         warning.setVisible(false);

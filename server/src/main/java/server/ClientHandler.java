@@ -15,8 +15,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketException;
-import java.nio.ByteBuffer;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -24,7 +22,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Scanner;
 
-import static util.Constants.KEY_GEN_LENGHT;
+import static util.Constants.KEY_GEN_LENGTH;
 import static util.Constants.SERVER_ROOT_DIRECTORY;
 import static util.ServerCommand.*;
 
@@ -48,7 +46,7 @@ public class ClientHandler extends Thread{
         this.dos=dos;
         this.currentUserID=-1;
         try {
-            connectionCryptoRepo=new ConnectionCryptoRepo(KEY_GEN_LENGHT);
+            connectionCryptoRepo=new ConnectionCryptoRepo(KEY_GEN_LENGTH);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             e.printStackTrace();
         }

@@ -117,8 +117,7 @@ public class GeneratorViewImpl extends BaseView implements GeneratorView {
     private BufferedImage getImage(String path) {
         try {
             URL url = AppManager.class.getResource(path);
-            File file = new File(url.getFile());
-            return ImageIO.read(file);
+            return ImageIO.read(url);
         } catch (IOException e) {
             e.printStackTrace();
         }

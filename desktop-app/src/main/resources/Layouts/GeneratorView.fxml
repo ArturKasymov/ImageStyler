@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../stylesheets/generatorViewStyle.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.GeneratorViewImpl">
+<GridPane alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../stylesheets/generatorViewStyle.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="Infinity" prefWidth="250.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="Infinity" prefWidth="100.0" />

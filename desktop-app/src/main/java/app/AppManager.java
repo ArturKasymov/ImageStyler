@@ -1,6 +1,11 @@
 package app;
 
 import Model.Interactors.Interactor;
+import Views.Implementations.GeneratorViewImpl;
+import Views.Implementations.LoginViewImpl;
+import Views.Implementations.MainViewImpl;
+import Views.Implementations.RegisterViewImpl;
+import Views.Interfaces.GeneratorView;
 import Views.core.BaseView;
 import Views.core.ViewByID;
 import javafx.application.Application;
@@ -66,9 +71,9 @@ public class AppManager extends Application {
 
     private void initViews() {
         try {
-            LoginView = loadView(separator+"LoginView.fxml");
-            RegisterView = loadView(separator+"RegisterView.fxml");
-            MainView = loadView(separator+"MainView.fxml");
+            LoginView = loadView(separator+"LoginView.fxml", new LoginViewImpl());
+            RegisterView = loadView(separator+"RegisterView.fxml", new RegisterViewImpl());
+            MainView = loadView(separator+"MainView.fxml", new MainViewImpl());
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -108,10 +113,11 @@ public class AppManager extends Application {
         return currentView;
     }
 
-    private Parent loadView(String path) throws IOException {
+    private Parent loadView(String path, Object ctrl) throws IOException {
         String layouts = separator+"Layouts";
         URL url = AppManager.class.getResource(layouts+path);
         FXMLLoader loader = new FXMLLoader(url);
+        loader.setController(ctrl);
         Parent view = loader.load();
         BaseView controller = loader.getController();
         saveController(controller);

@@ -23,7 +23,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="base" alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="canvas" stylesheets="@../stylesheets/mainViewStyle.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.Implementations.MainViewImpl">
+<GridPane fx:id="base" alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="canvas" stylesheets="@../stylesheets/mainViewStyle.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" percentWidth="33" />
     <ColumnConstraints hgrow="SOMETIMES" percentWidth="67" />

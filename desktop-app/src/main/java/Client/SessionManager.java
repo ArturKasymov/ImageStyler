@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import static Utils.Constants.KEY_GEN_LENGHT;
+import static Utils.Constants.KEY_GEN_LENGTH;
 import static Utils.ServerCommand.*;
 
 public class SessionManager implements Runnable {
@@ -67,7 +67,7 @@ public class SessionManager implements Runnable {
             executor = Executors.newSingleThreadScheduledExecutor();
 
             try {
-                connectionCryptoRepo=new ConnectionCryptoRepo(KEY_GEN_LENGHT);
+                connectionCryptoRepo=new ConnectionCryptoRepo(KEY_GEN_LENGTH);
             }catch (Exception e){
                 e.printStackTrace();
             }

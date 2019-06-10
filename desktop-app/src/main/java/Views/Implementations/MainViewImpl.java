@@ -17,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -223,8 +224,10 @@ public class MainViewImpl extends BaseView implements MainView {
                 if (generatorView==null) {
                     FXMLLoader loader = new FXMLLoader(getAppManager().getClass()
                             .getResource(separator+"Layouts"+separator+"GeneratorView.fxml"));
+                    generatorCtrl = new GeneratorViewImpl();
+                    loader.setController(generatorCtrl);
                     generatorView = loader.load();
-                    generatorCtrl = loader.getController();
+                    //generatorCtrl = loader.getController();
                     generatorCtrl.setViewsToggler(this);
                     generatorCtrl.handleNNChange(defaultNeuralNet);
                     BaseView genCtrl = loader.getController();
@@ -234,7 +237,7 @@ public class MainViewImpl extends BaseView implements MainView {
                 contentBox.getChildren().setAll(generatorView);
                 goToGenerateButton.textProperty().setValue("-");
                 fullButton.setDisable(true);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
