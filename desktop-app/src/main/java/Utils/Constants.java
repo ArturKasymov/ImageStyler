@@ -17,6 +17,9 @@ public class Constants {
     public static final int DEFAULT_SERVER_PORT=7777;
     public static final String DEFAULT_SERVER_IP = "35.197.39.104";
 
+    public static final int MAX_LOGIN_LENGTH = 32;
+    public static final int MAX_PASSWORD_LENGTH = 32;
+    public static final int MAX_STRING_LENGTH = 32;
 
     public static final String IN_PROGRESS_IMAGE = separator+"TestImages"+separator+"in_progress.jpg";
 

@@ -1,6 +1,7 @@
 package Views.Implementations;
 
 import Presenters.RegisterPresenter;
+import Utils.Constants;
 import Utils.controls.RingAnimation;
 import Views.core.BaseView;
 import Views.Interfaces.RegisterView;
@@ -51,7 +52,9 @@ public class RegisterViewImpl extends BaseView implements RegisterView {
     private boolean beingAnimated = false;
 
     private boolean filledIn() {
-        return loginField.getCharacters().length()>0 && passwordField.getCharacters().length()>0 && onceMorePasswordField.getCharacters().length()>0;
+        return loginField.getCharacters().length()>0 && passwordField.getCharacters().length()>0 && onceMorePasswordField.getCharacters().length()>0 &&
+            loginField.getCharacters().length()<=Constants.MAX_PASSWORD_LENGTH && passwordField.getCharacters().length()<=Constants.MAX_PASSWORD_LENGTH &&
+                onceMorePasswordField.getCharacters().length()<=Constants.MAX_PASSWORD_LENGTH;
     }
 
     private boolean passwordsMatch() {
