@@ -92,7 +92,7 @@ public class ConnectionCryptoRepo {
         return new String(cipherRSA.doFinal(Base64.decodeBase64(msg)), "UTF-8");
     }
 
-    public byte[] encryptImage(byte[] input)
+    public byte[] encryptBytes(byte[] input)
             throws GeneralSecurityException {
         byte[] iv = null;
         byte[] encrypted = null;
@@ -101,7 +101,6 @@ public class ConnectionCryptoRepo {
             secureRandom.nextBytes(iv);
             cipherAES.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(keyAES,"AES"), new GCMParameterSpec(128, iv));
             encrypted = cipherAES.doFinal(input);
-
             ByteBuffer byteBuffer = ByteBuffer.allocate(1 + iv.length + encrypted.length);
             byteBuffer.put((byte) iv.length);
             byteBuffer.put(iv);
@@ -113,24 +112,24 @@ public class ConnectionCryptoRepo {
         return input;
     }
 
-    public BufferedImage decryptImage(DataInputStream dis, int encryptImageSize) throws BadPaddingException, IllegalBlockSizeException, IOException, InvalidKeyException, InvalidAlgorithmParameterException {
-        byte [] encryptImage =new byte[encryptImageSize];
-        dis.readFully(encryptImage,0,encryptImageSize);
+    public byte[] decryptBytes(DataInputStream dis, int encryptBytesSize) throws BadPaddingException, IllegalBlockSizeException, IOException, InvalidKeyException, InvalidAlgorithmParameterException {
+        byte [] encryptBytes =new byte[encryptBytesSize];
+        dis.readFully(encryptBytes,0,encryptBytesSize);
         byte[] iv = null;
         byte[] encrypted = null;
         try {
-            ByteBuffer byteBuffer = ByteBuffer.wrap(encryptImage);
+            ByteBuffer byteBuffer = ByteBuffer.wrap(encryptBytes);
             int ivLength = byteBuffer.get();
             iv = new byte[ivLength];
             byteBuffer.get(iv);
             encrypted = new byte[byteBuffer.remaining()];
             byteBuffer.get(encrypted);
             cipherAES.init(Cipher.DECRYPT_MODE,new SecretKeySpec(keyAES, "AES"),new GCMParameterSpec(128, iv));
-            return ImageIO.read(new ByteArrayInputStream(cipherAES.doFinal(encrypted)));
+            return cipherAES.doFinal(encrypted);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ImageIO.read(new ByteArrayInputStream(encryptImage));
+        return encryptBytes;
     }
 
 }

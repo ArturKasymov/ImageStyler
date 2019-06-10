@@ -15,8 +15,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketException;
-import java.nio.ByteBuffer;
+import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -120,9 +119,15 @@ public class ClientHandler extends Thread{
                 else{
                     currentUserID=storedUser.getId_user();
                     interactor.checkUserDir(getCurrentUserPath());
-                    sendDataToClient(LOGIN+" "+SUCCESS+" "+currentUserID+" "+
-                            storedUser.getUser_name()+" "+interactor.getUserImagesListString(currentUserID));
-                    serverManager.userOnline(currentUserID, this);
+                    String images =interactor.getUserImagesListString(currentUserID);
+                    try {
+                        byte [] encrypt=connectionCryptoRepo.encryptBytes(images.getBytes());
+                        sendBytesToUser(LOGIN+" "+SUCCESS+" "+currentUserID+" "+
+                                storedUser.getUser_name()+" "+encrypt.length,encrypt);
+                        serverManager.userOnline(currentUserID, this);
+                    } catch (GeneralSecurityException e) {
+                        e.printStackTrace();
+                    }
                 }
                 break;
             case REGISTER:
@@ -167,7 +172,8 @@ public class ClientHandler extends Thread{
                 boolean preserveSize = sc.nextBoolean();
                 int encryptImageSize= sc.nextInt();
                 try {
-                    BufferedImage image = connectionCryptoRepo.decryptImage(dis,encryptImageSize);
+                    BufferedImage image =ImageIO.read(new ByteArrayInputStream(
+                            connectionCryptoRepo.decryptBytes(dis,encryptImageSize)));
                     int imageID = interactor.insertImage(imageName, currentUserID, imageDate);
                     final String imagePath = getCurrentUserPath()+"/."+imageID+".png";
                     serverManager.asyncTask(()->{
@@ -235,12 +241,24 @@ public class ClientHandler extends Thread{
         currentUserID = -1;
     }
 
+    private void sendBytesToUser(String data, byte [] bytes){
+        synchronized (dos) {
+            try {
+                dos.writeUTF(connectionCryptoRepo.encryptMessage(data));
+                dos.write(bytes);
+                dos.flush();
+            } catch (IOException | IllegalBlockSizeException | BadPaddingException | InvalidKeyException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void insertImageData(int imageID, int userID, BufferedImage bufferedImage){
         synchronized (dos) {
             try {
                 ByteArrayOutputStream generatedImage = new ByteArrayOutputStream();
                 ImageIO.write(bufferedImage, "png", generatedImage);
-                byte [] encryptImage= connectionCryptoRepo.encryptImage(generatedImage.toByteArray());
+                byte [] encryptImage= connectionCryptoRepo.encryptBytes(generatedImage.toByteArray());
                 dos.writeUTF(connectionCryptoRepo.encryptMessage(INSERT_IMAGE_DATA+" "+SUCCESS+" "+imageID+" "+userID+" "+encryptImage.length));
                 dos.write(encryptImage);
                 dos.flush();
