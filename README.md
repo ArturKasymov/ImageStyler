@@ -5,7 +5,7 @@ It's a semester project for Object-Oriented Programming course on Theoretical Co
 Application allows one to stylize images using our best style images (e.g. 'The Scream' by Van Gogh) with one of several neural nets 
 and maintain an own gallery of generated images.
 
-<img src="docs/assets/main_page.png" width="600">
+<img src="docs/assets/main-page.png" width="600">
 
 ## Usage:
 1) After executing an app you will find yourself at LogIn page, so register firstly.
